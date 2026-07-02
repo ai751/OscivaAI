@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Database, Workflow, BarChart3, MessageSquare, Code2, Paintbrush, Globe, Shield, Zap } from "lucide-react";
-import { Reveal, SectionHeading } from "./_primitives";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
 const spotlight = {
   icon: Database,
@@ -23,25 +24,29 @@ const integrations = ["WhatsApp", "Slack", "Zendesk", "Freshdesk", "Salesforce",
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-bl" aria-hidden />
-      <div className="relative z-10 max-w-[1200px] mx-auto">
-        <SectionHeading
-          eyebrow="Platform"
-          title="Everything you need. None of the complexity."
-          subtitle="A complete AI assistant platform built for operators, not engineers."
+    <section id="features" className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHead
+          pre="Everything You Need."
+          hl="None of the Complexity."
+          sub="A complete AI assistant platform built for operators, not engineers"
         />
 
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
           {/* Spotlight card */}
-          <Reveal className="md:col-span-2 lg:row-span-2">
-            <div className="relative h-full overflow-hidden rounded-3xl border border-[#EBEDF0] bg-[#0B0E14] p-8 text-white">
+          <FadeIn className="md:col-span-2 lg:row-span-2">
+            <div
+              className="relative h-full overflow-hidden p-8 text-white"
+              style={{ background: `linear-gradient(135deg, #f08a67 0%, ${X.coral} 50%, #e2603f 100%)`, borderRadius: 16 }}
+            >
               <div className="relative">
-                <div className="w-12 h-12 rounded-xl bg-[#E8613C] flex items-center justify-center mb-6 shadow-brand">
+                <div className="w-12 h-12 rounded-[12px] flex items-center justify-center mb-6" style={{ background: "rgba(255,255,255,0.22)" }}>
                   <spotlight.icon size={22} className="text-white" />
                 </div>
-                <h3 className="text-[22px] md:text-[26px] font-extrabold display mb-3">{spotlight.title}</h3>
-                <p className="text-[14.5px] text-white/65 leading-relaxed max-w-md">{spotlight.desc}</p>
+                <h3 className="text-[22px] md:text-[26px] font-bold mb-3">{spotlight.title}</h3>
+                <p className="text-[14.5px] leading-relaxed max-w-md" style={{ color: "rgba(255,255,255,0.9)" }}>
+                  {spotlight.desc}
+                </p>
 
                 {/* mini "indexing" visual */}
                 <div className="mt-8 grid grid-cols-3 gap-2.5 max-w-md">
@@ -52,42 +57,45 @@ export default function FeaturesSection() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.08, duration: 0.5 }}
-                      className="flex items-center gap-1.5 rounded-lg bg-white/[0.06] border border-white/10 px-2.5 py-2 text-[10px] text-white/70"
+                      className="flex items-center gap-1.5 rounded-[8px] px-2.5 py-2 text-[10px]"
+                      style={{ background: "rgba(255,255,255,0.16)", color: "rgba(255,255,255,0.95)" }}
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#bff2d1" }} />
                       <span className="truncate">{f}</span>
                     </motion.div>
                   ))}
                 </div>
               </div>
             </div>
-          </Reveal>
+          </FadeIn>
 
           {features.map((f, i) => (
-            <Reveal key={f.title} i={(i % 3) + 1}>
-              <div className="group h-full rounded-2xl border border-[#EBEDF0] bg-white p-6 transition-all duration-300 hover:border-[#E8613C]/30 hover:shadow-premium hover:-translate-y-1">
-                <div className="w-11 h-11 rounded-xl bg-[#F7F8FA] border border-[#EBEDF0] flex items-center justify-center mb-4 transition-colors group-hover:bg-[#FFF1EC] group-hover:border-[#E8613C]/20">
-                  <f.icon size={19} className="text-[#0B0E14] transition-colors group-hover:text-[#E8613C]" />
-                </div>
-                <h3 className="text-[15px] font-bold text-[#0B0E14] mb-1.5">{f.title}</h3>
-                <p className="text-[13px] text-[#586072] leading-relaxed">{f.desc}</p>
+            <FadeIn key={f.title} delay={(i % 3) * 0.08}>
+              <div
+                className="group h-full p-6 transition-all duration-300 hover:-translate-y-1"
+                style={{ background: i % 2 === 0 ? X.coralSoft : X.lavender, borderRadius: 16 }}
+              >
+                <f.icon size={26} strokeWidth={1.7} style={{ color: X.ink }} />
+                <h3 className="mt-4 text-[15px] font-bold mb-1.5" style={{ color: X.ink }}>{f.title}</h3>
+                <p className="text-[13px] leading-relaxed" style={{ color: X.sub }}>{f.desc}</p>
               </div>
-            </Reveal>
+            </FadeIn>
           ))}
         </div>
 
         {/* Integrations marquee */}
-        <Reveal>
-          <div className="mt-14 rounded-3xl border border-[#EBEDF0] bg-[#F7F8FA] py-10">
-            <p className="text-center text-[13px] text-[#586072] mb-6">
-              <span className="font-semibold text-[#0B0E14]">Works with your stack</span> — connect the tools your team already uses
+        <FadeIn>
+          <div className="mt-14 py-10" style={{ background: X.cream, borderRadius: 16 }}>
+            <p className="text-center text-[13.5px] mb-6" style={{ color: X.sub }}>
+              <span className="font-bold" style={{ color: X.ink }}>Works with your stack</span> — connect the tools your team already uses
             </p>
             <div className="relative overflow-hidden mask-fade-x">
               <div className="flex w-max gap-3 animate-marquee-slow">
                 {[...integrations, ...integrations].map((name, i) => (
                   <span
                     key={i}
-                    className="px-5 py-2.5 rounded-full border border-[#EBEDF0] bg-white text-[13px] font-medium text-[#586072] whitespace-nowrap"
+                    className="px-5 py-2.5 rounded-[50px] border text-[13px] font-medium whitespace-nowrap"
+                    style={{ borderColor: X.border, background: X.white, color: X.sub }}
                   >
                     {name}
                   </span>
@@ -95,7 +103,7 @@ export default function FeaturesSection() {
               </div>
             </div>
           </div>
-        </Reveal>
+        </FadeIn>
       </div>
     </section>
   );

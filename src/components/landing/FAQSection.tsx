@@ -1,53 +1,81 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
-import { Reveal, SectionHeading } from "./_primitives";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
 const faqs = [
-  { q: "What is Osciva AI?", a: "Osciva is a no-code platform to build, train and deploy AI assistants on your own data — no engineering required." },
-  { q: "How long does setup take?", a: "Most businesses go live within 30 minutes: upload your data, configure the agent, embed the widget, done." },
-  { q: "Which languages are supported?", a: "20+ languages including Hindi, Tamil, Telugu, Bengali, Kannada, Marathi, Gujarati, Malayalam and major international languages." },
-  { q: "Is my data secure?", a: "Yes. Data is encrypted in transit and at rest, hosted on Indian servers, with DPDP-ready controls." },
-  { q: "Can I integrate with existing tools?", a: "Slack, WhatsApp, Zendesk, Freshdesk, Shopify, WordPress, Razorpay and custom integrations via API and webhooks." },
-  { q: "What happens when the AI can't answer?", a: "It hands off to a human agent with full conversation context, so your team picks up right where it left off." },
-  { q: "Is there a free trial?", a: "Yes — start free with no credit card required, and upgrade when you're ready to scale." },
+  {
+    q: "How is Osciva different from other chatbot builders?",
+    a: "Osciva agents are grounded in your own documents and website — every answer cites its source, and the agent hands off to a human instead of guessing. You get real support automation, not a scripted decision tree, and it's built for India: INR pricing, GST invoices, 20+ Indian languages and India-hosted data.",
+  },
+  {
+    q: "Do I need technical skills to set it up?",
+    a: "No. If you can fill a form and copy-paste one line of code, you can launch an agent. Uploading documents, styling the widget and setting the tone all happen in a point-and-click dashboard. WordPress and Shopify installs are one click.",
+  },
+  {
+    q: "How does Osciva handle my customer data?",
+    a: "Your data is encrypted in transit and at rest, hosted in Indian data centres, and used only to power your own agent. We're DPDP-ready, and you can delete your data at any time from the dashboard.",
+  },
+  {
+    q: "What happens when the agent doesn't know an answer?",
+    a: "It says so honestly and escalates to your team with the full conversation attached. You control the confidence threshold, blocked topics and office-hours routing — the AI never invents answers.",
+  },
+  {
+    q: "Which languages does it support?",
+    a: "English, Hindi, Tamil, Telugu, Kannada, Malayalam, Marathi, Bengali, Gujarati, Punjabi and 10+ more — including Hinglish. The agent detects your customer's language automatically and answers in it, even if your documents are in English.",
+  },
+  {
+    q: "Can I try it before paying?",
+    a: "Yes — the Free plan gives you 1 agent and 500 messages a month, forever. No credit card required. Most businesses are live within 30 minutes of signing up.",
+  },
 ];
 
 export default function FAQSection() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-cl" aria-hidden />
-      <div className="relative z-10 max-w-[760px] mx-auto">
-        <SectionHeading eyebrow="FAQ" title="Frequently asked questions" />
+    <section className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
+      <div className="max-w-[900px] mx-auto">
+        <SectionHead pre="Still Got" hl="Questions?" />
 
-        <div className="mt-12 space-y-3">
-          {faqs.map((faq, i) => {
-            const isOpen = open === i;
-            return (
-              <Reveal key={i} i={i}>
-                <div
-                  className={`rounded-2xl border bg-white transition-all ${isOpen ? "border-[#E8613C]/30 shadow-sm" : "border-[#EBEDF0]"}`}
+        <FadeIn delay={0.1}>
+          <div className="mt-12">
+            {faqs.map((f, i) => (
+              <div key={f.q} className="border-b" style={{ borderColor: X.ink }}>
+                <button
+                  onClick={() => setOpen(open === i ? null : i)}
+                  className="w-full flex items-center justify-between gap-6 py-5 text-left"
+                  aria-expanded={open === i}
                 >
-                  <button
-                    onClick={() => setOpen(isOpen ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
-                  >
-                    <span className="text-[15px] font-semibold text-[#0B0E14]">{faq.q}</span>
-                    <span className={`shrink-0 grid place-items-center w-7 h-7 rounded-full border transition-all ${isOpen ? "bg-[#E8613C] border-[#E8613C] text-white rotate-45" : "border-[#E3E6EB] text-[#586072]"}`}>
-                      <Plus size={15} />
-                    </span>
-                  </button>
-                  <div className={`grid transition-all duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
-                    <div className="overflow-hidden">
-                      <p className="px-5 pb-5 text-[14px] text-[#586072] leading-relaxed">{faq.a}</p>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+                  <span className="text-[16px] md:text-[17px] font-bold" style={{ color: X.ink }}>
+                    {f.q}
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className="shrink-0 transition-transform duration-300"
+                    style={{ color: X.ink, transform: open === i ? "rotate(180deg)" : "none" }}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {open === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="pb-6 text-[15px] leading-[26px] max-w-[820px]" style={{ color: X.sub }}>
+                        {f.a}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
       </div>
     </section>
   );

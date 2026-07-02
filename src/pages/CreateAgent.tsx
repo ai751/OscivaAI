@@ -396,7 +396,7 @@ export default function CreateAgent() {
               <button
                 type="button"
                 onClick={() => setInstructionsExpanded(false)}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-[#CF4F2C] transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-[#e05f40] transition-colors"
               >
                 <Minimize2 size={12} /> Done
               </button>
@@ -433,7 +433,7 @@ export default function CreateAgent() {
                 onClick={refineInstructions}
                 disabled={refining}
                 title="Clean up & structure your prompt with AI (keeps all your details)"
-                className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-[11px] font-semibold shadow-lg hover:bg-[#CF4F2C] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-[11px] font-semibold shadow-lg hover:bg-[#e05f40] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {refining ? (
                   <>
@@ -743,7 +743,7 @@ export default function CreateAgent() {
                       placeholder="https://docs.example.com"
                       className="flex-1 px-3.5 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                     />
-                    <button onClick={handleAddUrl} className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-[#CF4F2C] transition-colors">
+                    <button onClick={handleAddUrl} className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-[#e05f40] transition-colors">
                       Add URL
                     </button>
                   </div>
@@ -1000,7 +1000,7 @@ export default function CreateAgent() {
                       placeholder="Type a message..."
                       className="flex-1 px-3.5 py-2.5 rounded-full bg-secondary border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                     />
-                    <button onClick={sendChatMessage} className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-[#CF4F2C] transition-colors">
+                    <button onClick={sendChatMessage} className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-[#e05f40] transition-colors">
                       <Send size={14} />
                     </button>
                   </div>
@@ -1008,7 +1008,7 @@ export default function CreateAgent() {
               )}
             </div>
 
-            <button onClick={handleSave} className="mt-4 w-full py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-[#CF4F2C] transition-colors transition-all glow-primary">
+            <button onClick={handleSave} className="mt-4 w-full py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-[#e05f40] transition-colors transition-all glow-primary">
               {existingAgent ? "Update Agent" : "Create Agent"}
             </button>
           </div>

@@ -1,25 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { type ReactNode } from "react";
+import { X } from "./LandingNavbar";
+import { HL } from "./xui";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const up = (d: number) => ({
   initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay: d, ease: EASE },
+  transition: { duration: 0.6, delay: d, ease: EASE },
 });
 
-/**
- * Distinctive, premium hero band for every marketing sub-page.
- * Replaces the bare orange eyebrow that used to sit at the top.
- */
+/** Expedify-style hero band for every marketing sub-page. */
 export default function PageHero({
   breadcrumb,
   title,
   highlight,
   subtitle,
-  primaryCta = { label: "Start building free", to: "/auth" },
+  primaryCta = { label: "Start Free Trial", to: "/auth" },
   secondaryCta,
   children,
 }: {
@@ -34,46 +33,66 @@ export default function PageHero({
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden pt-[130px] pb-16 md:pt-[160px] md:pb-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-tr" aria-hidden />
-
-      <div className="relative max-w-[820px] mx-auto text-center">
-        <motion.nav {...up(0)} className="flex items-center justify-center gap-1.5 text-[12.5px] text-[#8C94A1] mb-6">
-          <button onClick={() => navigate("/")} className="hover:text-[#0B0E14] transition-colors">Home</button>
+    <section
+      className="mkt-x relative overflow-hidden pt-[140px] pb-14 md:pt-[170px] md:pb-16 px-5 sm:px-8"
+      style={{ background: `linear-gradient(180deg, ${X.cream} 0%, ${X.white} 100%)` }}
+    >
+      <div className="relative max-w-[880px] mx-auto text-center">
+        <motion.nav {...up(0)} className="flex items-center justify-center gap-1.5 text-[13px] mb-6" style={{ color: X.faint }}>
+          <button
+            onClick={() => navigate("/")}
+            className="transition-colors"
+            onMouseEnter={(e) => (e.currentTarget.style.color = X.coral)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = X.faint)}
+          >
+            Home
+          </button>
           <ChevronRight size={13} />
-          <span className="text-[#586072] font-medium">{breadcrumb}</span>
+          <span className="font-medium" style={{ color: X.sub }}>{breadcrumb}</span>
         </motion.nav>
 
-
-        <motion.h1 {...up(0.1)} className="display text-[36px] sm:text-[46px] md:text-[56px] font-extrabold text-[#0B0E14]">
+        <motion.h1
+          {...up(0.08)}
+          className="text-[34px] sm:text-[44px] md:text-[52px] font-bold leading-[1.18] tracking-[-0.01em]"
+          style={{ color: X.ink }}
+        >
           {title}
           {highlight && (
             <>
               {" "}
-              <span className="text-[#E8613C]">{highlight}</span>
+              <HL>{highlight}</HL>
             </>
           )}
         </motion.h1>
 
-        <motion.p {...up(0.18)} className="mt-5 text-[16px] md:text-[17px] leading-relaxed text-[#586072] max-w-xl mx-auto">
+        <motion.p
+          {...up(0.16)}
+          className="mt-5 text-[16px] md:text-[17px] leading-[26px] max-w-xl mx-auto"
+          style={{ color: X.mute }}
+        >
           {subtitle}
         </motion.p>
 
         {(primaryCta || secondaryCta) && (
-          <motion.div {...up(0.26)} className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <motion.div {...up(0.24)} className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             {primaryCta && (
               <button
                 onClick={() => navigate(primaryCta.to)}
-                className="group w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#E8613C] text-white text-[15px] font-semibold hover:bg-[#CF4F2C] transition-colors shadow-brand"
+                className="w-full sm:w-auto px-7 py-3.5 rounded-full text-[15px] font-bold text-white transition-colors"
+                style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = X.coralGradHover)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = X.coralGrad)}
               >
                 {primaryCta.label}
-                <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" />
               </button>
             )}
             {secondaryCta && (
               <button
                 onClick={() => navigate(secondaryCta.to)}
-                className="w-full sm:w-auto px-6 py-3.5 rounded-full border border-[#E3E6EB] bg-white text-[15px] font-semibold text-[#0B0E14] hover:bg-[#F7F8FA] transition-colors"
+                className="w-full sm:w-auto px-7 py-3.5 rounded-full text-[15px] font-medium border transition-colors"
+                style={{ borderColor: X.coral, color: X.coral, background: "transparent" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = X.coralSoft)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
                 {secondaryCta.label}
               </button>
@@ -81,7 +100,7 @@ export default function PageHero({
           </motion.div>
         )}
 
-        {children && <motion.div {...up(0.34)}>{children}</motion.div>}
+        {children && <motion.div {...up(0.32)}>{children}</motion.div>}
       </div>
     </section>
   );

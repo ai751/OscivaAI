@@ -1,10 +1,11 @@
-import { ShoppingBag, GraduationCap, HeartPulse, Building2, Briefcase, Home, X, Check } from "lucide-react";
+import { ShoppingBag, GraduationCap, HeartPulse, Building2, Briefcase, Home, X as XIcon, Check } from "lucide-react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import { X } from "@/components/landing/LandingNavbar";
 import FooterSection from "@/components/landing/FooterSection";
 import PageHero from "@/components/landing/PageHero";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import CTASection from "@/components/landing/CTASection";
-import { Reveal, SectionHeading } from "@/components/landing/_primitives";
+import { SectionHead, FadeIn } from "@/components/landing/xui";
 
 const useCases = [
   { icon: ShoppingBag, title: "E-commerce", desc: "Order tracking, returns, product Q&A and cart recovery.", ex: "“Where is my order #4821?”" },
@@ -25,73 +26,80 @@ const compare = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mkt-x min-h-screen" style={{ background: X.white }}>
       <LandingNavbar />
 
       <PageHero
         breadcrumb="How it works"
-        title="Launch a real AI agent in"
-        highlight="three steps"
+        title="Launch a Real AI Agent in"
+        highlight="Three Steps"
         subtitle="No engineering team, no integrations to maintain. Configure, train on your data, and embed — that's the whole process."
         secondaryCta={{ label: "View pricing", to: "/pricing" }}
       />
 
-      {/* Existing 3-step section */}
+      {/* 3-step section */}
       <HowItWorksSection />
 
       {/* Use cases */}
-      <section className="relative overflow-hidden py-20 md:py-28 px-5 sm:px-6">
-        <div className="absolute inset-0 z-0 bg-glow-tl" aria-hidden />
-        <div className="relative z-10 max-w-[1200px] mx-auto">
-          <SectionHeading
-            eyebrow="Use cases"
-            title="One platform, every kind of business"
-            subtitle="If you have customers with questions, Osciva fits in. Here's what teams build."
+      <section className="py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
+        <div className="max-w-[1280px] mx-auto">
+          <SectionHead
+            pre="One Platform,"
+            hl="Every Kind of Business"
+            sub="If you have customers with questions, Osciva fits in. Here's what teams build."
           />
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {useCases.map((u, i) => (
-              <Reveal key={u.title} i={i % 3}>
-                <div className="group h-full rounded-2xl border border-[#EBEDF0] bg-white p-6 transition-all duration-300 hover:border-[#E8613C]/30 hover:shadow-premium hover:-translate-y-1">
-                  <div className="w-11 h-11 rounded-xl bg-[#F7F8FA] border border-[#EBEDF0] flex items-center justify-center mb-4 transition-colors group-hover:bg-[#FFF1EC] group-hover:border-[#E8613C]/20">
-                    <u.icon size={19} className="text-[#0B0E14] transition-colors group-hover:text-[#E8613C]" />
+              <FadeIn key={u.title} delay={(i % 3) * 0.08}>
+                <div
+                  className="h-full p-6 transition-all duration-300 hover:-translate-y-1"
+                  style={{ background: i % 2 === 0 ? X.coralSoft : X.lavender, borderRadius: 16 }}
+                >
+                  <u.icon size={26} strokeWidth={1.7} style={{ color: X.ink }} />
+                  <h3 className="mt-4 text-[15.5px] font-bold mb-1.5" style={{ color: X.ink }}>{u.title}</h3>
+                  <p className="text-[13px] leading-relaxed mb-4" style={{ color: X.sub }}>{u.desc}</p>
+                  <div
+                    className="text-[12.5px] rounded-[8px] px-3 py-2 italic"
+                    style={{ background: X.white, color: X.sub }}
+                  >
+                    {u.ex}
                   </div>
-                  <h3 className="text-[15.5px] font-bold text-[#0B0E14] mb-1.5">{u.title}</h3>
-                  <p className="text-[13px] text-[#586072] leading-relaxed mb-4">{u.desc}</p>
-                  <div className="text-[12.5px] text-[#586072] bg-[#F7F8FA] border border-[#EBEDF0] rounded-lg px-3 py-2 italic">{u.ex}</div>
                 </div>
-              </Reveal>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* Before / after comparison */}
-      <section className="relative overflow-hidden py-20 md:py-28 px-5 sm:px-6">
-        <div className="absolute inset-0 z-0 bg-glow-cr" aria-hidden />
-        <div className="relative z-10 max-w-[1000px] mx-auto">
-          <SectionHeading eyebrow="Why teams switch" title="The old way vs. the Osciva way" />
-          <Reveal>
+      <section className="py-20 md:py-24 px-5 sm:px-8" style={{ background: X.cream }}>
+        <div className="max-w-[1000px] mx-auto">
+          <SectionHead pre="The Old Way vs." hl="The Osciva Way" />
+          <FadeIn delay={0.1}>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="rounded-3xl border border-[#EBEDF0] bg-white p-7">
-                <h3 className="text-[15px] font-bold text-[#8C94A1] mb-5">The old way</h3>
+              <div className="p-7" style={{ background: X.white, borderRadius: 16, border: `1px solid ${X.border}` }}>
+                <h3 className="text-[15px] font-bold mb-5" style={{ color: X.faint }}>The old way</h3>
                 <ul className="space-y-4">
                   {compare.map((c) => (
-                    <li key={c.old} className="flex items-start gap-3 text-[14px] text-[#586072]">
-                      <span className="grid place-items-center w-5 h-5 rounded-full bg-[#EF4444]/10 mt-0.5 shrink-0">
-                        <X size={12} className="text-[#EF4444]" />
+                    <li key={c.old} className="flex items-start gap-3 text-[14px]" style={{ color: X.sub }}>
+                      <span className="grid place-items-center w-5 h-5 rounded-full mt-0.5 shrink-0" style={{ background: "#fee2e2" }}>
+                        <XIcon size={12} style={{ color: "#ef4444" }} />
                       </span>
                       {c.old}
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="rounded-3xl border border-[#E8613C]/30 bg-[#0B0E14] p-7 shadow-premium">
-                <h3 className="text-[15px] font-bold text-white mb-5">With Osciva</h3>
+              <div
+                className="p-7 text-white"
+                style={{ background: `linear-gradient(135deg, #f08a67 0%, ${X.coral} 50%, #e2603f 100%)`, borderRadius: 16, boxShadow: X.shadow1 }}
+              >
+                <h3 className="text-[15px] font-bold mb-5 text-white">With Osciva</h3>
                 <ul className="space-y-4">
                   {compare.map((c) => (
-                    <li key={c.neu} className="flex items-start gap-3 text-[14px] text-white/85">
-                      <span className="grid place-items-center w-5 h-5 rounded-full bg-[#16A34A]/20 mt-0.5 shrink-0">
-                        <Check size={12} className="text-[#16A34A]" />
+                    <li key={c.neu} className="flex items-start gap-3 text-[14px]" style={{ color: "rgba(255,255,255,0.95)" }}>
+                      <span className="grid place-items-center w-5 h-5 rounded-full mt-0.5 shrink-0" style={{ background: "rgba(255,255,255,0.25)" }}>
+                        <Check size={12} className="text-white" />
                       </span>
                       {c.neu}
                     </li>
@@ -99,7 +107,7 @@ export default function HowItWorksPage() {
                 </ul>
               </div>
             </div>
-          </Reveal>
+          </FadeIn>
         </div>
       </section>
 

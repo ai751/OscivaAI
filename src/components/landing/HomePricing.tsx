@@ -1,65 +1,131 @@
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { Reveal, SectionHeading } from "./_primitives";
-import CountUp from "./CountUp";
+import { useNavigate, Link } from "react-router-dom";
+import { Check, ChevronRight } from "lucide-react";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
-type Tier = { name: string; note: string; popular: boolean; amount?: number; custom?: boolean };
-
-const tiers: Tier[] = [
-  { name: "Free", amount: 0, note: "1 agent, 500 msgs/mo", popular: false },
-  { name: "Starter", amount: 999, note: "3 agents, 10k msgs/mo", popular: false },
-  { name: "Growth", amount: 1999, note: "10 agents, 25k msgs/mo", popular: true },
-  { name: "Enterprise", custom: true, note: "Unlimited everything", popular: false },
+const tiers = [
+  {
+    name: "Free",
+    price: "₹0",
+    per: "forever",
+    note: "Try it on your own site",
+    features: ["1 agent", "500 messages/mo", "Website + PDF training", "Community support"],
+    popular: false,
+  },
+  {
+    name: "Starter",
+    price: "₹999",
+    per: "/month",
+    note: "For small businesses",
+    features: ["3 agents", "10,000 messages/mo", "All knowledge sources", "Remove Osciva branding"],
+    popular: false,
+  },
+  {
+    name: "Growth",
+    price: "₹1,999",
+    per: "/month",
+    note: "For growing teams",
+    features: ["10 agents", "25,000 messages/mo", "Human handoff & inbox", "Priority support"],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    per: "",
+    note: "For serious volume",
+    features: ["Unlimited agents", "Custom message volume", "SLA & dedicated support", "Custom integrations"],
+    popular: false,
+  },
 ];
 
 export default function HomePricing() {
+  const navigate = useNavigate();
   return (
-    <section className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-tc" aria-hidden />
-      <div className="relative z-10 max-w-[1100px] mx-auto">
-        <SectionHeading
-          title="Simple, transparent pricing"
-          subtitle="Start free. Scale as you grow. INR pricing with GST invoices, no hidden fees."
+    <section className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHead
+          hl="Simple Pricing."
+          post="Zero Surprises."
+          sub="Start free. Scale as you grow. INR pricing with GST invoices."
         />
 
-        <Reveal i={2}>
-          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-px rounded-3xl overflow-hidden border border-[#EBEDF0] bg-[#EBEDF0]">
-            {tiers.map((t) => (
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {tiers.map((t, i) => (
+            <FadeIn key={t.name} delay={i * 0.07}>
               <div
-                key={t.name}
-                className={`p-6 sm:p-7 ${t.popular ? "bg-[#0B0E14] text-white" : "bg-white"}`}
+                className="relative h-full flex flex-col border-[1.5px] rounded-[12px] p-6"
+                style={{
+                  borderColor: X.coral,
+                  background: t.popular ? X.coralSoft : X.white,
+                }}
               >
-                <div className="flex items-center gap-2">
-                  <h3 className={`text-[14px] font-bold ${t.popular ? "text-white" : "text-[#0B0E14]"}`}>{t.name}</h3>
-                  {t.popular && (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#E8613C] text-white">POPULAR</span>
-                  )}
-                </div>
-                <div className="mt-4 flex items-baseline gap-1">
-                  <span className={`display text-[28px] font-extrabold ${t.popular ? "text-white" : "text-[#0B0E14]"}`}>
-                    {t.custom ? "Custom" : <CountUp prefix="₹" value={t.amount ?? 0} group />}
+                {t.popular && (
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-[11px] font-bold px-3 py-1 rounded-full text-white"
+                    style={{ background: X.coral }}
+                  >
+                    MOST POPULAR
                   </span>
-                  {!t.custom && (t.amount ?? 0) > 0 && (
-                    <span className={`text-[12px] ${t.popular ? "text-white/50" : "text-[#8C94A1]"}`}>/mo</span>
+                )}
+                <h3 className="text-[17px] font-bold text-center" style={{ color: X.ink }}>
+                  {t.name}
+                </h3>
+                <div className="mt-3 text-center">
+                  <span className="text-[32px] font-bold" style={{ color: X.ink }}>
+                    {t.price}
+                  </span>
+                  {t.per && (
+                    <span className="text-[13px] ml-1" style={{ color: X.faint }}>
+                      {t.per}
+                    </span>
                   )}
                 </div>
-                <p className={`mt-2 text-[12.5px] ${t.popular ? "text-white/60" : "text-[#586072]"}`}>{t.note}</p>
+                <p className="mt-1 text-[12.5px] text-center" style={{ color: X.mute }}>
+                  {t.note}
+                </p>
+                <ul className="mt-5 space-y-2.5 flex-1">
+                  {t.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-[13.5px]" style={{ color: X.sub }}>
+                      <Check size={15} className="mt-0.5 shrink-0" style={{ color: X.coral }} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => navigate("/auth")}
+                  className="mt-6 w-full py-3 rounded-full text-[14px] font-bold text-white transition-colors"
+                  style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = X.coralGradHover)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = X.coralGrad)}
+                >
+                  {t.price === "Custom" ? "Talk to Us" : "Start Free Trial"}
+                </button>
               </div>
+            </FadeIn>
+          ))}
+        </div>
+
+        <FadeIn delay={0.25}>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13.5px]" style={{ color: X.sub }}>
+            {["No credit card required", "Cancel anytime", "No hidden fees"].map((t, i) => (
+              <span key={t} className="inline-flex items-center gap-3">
+                {i > 0 && <span style={{ color: X.borderStrong }}>|</span>}
+                <span className="inline-flex items-center gap-1.5">
+                  <Check size={14} style={{ color: X.green }} /> {t}
+                </span>
+              </span>
             ))}
           </div>
-        </Reveal>
-
-        <Reveal i={3}>
-          <div className="mt-10 flex justify-center">
+          <div className="mt-5 flex justify-center">
             <Link
               to="/pricing"
-              className="group inline-flex items-center gap-2 text-[14px] font-semibold text-[#0B0E14] hover:text-[#E8613C] transition-colors"
+              className="inline-flex items-center gap-1.5 text-[14.5px] font-bold"
+              style={{ color: X.coral }}
             >
-              Compare all plans &amp; features
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+              Compare all plans & features <ChevronRight size={15} />
             </Link>
           </div>
-        </Reveal>
+        </FadeIn>
       </div>
     </section>
   );

@@ -68,7 +68,7 @@ export default function Agents() {
           </div>
           <button
             onClick={() => navigate("/agents/create")}
-            className="mt-1 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white text-sm font-semibold hover:bg-[#CF4F2C] transition-colors shadow-brand"
+            className="mt-1 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white text-sm font-semibold hover:bg-[#e05f40] transition-colors shadow-brand"
           >
             <Plus size={16} /> Create agent
           </button>

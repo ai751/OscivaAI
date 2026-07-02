@@ -1,85 +1,114 @@
 import { useEffect, useState } from "react";
+import { Upload, Wand2, Code2, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Reveal, SectionHeading } from "./_primitives";
+import { ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
 const steps = [
-  { num: "01", title: "Configure your assistant", desc: "Name it, set its personality and pick a model in a point-and-click wizard." },
-  { num: "02", title: "Upload your business data", desc: "Add PDFs, docs, your website URL and FAQs. Osciva indexes it all automatically." },
-  { num: "03", title: "Embed anywhere in one click", desc: "Copy one snippet, or use the WordPress, Shopify and React integrations." },
+  {
+    icon: Upload,
+    time: "Minute 0–10",
+    title: "Upload your knowledge",
+    desc: "Drop in PDFs, docs and your website URL. Osciva reads and indexes everything automatically.",
+  },
+  {
+    icon: Wand2,
+    time: "Minute 10–20",
+    title: "Shape your agent",
+    desc: "Pick the tone, greeting, languages and brand colors in a point-and-click editor. Preview it live.",
+  },
+  {
+    icon: Code2,
+    time: "Minute 20–30",
+    title: "Embed with one line",
+    desc: "Paste a single script tag — or one-click install on WordPress and Shopify. That's the whole job.",
+  },
+  {
+    icon: Rocket,
+    time: "Minute 30 →",
+    title: "It starts answering",
+    desc: "Your agent handles real customers while you watch every conversation in the dashboard.",
+  },
 ];
 
 export default function HomeHowItWorks() {
-  const reduce = useReducedMotion();
-  // `active` is the card shown in the centre (and highlighted). It cycles on a
-  // steady timer; hovering does not change it.
-  const [active, setActive] = useState(1);
-
+  /* Spotlight sweeps across the step icons, lighting each one up in turn. */
+  const [active, setActive] = useState(0);
   useEffect(() => {
-    if (reduce) return;
-    const id = setInterval(() => setActive((i) => (i + 1) % steps.length), 3600);
+    const id = setInterval(() => setActive((a) => (a + 1) % steps.length), 1400);
     return () => clearInterval(id);
-  }, [reduce]);
-
-  // Render order: previous on the left, active in the middle, next on the right.
-  const order = [
-    (active + steps.length - 1) % steps.length,
-    active,
-    (active + 1) % steps.length,
-  ];
+  }, []);
 
   return (
-    <section className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-tc" aria-hidden />
-      <div className="relative z-10 max-w-[1200px] mx-auto">
-        <SectionHeading
-          title="From idea to live AI in three steps"
-          subtitle="No coding, no glue work. Built for non-technical founders and teams."
+    <section className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.cream }}>
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHead
+          pre="Go"
+          hl="Live in 30 Minutes,"
+          post="Not 30 Days"
+          sub="From signup to your first answered customer — here's the whole journey"
         />
 
-        <Reveal>
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
-            {order.map((idx, pos) => {
-              const s = steps[idx];
-              const on = reduce || pos === 1; // the centre card is highlighted
-              return (
-                <motion.div
-                  key={s.num}
-                  layout
-                  transition={{ type: "spring", stiffness: 260, damping: 30 }}
-                  className={`h-full rounded-2xl border p-7 bg-white transition-[opacity,box-shadow,border-color] duration-500 ${
-                    on
-                      ? "border-[#E8613C]/40 shadow-premium opacity-100"
-                      : "border-[#EBEDF0] opacity-40"
-                  }`}
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 relative">
+          {/* Connector line (desktop) */}
+          <div
+            aria-hidden
+            className="hidden lg:block absolute top-[44px] left-[12%] right-[12%] border-t-2 border-dashed"
+            style={{ borderColor: "#f3c5b5" }}
+          />
+          {steps.map((s, i) => (
+            <FadeIn key={s.title} delay={i * 0.1}>
+              <div className="relative flex flex-col items-center text-center px-4">
+                <motion.span
+                  animate={{ scale: active === i ? 1.08 : 1 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="relative z-10 w-[88px] h-[88px] rounded-full grid place-items-center border-4"
+                  style={{
+                    background: active === i ? X.coralGrad : X.white,
+                    borderColor: X.coralSoft,
+                    boxShadow:
+                      active === i
+                        ? "0 0 0 7px rgba(239,120,91,0.16), 0 12px 28px rgba(239,120,91,0.38)"
+                        : X.shadow3,
+                    transition: "background 0.35s ease, box-shadow 0.35s ease",
+                  }}
                 >
-                  <span
-                    className={`display text-[40px] font-extrabold leading-none transition-colors duration-500 ${
-                      on ? "text-[#E8613C]" : "text-[#C7CDD6]"
-                    }`}
-                  >
-                    {s.num}
-                  </span>
-                  <h3 className="mt-3 text-[17px] font-bold text-[#0B0E14]">{s.title}</h3>
-                  <p className="mt-2 text-[13.5px] text-[#586072] leading-relaxed">{s.desc}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </Reveal>
+                  <s.icon
+                    size={30}
+                    strokeWidth={1.7}
+                    style={{ color: active === i ? "#ffffff" : X.coral, transition: "color 0.35s ease" }}
+                  />
+                </motion.span>
+                <span
+                  className="mt-5 text-[11px] font-bold uppercase tracking-[0.1em] px-2.5 py-1 rounded-full"
+                  style={{ background: X.coralSoft, color: X.coralDark }}
+                >
+                  {s.time}
+                </span>
+                <h3 className="mt-3 text-[17px] font-bold" style={{ color: X.ink }}>
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-[21px] max-w-[260px]" style={{ color: X.sub }}>
+                  {s.desc}
+                </p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
 
-        <Reveal i={3}>
-          <div className="mt-10 flex justify-center">
+        <FadeIn delay={0.3}>
+          <div className="mt-12 flex justify-center">
             <Link
               to="/how-it-works"
-              className="group inline-flex items-center gap-2 text-[14px] font-semibold text-[#0B0E14] hover:text-[#E8613C] transition-colors"
+              className="inline-flex items-center gap-1.5 text-[15px] font-bold transition-colors"
+              style={{ color: X.coral }}
             >
-              See the full walkthrough
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+              See the full walkthrough <ChevronRight size={16} />
             </Link>
           </div>
-        </Reveal>
+        </FadeIn>
       </div>
     </section>
   );

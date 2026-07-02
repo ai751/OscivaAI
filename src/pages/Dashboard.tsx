@@ -116,7 +116,7 @@ export default function Dashboard() {
             </div>
             <button
               onClick={() => navigate("/agents/create")}
-              className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-full text-[13.5px] font-semibold hover:bg-[#CF4F2C] transition-colors shadow-brand shrink-0"
+              className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-full text-[13.5px] font-semibold hover:bg-[#e05f40] transition-colors shadow-brand shrink-0"
             >
               <Plus size={16} /> New agent
             </button>

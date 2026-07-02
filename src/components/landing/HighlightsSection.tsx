@@ -1,56 +1,62 @@
-import { motion, type Variants } from "framer-motion";
-import { Clock, Boxes, MousePointerClick, ShieldCheck } from "lucide-react";
-import { SectionHeading } from "./_primitives";
+import { Zap, Clock4, IndianRupee, Puzzle } from "lucide-react";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
-const reasons = [
-  { icon: Clock, title: "Live in ~30 minutes", desc: "Upload your data, configure the assistant, embed one snippet. No setup hell, no engineering sprint." },
-  { icon: Boxes, title: "Fits any business", desc: "Stores, clinics, institutes, SaaS, agencies, real estate — if you have customers, it fits in." },
-  { icon: MousePointerClick, title: "Genuinely no-code", desc: "Built for founders and operators. If you can fill a form, you can ship an Osciva agent." },
-  { icon: ShieldCheck, title: "Secure by default", desc: "Encryption in transit and at rest, India-hosted data, and DPDP-ready controls out of the box." },
+const cards = [
+  {
+    icon: Zap,
+    title: "Live in 30 Minutes",
+    desc: "No setup hell. Upload your docs, connect your website, go live. Faster than writing one support email.",
+    bg: X.coralSoft,
+  },
+  {
+    icon: Clock4,
+    title: "24/7 Answers",
+    desc: "Your agent answers at 2 pm and 2 am with the same patience. Customers never wait for office hours again.",
+    bg: X.lavender,
+  },
+  {
+    icon: IndianRupee,
+    title: "Built for India",
+    desc: "INR pricing with GST invoices, 20+ Indian languages, and your data hosted in Indian data centres.",
+    bg: X.coralSoft,
+  },
+  {
+    icon: Puzzle,
+    title: "Fits Your Business",
+    desc: "Stores, clinics, institutes, SaaS, agencies — if customers ask you questions, Osciva answers them.",
+    bg: X.lavender,
+  },
 ];
-
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-// Cards reveal one-by-one as the section scrolls in.
-const grid: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.14, delayChildren: 0.05 } },
-};
-const card: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
-};
 
 export default function HighlightsSection() {
   return (
-    <section className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-bl" aria-hidden />
-      <div className="relative z-10 max-w-[1200px] mx-auto">
-        <SectionHeading
-          eyebrow="Why Osciva"
-          title="The fastest path from data to a working AI agent"
-          subtitle="Built for non-technical teams who want production-grade results without the production-grade complexity."
+    <section className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHead
+          pre="Why Choose"
+          hl="Osciva"
+          sub="Four reasons we're different from every other chatbot tool"
         />
 
-        <motion.div
-          className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
-          variants={grid}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-        >
-          {reasons.map((r) => (
-            <motion.div key={r.title} variants={card} className="h-full">
-              <div className="group h-full rounded-2xl border border-[#EBEDF0] bg-white p-6 transition-all duration-300 hover:border-[#E8613C]/30 hover:shadow-premium hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-xl bg-[#F7F8FA] border border-[#EBEDF0] flex items-center justify-center mb-5 transition-colors group-hover:bg-[#FFF1EC] group-hover:border-[#E8613C]/20">
-                  <r.icon size={21} className="text-[#0B0E14] transition-colors group-hover:text-[#E8613C]" />
-                </div>
-                <h3 className="text-[16px] font-bold text-[#0B0E14] mb-2">{r.title}</h3>
-                <p className="text-[13.5px] text-[#586072] leading-relaxed">{r.desc}</p>
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {cards.map((c, i) => (
+            <FadeIn key={c.title} delay={i * 0.08}>
+              <div
+                className="h-full flex flex-col items-center text-center px-6 py-12 transition-transform duration-300 hover:-translate-y-1.5"
+                style={{ background: c.bg, borderRadius: 16 }}
+              >
+                <c.icon size={34} strokeWidth={1.6} style={{ color: X.ink }} />
+                <h3 className="mt-7 text-[17px] font-bold" style={{ color: X.ink }}>
+                  {c.title}
+                </h3>
+                <p className="mt-3 text-[13.5px] leading-[21px]" style={{ color: X.sub }}>
+                  {c.desc}
+                </p>
               </div>
-            </motion.div>
+            </FadeIn>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

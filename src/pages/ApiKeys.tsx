@@ -110,7 +110,7 @@ export default function ApiKeys() {
                       {visible[p.name] ? <EyeOff size={14} /> : <Eye size={14} />}
                     </button>
                   </div>
-                  <button onClick={() => saveKey(p.name)} className="px-5 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-[#CF4F2C] transition-colors">
+                  <button onClick={() => saveKey(p.name)} className="px-5 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-[#e05f40] transition-colors">
                     Save
                   </button>
                   {hasKey && (

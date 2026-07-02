@@ -1,12 +1,13 @@
 import { Fragment } from "react";
 import { Check, Minus, ShieldCheck, RefreshCw, Headphones } from "lucide-react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import { X } from "@/components/landing/LandingNavbar";
 import FooterSection from "@/components/landing/FooterSection";
 import PageHero from "@/components/landing/PageHero";
 import PricingSection from "@/components/landing/PricingSection";
 import FAQSection from "@/components/landing/FAQSection";
 import CTASection from "@/components/landing/CTASection";
-import { Reveal, SectionHeading } from "@/components/landing/_primitives";
+import { SectionHead, FadeIn } from "@/components/landing/xui";
 
 const planNames = ["Free", "Starter", "Growth", "Enterprise"];
 
@@ -49,42 +50,45 @@ const guarantees = [
 ];
 
 function Cell({ v }: { v: string | boolean }) {
-  if (v === true) return <Check size={16} className="text-[#16A34A] mx-auto" />;
-  if (v === false) return <Minus size={15} className="text-[#C7CDD6] mx-auto" />;
-  return <span className="text-[13px] text-[#1F2733]">{v}</span>;
+  if (v === true) return <Check size={16} className="mx-auto" style={{ color: X.coral }} />;
+  if (v === false) return <Minus size={15} className="mx-auto" style={{ color: X.borderStrong }} />;
+  return <span className="text-[13px]" style={{ color: X.sub }}>{v}</span>;
 }
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mkt-x min-h-screen" style={{ background: X.white }}>
       <LandingNavbar />
 
       <PageHero
         breadcrumb="Pricing"
-        title="Pricing that scales"
-        highlight="with you"
+        title="Pricing That Scales"
+        highlight="With You"
         subtitle="Start free, upgrade when you grow. Every plan includes GST invoices and India-hosted data — no hidden fees, ever."
-        primaryCta={{ label: "Start free", to: "/auth" }}
+        primaryCta={{ label: "Start Free Trial", to: "/auth" }}
         secondaryCta={{ label: "Talk to sales", to: "/contact" }}
       />
 
-      {/* Plan cards (existing) */}
+      {/* Plan cards */}
       <PricingSection />
 
       {/* Comparison table */}
-      <section className="relative overflow-hidden py-20 md:py-28 px-5 sm:px-6">
-        <div className="absolute inset-0 z-0 bg-glow-cr" aria-hidden />
-        <div className="relative z-10 max-w-[1100px] mx-auto">
-          <SectionHeading eyebrow="Compare" title="Every feature, side by side" />
+      <section className="py-20 md:py-24 px-5 sm:px-8" style={{ background: X.cream }}>
+        <div className="max-w-[1100px] mx-auto">
+          <SectionHead pre="Every Feature," hl="Side by Side" />
 
-          <Reveal>
-            <div className="mt-12 overflow-x-auto rounded-3xl border border-[#EBEDF0] bg-white shadow-sm">
+          <FadeIn delay={0.1}>
+            <div className="mt-12 overflow-x-auto" style={{ background: X.white, borderRadius: 16, border: `1.5px solid ${X.coral}` }}>
               <table className="w-full min-w-[720px] border-collapse">
                 <thead>
-                  <tr className="border-b border-[#EBEDF0]">
-                    <th className="text-left text-[13px] font-semibold text-[#586072] px-6 py-5 w-[28%]">Plan</th>
+                  <tr style={{ borderBottom: `1px solid ${X.border}` }}>
+                    <th className="text-left text-[13px] font-bold px-6 py-5 w-[28%]" style={{ color: X.mute }}>Plan</th>
                     {planNames.map((n) => (
-                      <th key={n} className={`text-center text-[14px] font-bold px-4 py-5 ${n === "Growth" ? "text-[#E8613C]" : "text-[#0B0E14]"}`}>
+                      <th
+                        key={n}
+                        className="text-center text-[14px] font-bold px-4 py-5"
+                        style={{ color: n === "Growth" ? X.coral : X.ink }}
+                      >
                         {n}
                       </th>
                     ))}
@@ -93,16 +97,16 @@ export default function PricingPage() {
                 <tbody>
                   {rows.map((grp) => (
                     <Fragment key={grp.group}>
-                      <tr className="bg-[#FBFBFC]">
-                        <td colSpan={5} className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[#A2AAB6]">
+                      <tr style={{ background: X.surface }}>
+                        <td colSpan={5} className="px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: X.faint }}>
                           {grp.group}
                         </td>
                       </tr>
                       {grp.items.map((r) => (
-                        <tr key={r.label} className="border-b border-[#F1F3F6] last:border-0">
-                          <td className="px-6 py-3.5 text-[13.5px] text-[#586072]">{r.label}</td>
+                        <tr key={r.label} style={{ borderBottom: `1px solid ${X.border}` }}>
+                          <td className="px-6 py-3.5 text-[13.5px]" style={{ color: X.sub }}>{r.label}</td>
                           {r.values.map((v, i) => (
-                            <td key={i} className={`text-center px-4 py-3.5 ${i === 2 ? "bg-[#FFF8F5]" : ""}`}>
+                            <td key={i} className="text-center px-4 py-3.5" style={i === 2 ? { background: X.coralSoft } : undefined}>
                               <Cell v={v} />
                             </td>
                           ))}
@@ -113,22 +117,22 @@ export default function PricingPage() {
                 </tbody>
               </table>
             </div>
-          </Reveal>
+          </FadeIn>
 
           {/* Guarantees */}
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
             {guarantees.map((g, i) => (
-              <Reveal key={g.title} i={i}>
-                <div className="h-full rounded-2xl border border-[#EBEDF0] bg-white p-6 flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-[#FFF1EC] flex items-center justify-center shrink-0">
-                    <g.icon size={19} className="text-[#E8613C]" />
+              <FadeIn key={g.title} delay={i * 0.08}>
+                <div className="h-full p-6 flex items-start gap-4" style={{ background: X.white, borderRadius: 16, boxShadow: X.shadow3 }}>
+                  <div className="w-11 h-11 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: X.coralSoft }}>
+                    <g.icon size={19} style={{ color: X.coral }} />
                   </div>
                   <div>
-                    <h3 className="text-[15px] font-bold text-[#0B0E14] mb-1.5">{g.title}</h3>
-                    <p className="text-[13px] text-[#586072] leading-relaxed">{g.desc}</p>
+                    <h3 className="text-[15px] font-bold mb-1.5" style={{ color: X.ink }}>{g.title}</h3>
+                    <p className="text-[13px] leading-relaxed" style={{ color: X.sub }}>{g.desc}</p>
                   </div>
                 </div>
-              </Reveal>
+              </FadeIn>
             ))}
           </div>
         </div>

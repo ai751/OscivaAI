@@ -17,15 +17,15 @@
   <body>
     <div id="root"></div>
     <script>
-      // Apply theme before paint to avoid a flash. Dark is the default;
-      // only an explicit saved "light" preference opts out.
+      // Apply the saved theme before paint to avoid a flash. Light is the
+      // default everywhere; marketing + app both honor the saved choice.
+      // Auth pages always render light (they use useForceLightTheme).
       try {
-        if (localStorage.getItem('osciva-theme') !== 'light') {
+        var forcedLight = /^\/(auth|reset-password)/.test(window.location.pathname);
+        if (!forcedLight && localStorage.getItem('osciva-theme') === 'dark') {
           document.documentElement.classList.add('dark');
         }
-      } catch (e) {
-        document.documentElement.classList.add('dark');
-      }
+      } catch (e) {}
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>

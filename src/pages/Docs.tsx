@@ -26,12 +26,12 @@ const APP_ORIGIN = typeof window !== "undefined" ? window.location.origin : "htt
 const WIDGET_SRC = `${APP_ORIGIN}/osciva-chat.js`;
 
 const C = {
-  ink: "#0B0E14",
-  sub: "#586072",
-  mute: "#8C94A1",
-  line: "#EBEDF0",
-  soft: "#F7F8FA",
-  brand: "#E8613C",
+  ink: "var(--mx-ink)",
+  sub: "var(--mx-mute)",
+  mute: "var(--mx-faint)",
+  line: "var(--mx-border)",
+  soft: "var(--mx-surface)",
+  brand: "#ef785b",
 } as const;
 
 /* ----------------------------------------------------------------------------
@@ -39,41 +39,41 @@ const C = {
  * ------------------------------------------------------------------------- */
 
 function H1({ children }: { children: React.ReactNode }) {
-  return <h1 className="display text-[30px] sm:text-[36px] font-extrabold text-[#0B0E14] tracking-[-0.02em]">{children}</h1>;
+  return <h1 className="display text-[30px] sm:text-[36px] font-extrabold text-[color:var(--mx-ink)] tracking-[-0.02em]">{children}</h1>;
 }
 function Lead({ children }: { children: React.ReactNode }) {
-  return <p className="mt-3 text-[16px] leading-relaxed text-[#586072]">{children}</p>;
+  return <p className="mt-3 text-[16px] leading-relaxed text-[color:var(--mx-mute)]">{children}</p>;
 }
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="mt-12 mb-3 text-[21px] font-bold text-[#0B0E14] tracking-[-0.01em] scroll-mt-24">{children}</h2>;
+  return <h2 className="mt-12 mb-3 text-[21px] font-bold text-[color:var(--mx-ink)] tracking-[-0.01em] scroll-mt-24">{children}</h2>;
 }
 function H3({ children }: { children: React.ReactNode }) {
-  return <h3 className="mt-7 mb-2 text-[15px] font-bold text-[#0B0E14]">{children}</h3>;
+  return <h3 className="mt-7 mb-2 text-[15px] font-bold text-[color:var(--mx-ink)]">{children}</h3>;
 }
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mt-3 text-[14.5px] leading-[1.75] text-[#3a4150]">{children}</p>;
+  return <p className="mt-3 text-[14.5px] leading-[1.75] text-[color:var(--mx-sub)]">{children}</p>;
 }
 function UL({ children }: { children: React.ReactNode }) {
   return <ul className="mt-3 space-y-2">{children}</ul>;
 }
 function LI({ children }: { children: React.ReactNode }) {
   return (
-    <li className="flex gap-2.5 text-[14.5px] leading-[1.7] text-[#3a4150]">
-      <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-[#E8613C] shrink-0" />
+    <li className="flex gap-2.5 text-[14.5px] leading-[1.7] text-[color:var(--mx-sub)]">
+      <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-[#ef785b] shrink-0" />
       <span className="min-w-0">{children}</span>
     </li>
   );
 }
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <code className="px-1.5 py-0.5 rounded-[5px] bg-[#F2F4F7] border border-[#EBEDF0] text-[12.5px] font-mono text-[#CF4F2C] break-words">
+    <code className="px-1.5 py-0.5 rounded-[5px] bg-[var(--mx-surface)] border border-[var(--mx-border)] text-[12.5px] font-mono text-[#e05f40] break-words">
       {children}
     </code>
   );
 }
 function A({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#E8613C] font-medium hover:underline">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#ef785b] font-medium hover:underline">
       {children}
     </a>
   );
@@ -88,7 +88,7 @@ function CodeBlock({ code, label }: { code: string; label?: string }) {
     });
   };
   return (
-    <div className="mt-4 rounded-xl overflow-hidden border border-[#1c2130] bg-[#0B0E14]">
+    <div className="mt-4 rounded-xl overflow-hidden border border-[#1c2130] bg-[#111827]">
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/[0.07]">
         <span className="text-[11px] font-mono font-medium text-white/45">{label ?? "code"}</span>
         <button
@@ -116,19 +116,19 @@ function Note({ type = "info", children }: { type?: "info" | "warn" | "tip"; chi
   return (
     <div className="mt-4 flex gap-3 rounded-xl p-4" style={{ background: bg, border: `1px solid ${bd}` }}>
       <Icon size={17} style={{ color: fg }} className="shrink-0 mt-0.5" />
-      <div className="text-[13.5px] leading-relaxed text-[#3a4150] min-w-0">{children}</div>
+      <div className="text-[13.5px] leading-relaxed text-[color:var(--mx-sub)] min-w-0">{children}</div>
     </div>
   );
 }
 
 function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
   return (
-    <div className="mt-4 overflow-x-auto rounded-xl border border-[#EBEDF0]">
+    <div className="mt-4 overflow-x-auto rounded-xl border border-[var(--mx-border)]">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-[#F7F8FA]">
+          <tr className="bg-[var(--mx-surface)]">
             {head.map((h) => (
-              <th key={h} className="px-4 py-2.5 text-[12px] font-bold text-[#0B0E14] border-b border-[#EBEDF0] whitespace-nowrap">
+              <th key={h} className="px-4 py-2.5 text-[12px] font-bold text-[color:var(--mx-ink)] border-b border-[var(--mx-border)] whitespace-nowrap">
                 {h}
               </th>
             ))}
@@ -138,7 +138,7 @@ function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
           {rows.map((r, i) => (
             <tr key={i} className="align-top">
               {r.map((cell, j) => (
-                <td key={j} className="px-4 py-2.5 text-[13px] leading-relaxed text-[#3a4150] border-b border-[#F2F4F7]">
+                <td key={j} className="px-4 py-2.5 text-[13px] leading-relaxed text-[color:var(--mx-sub)] border-b border-[var(--mx-surface)]">
                   {cell}
                 </td>
               ))}
@@ -155,12 +155,12 @@ function Steps({ items }: { items: { title: string; body: React.ReactNode }[] })
     <ol className="mt-5 space-y-5">
       {items.map((s, i) => (
         <li key={i} className="flex gap-4">
-          <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-[#0B0E14] text-white text-[12px] font-bold">
+          <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-[var(--mx-ink)] text-[color:var(--mx-card)] text-[12px] font-bold">
             {i + 1}
           </span>
           <div className="min-w-0 pt-0.5">
-            <div className="text-[14.5px] font-bold text-[#0B0E14]">{s.title}</div>
-            <div className="mt-1 text-[14px] leading-[1.7] text-[#3a4150]">{s.body}</div>
+            <div className="text-[14.5px] font-bold text-[color:var(--mx-ink)]">{s.title}</div>
+            <div className="mt-1 text-[14px] leading-[1.7] text-[color:var(--mx-sub)]">{s.body}</div>
           </div>
         </li>
       ))}
@@ -878,7 +878,7 @@ Always answer from the knowledge base.          // Behaviour`}
     tagline: "🏥 24/7 Care",            // header subtitle
     welcomeMessage: "Hi there! 👋",      // first bot message
     headerLogo: "https://site.com/logo.png",
-    color: "#1e293b",                    // header / accent colour
+    color: "#111827",                    // header / accent colour
     position: "right",                   // "left" or "right"
     suggestions: ["Book appointment", "Find a doctor"],
     bubbleMessages: ["Need help? 💬", "Ask me anything 💡"]
@@ -968,7 +968,7 @@ Always answer from the knowledge base.          // Behaviour`}
         code={`{
   "name": "Adya Hospital",
   "welcomeMsg": "Hi 👋 How can I help you today?",
-  "color": "#1e293b",
+  "color": "#111827",
   "position": "right",
   "chatIcon": "🤖",
   "logoUrl": "https://site.com/logo.png",
@@ -1197,7 +1197,7 @@ data: [DONE]`}
       </P>
 
       <Note type="info">
-        Still stuck? Reach out from the <a href="/contact" className="text-[#E8613C] font-medium hover:underline">Contact</a>{" "}
+        Still stuck? Reach out from the <a href="/contact" className="text-[#ef785b] font-medium hover:underline">Contact</a>{" "}
         page and we'll help.
       </Note>
     </>
@@ -1257,7 +1257,7 @@ export default function Docs() {
     <nav className="space-y-6">
       {filteredNav.map((g) => (
         <div key={g.title}>
-          <div className="px-3 mb-2 text-[11px] font-bold uppercase tracking-[0.09em] text-[#8C94A1]">{g.title}</div>
+          <div className="px-3 mb-2 text-[11px] font-bold uppercase tracking-[0.09em] text-[color:var(--mx-faint)]">{g.title}</div>
           <div className="space-y-0.5">
             {g.items.map((it) => (
               <button
@@ -1265,8 +1265,8 @@ export default function Docs() {
                 onClick={() => go(it.id)}
                 className={`w-full text-left px-3 py-1.5 rounded-lg text-[13.5px] transition-colors ${
                   active === it.id
-                    ? "bg-[#FFF1EC] text-[#CF4F2C] font-semibold"
-                    : "text-[#586072] hover:text-[#0B0E14] hover:bg-[#F2F4F7]"
+                    ? "bg-[var(--mx-coral-soft)] text-[#e05f40] font-semibold"
+                    : "text-[color:var(--mx-mute)] hover:text-[color:var(--mx-ink)] hover:bg-[var(--mx-surface)]"
                 }`}
               >
                 {it.label}
@@ -1276,27 +1276,27 @@ export default function Docs() {
         </div>
       ))}
       {filteredNav.length === 0 && (
-        <p className="px-3 text-[13px] text-[#8C94A1]">No sections match "{query}".</p>
+        <p className="px-3 text-[13px] text-[color:var(--mx-faint)]">No sections match "{query}".</p>
       )}
     </nav>
   );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mkt-x min-h-screen" style={{ background: "var(--mx-card)" }}>
       <LandingNavbar />
 
-      <div className="pt-[68px]">
+      <div className="pt-[96px]">
         <div className="max-w-[1240px] mx-auto flex">
           {/* Desktop sidebar */}
-          <aside className="hidden lg:block w-[270px] shrink-0 border-r border-[#EBEDF0]">
-            <div className="sticky top-[68px] h-[calc(100vh-68px)] overflow-y-auto px-4 py-8">
+          <aside className="hidden lg:block w-[270px] shrink-0 border-r border-[var(--mx-border)]">
+            <div className="sticky top-[96px] h-[calc(100vh-96px)] overflow-y-auto px-4 py-8">
               <div className="relative mb-5">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8C94A1]" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--mx-faint)]" />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search docs…"
-                  className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#F7F8FA] border border-[#EBEDF0] text-[13px] text-[#0B0E14] placeholder:text-[#8C94A1] focus:outline-none focus:ring-2 focus:ring-[#E8613C]/30"
+                  className="w-full pl-9 pr-3 py-2 rounded-lg bg-[var(--mx-surface)] border border-[var(--mx-border)] text-[13px] text-[color:var(--mx-ink)] placeholder:text-[color:var(--mx-faint)] focus:outline-none focus:ring-2 focus:ring-[#ef785b]/30"
                 />
               </div>
               {SidebarNav}
@@ -1309,20 +1309,20 @@ export default function Docs() {
             <div className="lg:hidden mb-6">
               <button
                 onClick={() => setMobileNavOpen((v) => !v)}
-                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-[#EBEDF0] bg-[#F7F8FA] text-[14px] font-semibold text-[#0B0E14]"
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-[var(--mx-border)] bg-[var(--mx-surface)] text-[14px] font-semibold text-[color:var(--mx-ink)]"
               >
                 {activeLabel}
-                <ChevronRight size={16} className={`text-[#8C94A1] transition-transform ${mobileNavOpen ? "rotate-90" : ""}`} />
+                <ChevronRight size={16} className={`text-[color:var(--mx-faint)] transition-transform ${mobileNavOpen ? "rotate-90" : ""}`} />
               </button>
               {mobileNavOpen && (
-                <div className="mt-2 rounded-xl border border-[#EBEDF0] bg-white p-3">
+                <div className="mt-2 rounded-xl border border-[var(--mx-border)] bg-[var(--mx-card)] p-3">
                   <div className="relative mb-3">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8C94A1]" />
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--mx-faint)]" />
                     <input
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       placeholder="Search docs…"
-                      className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#F7F8FA] border border-[#EBEDF0] text-[13px] focus:outline-none focus:ring-2 focus:ring-[#E8613C]/30"
+                      className="w-full pl-9 pr-3 py-2 rounded-lg bg-[var(--mx-surface)] border border-[var(--mx-border)] text-[13px] focus:outline-none focus:ring-2 focus:ring-[#ef785b]/30"
                     />
                   </div>
                   {SidebarNav}
@@ -1336,16 +1336,16 @@ export default function Docs() {
               </article>
 
               {/* Prev / next */}
-              <div className="mt-16 pt-8 border-t border-[#EBEDF0] grid grid-cols-2 gap-4">
+              <div className="mt-16 pt-8 border-t border-[var(--mx-border)] grid grid-cols-2 gap-4">
                 {prev ? (
                   <button
                     onClick={() => go(prev.id)}
-                    className="group text-left rounded-xl border border-[#EBEDF0] p-4 hover:border-[#E8613C]/40 hover:bg-[#FFF8F5] transition-colors"
+                    className="group text-left rounded-xl border border-[var(--mx-border)] p-4 hover:border-[#ef785b]/40 hover:bg-[var(--mx-coral-soft)] transition-colors"
                   >
-                    <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#8C94A1]">
+                    <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[color:var(--mx-faint)]">
                       <ArrowLeft size={12} /> Previous
                     </span>
-                    <span className="mt-1 block text-[14px] font-bold text-[#0B0E14] group-hover:text-[#CF4F2C]">{prev.label}</span>
+                    <span className="mt-1 block text-[14px] font-bold text-[color:var(--mx-ink)] group-hover:text-[#e05f40]">{prev.label}</span>
                   </button>
                 ) : (
                   <span />
@@ -1353,12 +1353,12 @@ export default function Docs() {
                 {next ? (
                   <button
                     onClick={() => go(next.id)}
-                    className="group text-right rounded-xl border border-[#EBEDF0] p-4 hover:border-[#E8613C]/40 hover:bg-[#FFF8F5] transition-colors"
+                    className="group text-right rounded-xl border border-[var(--mx-border)] p-4 hover:border-[#ef785b]/40 hover:bg-[var(--mx-coral-soft)] transition-colors"
                   >
-                    <span className="flex items-center justify-end gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#8C94A1]">
+                    <span className="flex items-center justify-end gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[color:var(--mx-faint)]">
                       Next <ArrowRight size={12} />
                     </span>
-                    <span className="mt-1 block text-[14px] font-bold text-[#0B0E14] group-hover:text-[#CF4F2C]">{next.label}</span>
+                    <span className="mt-1 block text-[14px] font-bold text-[color:var(--mx-ink)] group-hover:text-[#e05f40]">{next.label}</span>
                   </button>
                 ) : (
                   <span />

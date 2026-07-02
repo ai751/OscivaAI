@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Check, Lightbulb } from "lucide-react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import { X } from "@/components/landing/LandingNavbar";
 import FooterSection from "@/components/landing/FooterSection";
 import PageHero from "@/components/landing/PageHero";
-import { Reveal } from "@/components/landing/_primitives";
+import { FadeIn } from "@/components/landing/xui";
 import ImageCycler, { imgFallback, type CycleImage } from "@/components/landing/ImageCycler";
 
 // Indian-context professional imagery (Unsplash), each with a Picsum fallback.
@@ -29,92 +30,93 @@ export default function Careers() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mkt-x min-h-screen" style={{ background: X.white }}>
       <LandingNavbar />
 
       <PageHero
         breadcrumb="Careers"
-        title="Build AI that every business can"
-        highlight="actually use"
+        title="Build AI That Every Business Can"
+        highlight="Actually Use"
         subtitle="We are a small, remote-first team in India shipping fast. If you like turning hard problems into simple products, you will feel at home here."
         primaryCta={null}
         secondaryCta={{ label: "About Osciva", to: "/about" }}
       />
 
       {/* Cycling team imagery */}
-      <section className="px-5 sm:px-6 pb-4 md:pb-8">
+      <section className="px-5 sm:px-8 pb-4 md:pb-8" style={{ background: X.white }}>
         <div className="max-w-[1000px] mx-auto">
-          <Reveal>
+          <FadeIn>
             <ImageCycler images={cycle} />
-          </Reveal>
+          </FadeIn>
         </div>
       </section>
 
       {/* Why join — split with image */}
-      <section className="relative overflow-hidden py-14 md:py-20 px-5 sm:px-6">
-        <div className="absolute inset-0 z-0 bg-glow-bl" aria-hidden />
-        <div className="relative z-10 max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <Reveal>
+      <section className="py-14 md:py-20 px-5 sm:px-8" style={{ background: X.white }}>
+        <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <FadeIn>
             <img
               src={featureImg.src}
               alt={featureImg.alt}
               loading="lazy"
               onError={(e) => imgFallback(e, featureImg.seed)}
-              className="w-full h-[300px] md:h-[420px] object-cover rounded-3xl border border-[#EBEDF0]"
+              className="w-full h-[300px] md:h-[420px] object-cover"
+              style={{ borderRadius: 16, border: `1px solid ${X.border}` }}
             />
-          </Reveal>
-          <Reveal i={1}>
+          </FadeIn>
+          <FadeIn delay={0.1}>
             <div>
-              <h2 className="display text-[28px] md:text-[36px] font-extrabold text-[#0B0E14] leading-tight">
+              <h2 className="text-[28px] md:text-[36px] font-bold leading-tight" style={{ color: X.ink }}>
                 A place to do your best work
               </h2>
-              <p className="mt-4 text-[15px] text-[#586072] leading-relaxed max-w-md">
+              <p className="mt-4 text-[15px] leading-relaxed max-w-md" style={{ color: X.sub }}>
                 No layers, no busywork. Just a focused team building something people use every day.
               </p>
               <ul className="mt-7 space-y-5">
                 {reasons.map((r) => (
                   <li key={r.title} className="flex items-start gap-3.5">
-                    <span className="grid place-items-center w-6 h-6 rounded-full bg-[#16A34A]/10 mt-0.5 shrink-0">
-                      <Check size={14} className="text-[#16A34A]" />
+                    <span className="grid place-items-center w-6 h-6 rounded-full mt-0.5 shrink-0" style={{ background: X.coralSoft }}>
+                      <Check size={14} style={{ color: X.coral }} />
                     </span>
                     <div>
-                      <h3 className="text-[15px] font-bold text-[#0B0E14]">{r.title}</h3>
-                      <p className="text-[13.5px] text-[#586072] leading-relaxed mt-0.5">{r.desc}</p>
+                      <h3 className="text-[15px] font-bold" style={{ color: X.ink }}>{r.title}</h3>
+                      <p className="text-[13.5px] leading-relaxed mt-0.5" style={{ color: X.sub }}>{r.desc}</p>
                     </div>
                   </li>
                 ))}
               </ul>
             </div>
-          </Reveal>
+          </FadeIn>
         </div>
       </section>
 
       {/* Open application — share your idea */}
-      <section className="px-5 sm:px-6 pb-20 md:pb-28">
+      <section className="px-5 sm:px-8 pb-20 md:pb-24" style={{ background: X.white }}>
         <div className="max-w-[900px] mx-auto">
-          <Reveal>
-            <div className="relative overflow-hidden rounded-[28px] bg-[#0B0E14] px-6 py-14 md:px-14 md:py-16 text-center">
-              <div className="absolute inset-0 bg-glow-tl" aria-hidden />
-              <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-[#E8613C] flex items-center justify-center mx-auto mb-6 shadow-brand">
-                  <Lightbulb size={22} className="text-white" />
-                </div>
-                <h2 className="display text-[26px] md:text-[34px] font-extrabold text-white max-w-xl mx-auto">
-                  No open role? Pitch us your idea.
-                </h2>
-                <p className="mt-4 text-[15px] text-white/60 max-w-lg mx-auto leading-relaxed">
-                  We do not have positions posted right now, but we always make room for sharp, kind people. Tell us what you would want to build at Osciva and why.
-                </p>
-                <button
-                  onClick={() => navigate("/contact")}
-                  className="group mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#E8613C] text-white text-[15px] font-semibold hover:bg-[#CF4F2C] transition-colors shadow-brand"
-                >
-                  Share your idea
-                  <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" />
-                </button>
+          <FadeIn>
+            <div
+              className="px-6 py-14 md:px-14 md:py-16 text-center"
+              style={{ background: `linear-gradient(135deg, #f08a67 0%, ${X.coral} 50%, #e2603f 100%)`, borderRadius: 16 }}
+            >
+              <div className="w-12 h-12 rounded-[12px] flex items-center justify-center mx-auto mb-6" style={{ background: "rgba(255,255,255,0.22)" }}>
+                <Lightbulb size={22} className="text-white" />
               </div>
+              <h2 className="text-[26px] md:text-[34px] font-bold text-white max-w-xl mx-auto">
+                No open role? Pitch us your idea.
+              </h2>
+              <p className="mt-4 text-[15px] max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.9)" }}>
+                We do not have positions posted right now, but we always make room for sharp, kind people. Tell us what you would want to build at Osciva and why.
+              </p>
+              <button
+                onClick={() => navigate("/contact")}
+                className="group mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[15px] font-bold transition-opacity hover:opacity-90 text-white"
+                style={{ background: X.inkSolid }}
+              >
+                Share your idea
+                <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" />
+              </button>
             </div>
-          </Reveal>
+          </FadeIn>
         </div>
       </section>
 

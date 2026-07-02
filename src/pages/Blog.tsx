@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import { X } from "@/components/landing/LandingNavbar";
 import FooterSection from "@/components/landing/FooterSection";
 import PageHero from "@/components/landing/PageHero";
-import { Reveal } from "@/components/landing/_primitives";
+import { FadeIn } from "@/components/landing/xui";
 import { imgFallback } from "@/components/landing/ImageCycler";
 
 const upcoming = [
@@ -16,27 +17,32 @@ export default function Blog() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mkt-x min-h-screen" style={{ background: X.white }}>
       <LandingNavbar />
 
       <PageHero
         breadcrumb="Blog"
-        title="Notes on building"
-        highlight="useful AI"
+        title="Notes on Building"
+        highlight="Useful AI"
         subtitle="Practical writing on AI agents, customer support and shipping product for Indian businesses. The first articles are on the way."
         primaryCta={null}
         secondaryCta={{ label: "Talk to us", to: "/contact" }}
       />
 
-      <section className="px-5 sm:px-6 pb-20 md:pb-28">
+      <section className="px-5 sm:px-8 pb-20 md:pb-24" style={{ background: X.white }}>
         <div className="max-w-[1000px] mx-auto">
-          <Reveal>
-            <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#A2AAB6] mb-6">Coming soon</p>
-          </Reveal>
+          <FadeIn>
+            <p className="text-[12px] font-bold uppercase tracking-[0.14em] mb-6" style={{ color: X.faint }}>
+              Coming soon
+            </p>
+          </FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {upcoming.map((a, i) => (
-              <Reveal key={a.title} i={i}>
-                <article className="h-full rounded-2xl border border-[#EBEDF0] bg-white overflow-hidden flex flex-col">
+              <FadeIn key={a.title} delay={i * 0.08}>
+                <article
+                  className="h-full overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1"
+                  style={{ background: X.white, borderRadius: 16, border: `1px solid ${X.border}`, boxShadow: "rgba(0,0,0,0.04) 0px 2px 8px" }}
+                >
                   <img
                     src={a.img}
                     alt=""
@@ -45,30 +51,38 @@ export default function Blog() {
                     className="w-full h-[170px] object-cover"
                   />
                   <div className="p-6 flex flex-col flex-1">
-                    <span className="self-start text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#FFF1EC] text-[#E8613C] mb-4">{a.tag}</span>
-                    <h3 className="text-[16px] font-bold text-[#0B0E14] leading-snug mb-2">{a.title}</h3>
-                    <p className="text-[13px] text-[#586072] leading-relaxed">{a.desc}</p>
+                    <span
+                      className="self-start text-[11px] font-bold px-2.5 py-1 rounded-[4px] mb-4 text-white"
+                      style={{ background: X.coral }}
+                    >
+                      {a.tag}
+                    </span>
+                    <h3 className="text-[16px] font-bold leading-snug mb-2" style={{ color: X.ink }}>{a.title}</h3>
+                    <p className="text-[13px] leading-relaxed" style={{ color: X.sub }}>{a.desc}</p>
                   </div>
                 </article>
-              </Reveal>
+              </FadeIn>
             ))}
           </div>
 
-          <Reveal>
-            <div className="mt-12 rounded-3xl border border-[#EBEDF0] bg-[#F7F8FA] p-10 text-center">
-              <h2 className="text-[20px] font-bold text-[#0B0E14]">Want these in your inbox?</h2>
-              <p className="mt-3 text-[14px] text-[#586072] max-w-md mx-auto">
+          <FadeIn>
+            <div className="mt-12 p-10 text-center" style={{ background: X.coralSoft, borderRadius: 16 }}>
+              <h2 className="text-[20px] font-bold" style={{ color: X.ink }}>Want these in your inbox?</h2>
+              <p className="mt-3 text-[14px] max-w-md mx-auto" style={{ color: X.sub }}>
                 We will start publishing soon. Reach out and we will let you know when the first articles go live.
               </p>
               <button
                 onClick={() => navigate("/contact")}
-                className="group mt-7 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0B0E14] text-white text-[14px] font-semibold hover:bg-[#1b2030] transition-colors"
+                className="group mt-7 inline-flex items-center gap-2 px-6 py-3 rounded-full text-white text-[14px] font-bold transition-colors"
+                style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = X.coralGradHover)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = X.coralGrad)}
               >
                 Get notified
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
               </button>
             </div>
-          </Reveal>
+          </FadeIn>
         </div>
       </section>
 

@@ -1,163 +1,213 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X, ArrowRight, Sun, Moon } from "lucide-react";
-import { useTheme } from "@/hooks/useTheme";
+import { Menu, X as CloseIcon, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
+
+/* Expedify-style token set (from design-system skill). Most values resolve to
+   CSS variables defined under .mkt-x / .dark .mkt-x in index.css, so every
+   marketing component is light/dark aware without any per-component work.
+   Coral stays constant across themes; `inkSolid` is for surfaces that must
+   remain dark in both themes (e.g. buttons sitting on the coral gradient). */
+export const X = {
+  ink: "var(--mx-ink)",
+  inkSolid: "#111827",
+  sub: "var(--mx-sub)",
+  mute: "var(--mx-mute)",
+  faint: "var(--mx-faint)",
+  border: "var(--mx-border)",
+  borderStrong: "var(--mx-border-strong)",
+  surface: "var(--mx-surface)",
+  coral: "#ef785b",
+  coralDark: "#e05f40",
+  /* Signature pill-button gradient (differs from the flat expedify look). */
+  coralGrad: "linear-gradient(135deg, #f08a67 0%, #ef785b 45%, #e05f40 100%)",
+  coralGradHover: "linear-gradient(135deg, #ef785b 0%, #e05f40 55%, #cf4f2c 100%)",
+  btnShadow: "0 6px 18px rgba(239,120,91,0.35)",
+  coralSoft: "var(--mx-coral-soft)",
+  cream: "var(--mx-cream)",
+  lavender: "var(--mx-lavender)",
+  white: "var(--mx-card)",
+  green: "#22c55e",
+  hairline: "var(--mx-hairline)",
+  shadow1: "rgba(0,0,0,0.1) 0px 20px 25px -5px, rgba(0,0,0,0.1) 0px 8px 10px -6px",
+  shadow3: "rgba(0,0,0,0.15) 0px 4px 12px 0px",
+} as const;
 
 const navLinks = [
   { label: "Features", path: "/features" },
   { label: "How it works", path: "/how-it-works" },
   { label: "Pricing", path: "/pricing" },
   { label: "Docs", path: "/docs" },
-  { label: "Contact", path: "/contact" },
+  { label: "Contact us", path: "/contact" },
 ];
 
 export default function LandingNavbar() {
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
-  const dark = theme === "dark";
+  const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const ThemeToggle = (
     <button
       onClick={toggleTheme}
-      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex items-center justify-center w-9 h-9 rounded-full border border-[#E3E6EB] text-[#0B0E14] hover:bg-[#F2F4F7] transition-colors"
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      className="flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+      style={{ background: X.surface, color: X.ink }}
     >
-      {dark ? <Sun size={16} /> : <Moon size={16} />}
+      {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
     </button>
   );
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 6);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <nav
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/80 backdrop-blur-xl border-b border-[#EBEDF0] shadow-[0_1px_0_rgba(11,14,20,0.04)]"
-          : "bg-transparent border-b border-transparent"
-      }`}
-    >
-      <div className="max-w-[1200px] mx-auto flex items-center justify-between px-5 sm:px-6 h-[68px]">
-        <a href="/" className="flex items-center gap-2.5 group">
-          <img
-            src="https://osciva.io/images/osciva-web.png"
-            alt="Osciva"
-            className="h-8 w-8 transition-transform group-hover:scale-105"
-          />
-          <span className="text-[17px] font-bold tracking-[-0.02em] text-[#0B0E14]">Osciva <span className="text-[#E8613C]">AI</span></span>
-        </a>
+    <header className="mkt-x fixed top-0 inset-x-0 z-50 px-3 sm:px-6 pt-3">
+      <nav
+        className="max-w-[1280px] mx-auto rounded-[16px] transition-shadow duration-300"
+        style={{
+          background: X.white,
+          boxShadow: scrolled ? X.shadow1 : X.shadow3,
+        }}
+      >
+        <div className="flex items-center justify-between pl-5 pr-3 h-[72px]">
+          {/* Logo */}
+          <a href="/" className="flex items-center gap-2.5 shrink-0">
+            <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="h-9 w-9" />
+            <span className="text-[22px] font-bold tracking-[-0.01em]" style={{ color: X.ink }}>
+              Osciva <span style={{ color: X.coral }}>AI</span>
+            </span>
+          </a>
 
-        <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
-          {navLinks.map((l) => (
-            <button
-              key={l.label}
-              onClick={() => navigate(l.path)}
-              className="px-3.5 py-2 rounded-lg text-[14px] font-medium text-[#586072] hover:text-[#0B0E14] hover:bg-[#F2F4F7] transition-colors"
-            >
-              {l.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="hidden md:flex items-center gap-2">
-          {ThemeToggle}
-          {user ? (
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="group flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#0B0E14] text-white text-[14px] font-semibold hover:bg-[#1b2030] transition-colors"
-            >
-              Go to dashboard
-              <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-            </button>
-          ) : (
-            <>
+          {/* Links */}
+          <div className="hidden lg:flex items-center gap-1 ml-6 mr-auto">
+            {navLinks.map((l) => (
               <button
-                onClick={() => navigate("/auth")}
-                className="px-4 py-2 rounded-full text-[14px] font-semibold text-[#0B0E14] hover:bg-[#F2F4F7] transition-colors"
+                key={l.label}
+                onClick={() => navigate(l.path)}
+                className="px-3.5 py-2 text-[15px] font-medium transition-colors"
+                style={{ color: X.ink }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = X.coral)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = X.ink)}
               >
-                Sign in
+                {l.label}
               </button>
-              <button
-                onClick={() => navigate("/auth")}
-                className="group flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#0B0E14] text-white text-[14px] font-semibold hover:bg-[#1b2030] transition-colors"
-              >
-                Get started
-                <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-              </button>
-            </>
-          )}
-        </div>
+            ))}
+          </div>
 
-        <div className="md:hidden flex items-center gap-2">
-          {ThemeToggle}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="text-[#0B0E14] p-1"
-            aria-label="Menu"
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-[#EBEDF0] px-5 py-4 space-y-1">
-          {navLinks.map((l) => (
-            <button
-              key={l.label}
-              onClick={() => {
-                setMobileOpen(false);
-                navigate(l.path);
-              }}
-              className="block w-full text-left py-3 px-2 rounded-lg text-[15px] text-[#586072] hover:bg-[#F2F4F7] hover:text-[#0B0E14]"
-            >
-              {l.label}
-            </button>
-          ))}
-          <div className="pt-3 flex flex-col gap-2">
+          {/* Actions */}
+          <div className="hidden lg:flex items-center gap-3">
+            {ThemeToggle}
             {user ? (
               <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  navigate("/dashboard");
-                }}
-                className="w-full py-3 rounded-full bg-[#0B0E14] text-white text-[15px] font-semibold"
+                onClick={() => navigate("/dashboard")}
+                className="px-5 py-2.5 rounded-full text-[15px] font-bold text-white transition-colors"
+                style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = X.coralGradHover)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = X.coralGrad)}
               >
-                Go to dashboard
+                Go to Dashboard
               </button>
             ) : (
               <>
                 <button
-                  onClick={() => {
-                    setMobileOpen(false);
-                    navigate("/auth");
-                  }}
-                  className="w-full py-3 rounded-full border border-[#E3E6EB] text-[15px] font-semibold text-[#0B0E14]"
+                  onClick={() => navigate("/auth")}
+                  className="px-5 py-2.5 rounded-full text-[15px] font-medium border transition-colors"
+                  style={{ borderColor: X.coral, color: X.coral, background: X.white }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = X.coralSoft)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = X.white)}
                 >
-                  Sign in
+                  Sign In
                 </button>
                 <button
-                  onClick={() => {
-                    setMobileOpen(false);
-                    navigate("/auth");
-                  }}
-                  className="w-full py-3 rounded-full bg-[#0B0E14] text-white text-[15px] font-semibold"
+                  onClick={() => navigate("/auth")}
+                  className="px-6 py-2.5 rounded-full text-[15px] font-bold text-white transition-colors"
+                  style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = X.coralGradHover)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = X.coralGrad)}
                 >
-                  Get started
+                  Get Started
                 </button>
               </>
             )}
           </div>
+
+          {/* Mobile toggle */}
+          <div className="lg:hidden flex items-center gap-1.5">
+            {ThemeToggle}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2"
+              style={{ color: X.ink }}
+              aria-label="Menu"
+            >
+              {mobileOpen ? <CloseIcon size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <div className="lg:hidden px-4 pb-4 pt-1 border-t" style={{ borderColor: X.border }}>
+            {navLinks.map((l) => (
+              <button
+                key={l.label}
+                onClick={() => {
+                  setMobileOpen(false);
+                  navigate(l.path);
+                }}
+                className="block w-full text-left py-3 px-2 text-[15px] font-medium"
+                style={{ color: X.ink }}
+              >
+                {l.label}
+              </button>
+            ))}
+            <div className="pt-3 flex flex-col gap-2">
+              {user ? (
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    navigate("/dashboard");
+                  }}
+                  className="w-full py-3 rounded-full text-white text-[15px] font-bold"
+                  style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                >
+                  Go to Dashboard
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false);
+                      navigate("/auth");
+                    }}
+                    className="w-full py-3 rounded-full text-white text-[15px] font-bold"
+                    style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                  >
+                    Get Started
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false);
+                      navigate("/auth");
+                    }}
+                    className="w-full py-3 rounded-full text-[15px] font-medium border"
+                    style={{ borderColor: X.coral, color: X.coral }}
+                  >
+                    Sign In
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
+    </header>
   );
 }

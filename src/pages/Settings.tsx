@@ -97,7 +97,7 @@ export default function SettingsPage() {
                 <label className="text-xs font-semibold text-foreground-secondary mb-1.5 block">Email</label>
                 <input value={email} disabled className="w-full px-3.5 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground-muted cursor-not-allowed" />
               </div>
-              <button onClick={saveProfile} disabled={saving} className="w-full py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#CF4F2C] transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
+              <button onClick={saveProfile} disabled={saving} className="w-full py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#e05f40] transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 Save Changes
               </button>

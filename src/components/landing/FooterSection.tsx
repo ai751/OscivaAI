@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { Instagram, Facebook, Youtube, Linkedin } from "lucide-react";
+import { X } from "./LandingNavbar";
 
 const columns = [
   {
-    title: "Product",
+    title: "Platform",
     links: [
       { label: "Features", path: "/features" },
-      { label: "Pricing", path: "/pricing" },
       { label: "How it works", path: "/how-it-works" },
-      { label: "Integrations", path: "/features" },
+      { label: "Pricing", path: "/pricing" },
+      { label: "Docs", path: "/docs" },
     ],
   },
   {
@@ -30,40 +32,59 @@ const columns = [
   },
 ];
 
+const socials = [
+  { icon: Instagram, label: "Instagram" },
+  { icon: Facebook, label: "Facebook" },
+  { icon: Youtube, label: "YouTube" },
+  { icon: Linkedin, label: "LinkedIn" },
+];
+
 export default function FooterSection() {
   const navigate = useNavigate();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0B0E14] px-5 sm:px-6 pt-16 pb-10">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+    <footer className="mkt-x border-t px-5 sm:px-8 pt-14 pb-8" style={{ background: X.white, borderColor: X.border }}>
+      <div className="max-w-[1280px] mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-10">
+          {/* Brand */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="h-8 w-8" />
-              <span className="text-[16px] font-bold text-white tracking-[-0.02em]">Osciva <span className="text-[#E8613C]">AI</span></span>
+              <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="h-9 w-9" />
+              <span className="text-[22px] font-bold" style={{ color: X.ink }}>Osciva <span style={{ color: X.coral }}>AI</span></span>
             </div>
-            <p className="text-[13.5px] text-white/55 leading-relaxed max-w-xs mb-6">
-              The no-code platform to build, train and deploy AI assistants on your own data — in minutes.
+            <p className="text-[14px] leading-[22px] max-w-[280px]" style={{ color: X.mute }}>
+              AI support agents trained on your business. Stop answering the same
+              questions — start automating every conversation.
             </p>
-            <div className="flex flex-wrap items-center gap-2">
-              {["India hosted", "DPDP ready", "SOC 2"].map((b) => (
-                <span key={b} className="text-[10.5px] px-3 py-1 rounded-full bg-white/[0.06] text-white/60 border border-white/10 font-medium">
+            <div className="mt-5 flex flex-wrap gap-2">
+              {["India hosted", "DPDP ready", "GST invoices"].map((b) => (
+                <span
+                  key={b}
+                  className="text-[11px] font-medium px-3 py-1 rounded-full border"
+                  style={{ borderColor: X.border, color: X.mute }}
+                >
                   {b}
                 </span>
               ))}
             </div>
           </div>
 
+          {/* Link columns */}
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="text-[11px] font-bold text-white/40 uppercase tracking-[0.12em] mb-4">{col.title}</h4>
+              <h4 className="text-[14px] font-bold mb-4" style={{ color: X.ink }}>
+                {col.title}
+              </h4>
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <button
                       onClick={() => navigate(link.path)}
-                      className="text-[13.5px] text-white/65 hover:text-white transition-colors"
+                      className="text-[14px] transition-colors"
+                      style={{ color: X.mute }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = X.coral)}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = X.mute)}
                     >
                       {link.label}
                     </button>
@@ -72,10 +93,34 @@ export default function FooterSection() {
               </ul>
             </div>
           ))}
+
+          {/* Socials */}
+          <div>
+            <h4 className="text-[14px] font-bold mb-4" style={{ color: X.ink }}>
+              Follow us
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {socials.map((s) => (
+                <span
+                  key={s.label}
+                  aria-label={s.label}
+                  className="w-10 h-10 rounded-[10px] grid place-items-center cursor-pointer transition-colors"
+                  style={{ background: X.surface, color: X.ink }}
+                >
+                  <s.icon size={17} />
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="border-t border-white/10 mt-12 pt-6">
-          <p className="text-[12.5px] text-white/45">© {year} Osciva AI. All rights reserved.</p>
+        <div className="mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: X.border }}>
+          <p className="text-[13px]" style={{ color: X.faint }}>
+            © {year} Osciva AI. All rights reserved.
+          </p>
+          <p className="text-[13px]" style={{ color: X.faint }}>
+            Made in India 🇮🇳
+          </p>
         </div>
       </div>
     </footer>

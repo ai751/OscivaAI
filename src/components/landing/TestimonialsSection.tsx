@@ -1,74 +1,128 @@
-import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-import { Reveal, SectionHeading } from "./_primitives";
-import CountUp from "./CountUp";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+const featured = {
+  company: "ShopKart",
+  industry: "D2C Store",
+  quote:
+    "Setting up our agent took under 30 minutes. It now handles 70% of customer queries with no human in the loop — including the midnight 'where is my order' wave.",
+  name: "Rahul Menon",
+  role: "Founder, ShopKart",
+  stats: [
+    { value: "70%", label: "queries resolved without a human" },
+    { value: "30 min", label: "from signup to live agent" },
+    { value: "24/7", label: "coverage without night shifts" },
+    { value: "4.8/5", label: "customer satisfaction score" },
+  ],
+};
 
-const testimonials = [
-  { name: "Priya Sharma", role: "CTO, FinEdge Solutions", text: "Osciva transformed our support. Response time dropped 80% and CSAT went through the roof.", avatar: "PS" },
-  { name: "Rahul Menon", role: "Founder, ShopKart", text: "Setting up our agent took under 30 minutes. It now handles 70% of customer queries with no human in the loop.", avatar: "RM" },
-  { name: "Ananya Gupta", role: "VP Product, HealthBridge", text: "The knowledge-base retrieval is a game-changer. It answers complex queries accurately from our own docs.", avatar: "AG" },
-];
-
-const stats = [
-  { value: 500, suffix: "+", label: "Businesses trust us" },
-  { value: 10, suffix: "M+", label: "Messages handled" },
-  { value: 99.9, decimals: 1, suffix: "%", label: "Platform uptime" },
-  { value: 1.2, decimals: 1, prefix: "<", suffix: "s", label: "Avg. response time" },
+const quotes = [
+  {
+    text: "Response time dropped 80% and CSAT went through the roof. Our support team finally works on real problems.",
+    name: "Priya Sharma",
+    role: "CTO, FinEdge Solutions",
+    initials: "PS",
+    hue: "#4A7DDE",
+  },
+  {
+    text: "The knowledge-base retrieval is a game-changer. It answers complex queries accurately from our own docs.",
+    name: "Ananya Gupta",
+    role: "VP Product, HealthBridge",
+    initials: "AG",
+    hue: "#9A5BC2",
+  },
 ];
 
 export default function TestimonialsSection() {
   return (
-    <section id="testimonials" className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-tl" aria-hidden />
-      <div className="relative z-10 max-w-[1200px] mx-auto">
-        {/* Stats band */}
-        <Reveal>
-          <div className="relative overflow-hidden rounded-3xl bg-[#0B0E14] p-8 md:p-12 mb-20">
-            <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
-                  className="text-center"
-                >
-                  <div className="text-[30px] md:text-[40px] font-extrabold text-white display">
-                    <CountUp value={s.value} decimals={s.decimals} prefix={s.prefix} suffix={s.suffix} />
+    <section className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.cream }}>
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHead
+          pre="See How Businesses Like Yours"
+          hl="Answer Faster"
+          sub="Real results, not just promises"
+        />
+
+        {/* Featured case */}
+        <FadeIn delay={0.1}>
+          <div
+            className="mt-12 grid grid-cols-1 lg:grid-cols-[380px_1fr] rounded-[16px] overflow-hidden border"
+            style={{ borderColor: X.border, background: X.white }}
+          >
+            {/* Left visual block */}
+            <div className="relative flex flex-col justify-between p-8 min-h-[280px]" style={{ background: X.coral }}>
+              <span
+                className="self-start text-[12px] font-bold px-2.5 py-1 rounded"
+                style={{ background: "rgba(255,255,255,0.2)", color: "#fff" }}
+              >
+                {featured.industry}
+              </span>
+              <div>
+                <div className="text-[34px] font-bold text-white leading-tight">{featured.company}</div>
+                <div className="mt-1 text-[13px]" style={{ color: "rgba(255,255,255,0.75)" }}>
+                  Customer story
+                </div>
+              </div>
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={15} className="text-white" style={{ fill: "#fff" }} />
+                ))}
+              </div>
+            </div>
+
+            {/* Right content */}
+            <div className="p-8 md:p-10">
+              <p className="text-[17px] md:text-[19px] leading-relaxed font-medium" style={{ color: X.ink }}>
+                “{featured.quote}”
+              </p>
+              <div className="mt-4 text-[14px]" style={{ color: X.mute }}>
+                <span className="font-bold" style={{ color: X.ink }}>{featured.name}</span> — {featured.role}
+              </div>
+              <div className="mt-7 grid grid-cols-2 md:grid-cols-4 gap-3">
+                {featured.stats.map((s) => (
+                  <div key={s.label} className="px-4 py-4 text-center" style={{ background: X.coral, borderRadius: 8 }}>
+                    <div className="text-[22px] font-bold text-white leading-none">{s.value}</div>
+                    <div className="mt-1.5 text-[11px] leading-snug" style={{ color: "rgba(255,255,255,0.85)" }}>
+                      {s.label}
+                    </div>
                   </div>
-                  <div className="text-[12.5px] text-white/55 font-medium mt-1">{s.label}</div>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </Reveal>
+        </FadeIn>
 
-        <SectionHeading eyebrow="Testimonials" title="Loved by teams across India" />
-
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => (
-            <Reveal key={t.name} i={i % 3}>
-              <figure className="h-full rounded-2xl border border-[#EBEDF0] bg-white p-6 transition-all duration-300 hover:shadow-premium hover:-translate-y-1">
-                <div className="flex gap-0.5 mb-4">
+        {/* Supporting quotes */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {quotes.map((q, i) => (
+            <FadeIn key={q.name} delay={0.15 + i * 0.08}>
+              <figure
+                className="h-full rounded-[16px] border p-7"
+                style={{ borderColor: X.border, background: X.white }}
+              >
+                <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, j) => (
-                    <Star key={j} size={14} className="text-[#E8613C] fill-[#E8613C]" />
+                    <Star key={j} size={14} style={{ color: X.coral, fill: X.coral }} />
                   ))}
                 </div>
-                <blockquote className="text-[14px] text-[#1F2733] leading-relaxed mb-6">“{t.text}”</blockquote>
-                <figcaption className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-[12px] font-bold text-white bg-[#0B0E14]">
-                    {t.avatar}
-                  </div>
+                <blockquote className="text-[15px] leading-relaxed" style={{ color: X.ink }}>
+                  “{q.text}”
+                </blockquote>
+                <figcaption className="mt-5 flex items-center gap-3">
+                  <span
+                    className="w-10 h-10 rounded-full grid place-items-center text-[12px] font-bold text-white"
+                    style={{ background: q.hue }}
+                  >
+                    {q.initials}
+                  </span>
                   <div>
-                    <div className="text-[14px] font-semibold text-[#0B0E14]">{t.name}</div>
-                    <div className="text-[11.5px] text-[#8C94A1]">{t.role}</div>
+                    <div className="text-[14px] font-bold" style={{ color: X.ink }}>{q.name}</div>
+                    <div className="text-[12px]" style={{ color: X.faint }}>{q.role}</div>
                   </div>
                 </figcaption>
               </figure>
-            </Reveal>
+            </FadeIn>
           ))}
         </div>
       </div>

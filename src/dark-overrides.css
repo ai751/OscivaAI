@@ -52,11 +52,11 @@
 .dark .bg-\[\#FFF6EC\],
 .dark .bg-\[\#FBE7DF\],
 .dark .group:hover .group-hover\:bg-\[\#FFF1EC\] {
-  background-color: rgba(232, 97, 60, 0.14);
+  background-color: rgba(239, 120, 91, 0.14);
 }
 .dark .bg-\[\#FFE2C2\],
 .dark .bg-\[\#F3C5B5\] {
-  background-color: rgba(232, 97, 60, 0.20);
+  background-color: rgba(239, 120, 91, 0.20);
 }
 
 /* ---- Light blue / green tints -> dark tints ---- */

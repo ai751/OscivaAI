@@ -1,7 +1,8 @@
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import { X } from "@/components/landing/LandingNavbar";
 import FooterSection from "@/components/landing/FooterSection";
 import PageHero from "@/components/landing/PageHero";
-import { Reveal } from "@/components/landing/_primitives";
+import { FadeIn } from "@/components/landing/xui";
 
 type Section = { heading: string; body: string[] };
 type Doc = { breadcrumb: string; title: string; updated: string; intro: string; sections: Section[] };
@@ -96,24 +97,24 @@ export default function Legal({ slug }: { slug: keyof typeof docs }) {
   const doc = docs[slug];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="mkt-x min-h-screen" style={{ background: X.white }}>
       <LandingNavbar />
 
       <PageHero breadcrumb={doc.breadcrumb} title={doc.title} subtitle={doc.intro} primaryCta={null} />
 
-      <section className="px-5 sm:px-6 pb-20 md:pb-28">
+      <section className="px-5 sm:px-8 pb-20 md:pb-24" style={{ background: X.white }}>
         <div className="max-w-[760px] mx-auto">
-          <p className="text-[13px] text-[#8C94A1] mb-10">Last updated {doc.updated}</p>
+          <p className="text-[13px] mb-10" style={{ color: X.faint }}>Last updated {doc.updated}</p>
           <div className="space-y-10">
             {doc.sections.map((s, i) => (
-              <Reveal key={s.heading} i={i % 3}>
+              <FadeIn key={s.heading} delay={(i % 3) * 0.06}>
                 <div>
-                  <h2 className="text-[20px] font-bold text-[#0B0E14] mb-3">{s.heading}</h2>
+                  <h2 className="text-[20px] font-bold mb-3" style={{ color: X.ink }}>{s.heading}</h2>
                   {s.body.map((p, j) => (
-                    <p key={j} className="text-[14.5px] text-[#586072] leading-relaxed mb-3">{p}</p>
+                    <p key={j} className="text-[14.5px] leading-[26px] mb-3" style={{ color: X.sub }}>{p}</p>
                   ))}
                 </div>
-              </Reveal>
+              </FadeIn>
             ))}
           </div>
         </div>

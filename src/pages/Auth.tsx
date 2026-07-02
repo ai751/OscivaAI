@@ -5,6 +5,7 @@ import { Loader2, Eye, EyeOff, Check, Bot, Zap, Shield, Sparkles, ArrowLeft } fr
 import { toast } from "sonner";
 import CountUp from "@/components/landing/CountUp";
 import { supabase } from "@/integrations/supabase/client";
+import { useForceLightTheme } from "@/hooks/useTheme";
 
 
 const passwordRules = [
@@ -26,6 +27,8 @@ const floatingIcons = [
 const rotatingWords = ["agents", "chatbots", "assistants"];
 
 export default function AuthPage() {
+  // The auth page is part of the marketing funnel — always light, like the site.
+  useForceLightTheme();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -144,7 +147,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-background relative overflow-hidden">
+    <div className="mkt-x min-h-screen flex bg-background relative overflow-hidden">
       {floatingIcons.map((item, i) => (
         <motion.div
           key={i}

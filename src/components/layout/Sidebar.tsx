@@ -141,7 +141,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                 </p>
                 <button
                   onClick={() => navigate("/pricing")}
-                  className="w-full py-1.5 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-[#CF4F2C] transition-colors"
+                  className="w-full py-1.5 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-[#e05f40] transition-colors"
                 >
                   See plans
                 </button>

@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useForceLightTheme } from "@/hooks/useTheme";
 
 export default function ResetPassword() {
+  // Reached from an email link — always light, like the marketing site and auth.
+  useForceLightTheme();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -38,7 +41,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+    <div className="mkt-x min-h-screen flex items-center justify-center bg-background p-6">
       <div className="w-full max-w-[400px]">
         <div className="flex items-center gap-2.5 mb-8">
           <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="h-10 w-10" />

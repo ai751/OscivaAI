@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { DashboardMockup, WizardMockup, WidgetMockup } from "./UIMockups";
-import { Reveal, SectionHeading } from "./_primitives";
+import { X } from "./LandingNavbar";
+import { SectionHead, FadeIn } from "./xui";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -27,30 +28,39 @@ const steps = [
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="relative overflow-hidden py-16 md:py-20 px-5 sm:px-6">
-      <div className="absolute inset-0 z-0 bg-glow-tc" aria-hidden />
-      <div className="relative z-10 max-w-[1200px] mx-auto">
-        <SectionHeading
-          eyebrow="How it works"
-          title="From idea to live AI in three steps"
-          subtitle="No coding. No glue work. Designed for non-technical founders and teams."
+    <section id="how-it-works" className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
+      <div className="max-w-[1280px] mx-auto">
+        <SectionHead
+          pre="From Idea to Live AI in"
+          hl="Three Steps"
+          sub="No coding. No glue work. Designed for non-technical founders and teams."
         />
 
-        <div className="mt-16 space-y-6 lg:space-y-10">
+        <div className="mt-14 space-y-6 lg:space-y-8">
           {steps.map((s, i) => {
             const flip = i % 2 === 1;
             return (
-              <Reveal key={s.num} i={0}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center rounded-3xl border border-[#EBEDF0] bg-white p-6 md:p-10 shadow-sm">
+              <FadeIn key={s.num}>
+                <div
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center p-6 md:p-10"
+                  style={{ background: i % 2 === 0 ? X.coralSoft : X.lavender, borderRadius: 16 }}
+                >
                   <div className={flip ? "lg:order-2" : ""}>
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="inline-flex items-center justify-center h-9 px-3 rounded-full bg-[#0B0E14] text-white text-[12px] font-bold tracking-wide">
+                      <span
+                        className="inline-flex items-center justify-center h-9 px-3.5 rounded-full text-white text-[12px] font-bold tracking-wide"
+                        style={{ background: X.coralGrad }}
+                      >
                         STEP {s.num}
                       </span>
-                      <span className="h-px flex-1 bg-gradient-to-r from-[#EBEDF0] to-transparent" />
+                      <span className="h-px flex-1" style={{ background: "rgba(17,24,39,0.1)" }} />
                     </div>
-                    <h3 className="text-[22px] md:text-[28px] font-extrabold text-[#0B0E14] display mb-3">{s.title}</h3>
-                    <p className="text-[14.5px] text-[#586072] leading-relaxed max-w-md">{s.desc}</p>
+                    <h3 className="text-[22px] md:text-[28px] font-bold mb-3" style={{ color: X.ink }}>
+                      {s.title}
+                    </h3>
+                    <p className="text-[14.5px] leading-relaxed max-w-md" style={{ color: X.sub }}>
+                      {s.desc}
+                    </p>
                   </div>
                   <motion.div
                     initial={{ opacity: 0, y: 24 }}
@@ -62,7 +72,7 @@ export default function HowItWorksSection() {
                     <s.Mockup />
                   </motion.div>
                 </div>
-              </Reveal>
+              </FadeIn>
             );
           })}
         </div>
