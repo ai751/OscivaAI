@@ -289,6 +289,24 @@ export type Database = {
         }
         Relationships: []
       }
+      monthly_usage: {
+        Row: {
+          user_id: string
+          month: string
+          msgs: number
+        }
+        Insert: {
+          user_id: string
+          month: string
+          msgs?: number
+        }
+        Update: {
+          user_id?: string
+          month?: string
+          msgs?: number
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           id: string

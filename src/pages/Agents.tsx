@@ -7,9 +7,13 @@ import { useAgents, type Agent } from "@/context/AgentContext";
 import { useTheme } from "@/hooks/useTheme";
 import { agentAvatarStyle } from "@/lib/agentColor";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { planLimits } from "@/lib/plans";
 
 export default function Agents() {
   const navigate = useNavigate();
+  const { profile } = useAuth();
+  const limits = planLimits(profile?.plan);
   const { agents, deleteAgent, updateAgent, loading, refreshFromStorage } = useAgents();
   const { theme } = useTheme();
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
@@ -165,15 +169,33 @@ export default function Agents() {
             </motion.div>
           ))}
 
-          <button
-            onClick={() => navigate("/agents/create")}
-            className="min-h-[220px] rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/[0.03] transition-all group"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-              <Plus size={24} className="text-primary" />
+          {agents.length >= limits.agents ? (
+            <div className="min-h-[220px] rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-2.5 px-6 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center">
+                <Plus size={24} className="text-foreground-muted" />
+              </div>
+              <span className="text-sm font-semibold text-foreground-secondary">
+                {limits.label} plan includes {limits.agents} agent{limits.agents > 1 ? "s" : ""}
+              </span>
+              <p className="text-[11px] text-foreground-muted -mt-1">Upgrade to create more agents.</p>
+              <button
+                onClick={() => navigate("/settings")}
+                className="mt-1 px-4 py-2 rounded-full bg-primary text-white text-xs font-semibold hover:bg-[#e05f40] transition-colors"
+              >
+                View plans
+              </button>
             </div>
-            <span className="text-sm font-semibold text-foreground-secondary group-hover:text-primary transition-colors">Create new agent</span>
-          </button>
+          ) : (
+            <button
+              onClick={() => navigate("/agents/create")}
+              className="min-h-[220px] rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/[0.03] transition-all group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <Plus size={24} className="text-primary" />
+              </div>
+              <span className="text-sm font-semibold text-foreground-secondary group-hover:text-primary transition-colors">Create new agent</span>
+            </button>
+          )}
         </div>
       </div>
     </>

@@ -33,6 +33,42 @@ type Msg = { role: string; content: string };
 // Max visitor messages per agent per hour (per IP) when rate limiting is on.
 const RATE_LIMIT_PER_HOUR = 20;
 
+// ---- Pricing plans (profiles.plan: free | starter | growth) ----
+// free:    locked to gpt-4o-mini on OSCIVA's platform key, 50 messages/month.
+// starter: owner's key, budget models only (premium silently downgraded).
+// growth:  owner's key, any model, custom rate limits honored.
+const FREE_MONTHLY_MSGS = 50;
+const FREE_MODEL = "gpt-4o-mini";
+// Platform key that pays for free-tier replies. If unset, free-tier agents fall
+// back to the owner's own OpenAI key (and the usual "add your key" gate).
+const PLATFORM_FREE_KEY = Deno.env.get("OSCIVA_FREE_OPENAI_KEY") ?? "";
+
+const STARTER_BUDGET: Record<Provider, string[]> = {
+  OpenAI: ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1-nano"],
+  Anthropic: ["claude-haiku", "claude-haiku-4-5"],
+  "Google AI": ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-flash", "gemini-2.5-flash"],
+  OpenRouter: [], // OpenRouter models are budget-class; allowed as-is below
+};
+const STARTER_FALLBACK: Record<Provider, string> = {
+  OpenAI: "gpt-4o-mini",
+  Anthropic: "claude-haiku-4-5",
+  "Google AI": "gemini-2.0-flash",
+  OpenRouter: "openrouter/auto",
+};
+
+// Starter plan: keep budget models, downgrade premium ones to the provider's
+// budget default (the reply still works — just on the affordable model).
+function clampStarterModel(model: string): string {
+  const provider = detectProvider(model);
+  if (provider === "OpenRouter") return model;
+  if (STARTER_BUDGET[provider]?.includes(model)) return model;
+  return STARTER_FALLBACK[provider];
+}
+
+function monthKey(): string {
+  return new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+}
+
 // Max wrong-password attempts per agent per hour (per IP) before a temporary
 // lockout — throttles brute-force on password-protected agents.
 const MAX_PW_ATTEMPTS = 10;
@@ -329,10 +365,14 @@ Deno.serve(async (req) => {
       if (!agentId) return json({ error: "agentId required" }, 400);
       const { data: agent } = await admin
         .from("agents")
-        .select("name, welcome_msg, color, position, chat_icon, logo_url, suggestions, active, password_enabled")
+        .select("user_id, name, welcome_msg, color, position, chat_icon, logo_url, suggestions, active, password_enabled")
         .eq("id", agentId)
         .maybeSingle();
       if (!agent || !agent.active) return json({ error: "Agent not found" }, 404);
+
+      // "Powered by Osciva" stays on the free plan; paid plans remove it.
+      const { data: prof } = await admin.from("profiles").select("plan").eq("user_id", agent.user_id).maybeSingle();
+      const branding = (prof?.plan ?? "free").toLowerCase() === "free";
 
       // A password is only actually required if one has been set (hash exists).
       let passwordRequired = false;
@@ -354,6 +394,7 @@ Deno.serve(async (req) => {
         logoUrl: agent.logo_url ?? "",
         suggestions: agent.suggestions ?? [],
         passwordRequired,
+        branding,
       });
     }
 
@@ -364,6 +405,10 @@ Deno.serve(async (req) => {
 
       const { data: agent } = await admin.from("agents").select("*").eq("id", agentId).maybeSingle();
       if (!agent || !agent.active) return json({ error: "Agent not found" }, 404);
+
+      // Owner's plan drives model, key, limits and branding below.
+      const { data: planRow } = await admin.from("profiles").select("plan").eq("user_id", agent.user_id).maybeSingle();
+      const plan = (planRow?.plan ?? "free").toLowerCase();
 
       // Access control — runs BEFORE rate limiting, RAG, and any LLM call, so
       // blocked requests cost nothing. Skipped for the owner's own Live-Test.
@@ -419,14 +464,20 @@ Deno.serve(async (req) => {
       // Rate limiting — protects the owner's LLM spend from abuse/bots.
       // On by default (only an explicit `false` disables it). Skipped for the
       // owner's own Live-Test chats (test:true). Keyed by visitor IP + agent.
-      if (agent.rate_limit_enabled !== false && !test) {
+      // Free is ALWAYS rate-limited (replies burn the platform key); starter may
+      // toggle it but keeps the default limit; only growth can customise the limit.
+      const rateLimitOn = plan === "free" || agent.rate_limit_enabled !== false;
+      if (rateLimitOn && !test) {
         const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";
         const { data: hits } = await admin.rpc("bump_rate_limit", {
           p_agent_id: agentId,
           p_client_id: ip,
           p_window_seconds: 3600,
         });
-        const limit = Number(agent.rate_limit_per_hour) > 0 ? Number(agent.rate_limit_per_hour) : RATE_LIMIT_PER_HOUR;
+        const limit =
+          plan === "growth" && Number(agent.rate_limit_per_hour) > 0
+            ? Number(agent.rate_limit_per_hour)
+            : RATE_LIMIT_PER_HOUR;
         if (typeof hits === "number" && hits > limit) {
           return json(
             { reply: "You've reached the message limit for now — please try again later. 🙏", error: "rate_limited", conversationId: null },
@@ -467,14 +518,41 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Look up the OWNER's key for this model's provider
-      const provider = detectProvider(agent.model);
-      const { data: keyRow } = await admin
-        .from("user_api_keys")
-        .select("api_key")
-        .eq("user_id", agent.user_id)
-        .eq("provider", provider)
-        .maybeSingle();
+      // Free plan: 50 messages/month on Osciva's platform key, then a friendly stop.
+      if (plan === "free") {
+        const { data: used } = await admin.rpc("get_monthly_usage", {
+          p_user_id: agent.user_id,
+          p_month: monthKey(),
+        });
+        if (typeof used === "number" && used >= FREE_MONTHLY_MSGS) {
+          return json({
+            reply:
+              "This assistant has used all of its free messages for this month. 🙏 " +
+              "The site owner can upgrade their Osciva AI plan for unlimited messages.",
+            error: "plan_limit",
+            conversationId: null,
+          });
+        }
+      }
+
+      // Plan-aware model + key: free is locked to the platform's gpt-4o-mini,
+      // starter is clamped to budget models, growth runs whatever is configured.
+      const effModel = plan === "free" ? FREE_MODEL : plan === "starter" ? clampStarterModel(agent.model) : agent.model;
+      const provider = detectProvider(effModel);
+      let apiKey = "";
+      if (plan === "free" && PLATFORM_FREE_KEY) {
+        apiKey = PLATFORM_FREE_KEY;
+      } else {
+        // Owner's own key for this model's provider (also the free-tier fallback
+        // when no platform key is configured).
+        const { data: keyRow } = await admin
+          .from("user_api_keys")
+          .select("api_key")
+          .eq("user_id", agent.user_id)
+          .eq("provider", provider)
+          .maybeSingle();
+        apiKey = keyRow?.api_key ?? "";
+      }
 
       const gate = `⚠️ This assistant isn't ready yet — the owner needs to add their ${provider} API key in Settings → API Keys.`;
       const system = buildSystemPrompt(agent, context);
@@ -494,6 +572,10 @@ Deno.serve(async (req) => {
       }
       const countTurn = () => {
         if (!test) admin.rpc("increment_agent_message", { p_agent_id: agentId }).then(() => {}, () => {});
+        // Free tier burns the platform key even in Live Test — count every reply.
+        if (plan === "free") {
+          admin.rpc("bump_monthly_usage", { p_user_id: agent.user_id, p_month: monthKey() }).then(() => {}, () => {});
+        }
       };
 
       // ---- Streaming (SSE) ----
@@ -507,14 +589,14 @@ Deno.serve(async (req) => {
               controller.enqueue(encoder.encode("data: [DONE]\n\n"));
               controller.close();
             };
-            if (!keyRow?.api_key) {
+            if (!apiKey) {
               send({ delta: gate });
               finish();
               return;
             }
             let full = "";
             try {
-              for await (const delta of streamLLM(provider, agent.model, keyRow.api_key, system, messages)) {
+              for await (const delta of streamLLM(provider, effModel, apiKey, system, messages)) {
                 full += delta;
                 send({ delta });
               }
@@ -533,14 +615,14 @@ Deno.serve(async (req) => {
       }
 
       // ---- Non-streaming (JSON) ----
-      if (!keyRow?.api_key) {
+      if (!apiKey) {
         await logTurn(conversationId, agentId, userText, gate);
         return json({ reply: gate, conversationId });
       }
 
       let reply: string;
       try {
-        reply = await callLLM(provider, agent.model, keyRow.api_key, system, messages);
+        reply = await callLLM(provider, effModel, apiKey, system, messages);
       } catch (e) {
         return json({
           reply: "Sorry, I'm having trouble responding right now. Please try again in a moment.",

@@ -3,6 +3,8 @@ import { MessageSquare, MessagesSquare, CheckCircle, Star, Bot, ChevronDown, Che
 import { useEffect, useState } from "react";
 import { useAgents } from "@/context/AgentContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { planLimits } from "@/lib/plans";
 
 interface ConversationRow {
   id: string;
@@ -19,6 +21,8 @@ interface ConversationMessage {
 
 export default function Analytics() {
   const { agents } = useAgents();
+  const { profile } = useAuth();
+  const limits = planLimits(profile?.plan);
 
   const totalMessages = agents.reduce((sum, a) => sum + a.messages, 0);
   const totalConversations = agents.reduce((sum, a) => sum + a.conversations, 0);
@@ -38,18 +42,24 @@ export default function Analytics() {
     let active = true;
     (async () => {
       try {
-        const { data, error } = await supabase
+        let q = supabase
           .from("conversations")
           .select("id, agent_id, message_count, last_message_at")
           .order("last_message_at", { ascending: false })
           .limit(25);
+        // Free plan keeps 7 days of visible history; paid plans see everything.
+        if (limits.analyticsDays) {
+          const cutoff = new Date(Date.now() - limits.analyticsDays * 24 * 60 * 60 * 1000).toISOString();
+          q = q.gte("last_message_at", cutoff);
+        }
+        const { data, error } = await q;
         if (!error && active && data) setConversations(data as ConversationRow[]);
       } catch {
         // table may not be deployed yet — silently skip the section
       }
     })();
     return () => { active = false; };
-  }, [agents.length]);
+  }, [agents.length, limits.analyticsDays]);
 
   const toggleConversation = async (id: string) => {
     if (expandedId === id) { setExpandedId(null); return; }
@@ -148,7 +158,10 @@ export default function Analytics() {
           <div className="glass-card overflow-hidden">
             <div className="p-4 border-b border-border">
               <h3 className="text-sm font-semibold text-foreground">Recent Conversations</h3>
-              <p className="text-[11px] text-foreground-muted mt-0.5">Real visitor chats from your embedded widget. Click to view the transcript.</p>
+              <p className="text-[11px] text-foreground-muted mt-0.5">
+                Real visitor chats from your embedded widget. Click to view the transcript.
+                {limits.analyticsDays ? ` Free plan shows the last ${limits.analyticsDays} days — upgrade for full history.` : ""}
+              </p>
             </div>
             <div className="divide-y divide-border/50">
               {conversations.map((c) => (

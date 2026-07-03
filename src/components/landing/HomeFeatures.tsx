@@ -13,12 +13,12 @@ const sources = [
     title: "Website Crawling",
     desc: "Point Osciva at your domain — it reads every page and keeps re-reading them on a schedule",
     points: [
-      "Crawls up to 500 pages automatically",
+      "Indexes your key pages automatically",
       "Re-syncs nightly so answers never go stale",
       "Handles product pages, policies & blogs",
       "No sitemap or setup required",
     ],
-    visual: { icon: Globe, label: "yourstore.in", meta: "142 pages indexed · synced 2h ago" },
+    visual: { icon: Globe, label: "yourstore.in", meta: "12 pages indexed · synced 2h ago" },
   },
   {
     tab: "PDFs & Docs",
@@ -27,7 +27,7 @@ const sources = [
     desc: "Price lists, manuals, brochures, policies — if you can upload it, your agent can answer from it",
     points: [
       "PDF, Word, text and markdown files",
-      "Up to 200 MB per agent",
+      "Up to 10 MB of documents per agent",
       "Answers cite the exact page they came from",
       "Update a file and answers update too",
     ],

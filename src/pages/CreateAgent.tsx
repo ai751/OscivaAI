@@ -10,6 +10,7 @@ import { recordAgentActivity } from "@/lib/agentStats";
 import { PROMPT_TEMPLATES, PromptTemplate } from "@/lib/promptTemplates";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { normalizePlan, planLimits, FREE_MODEL_ID, STARTER_MODEL_IDS, parseSizeMB } from "@/lib/plans";
 
 const providers = [
   { id: "OpenAI", label: "OpenAI", emoji: "🟢", desc: "GPT-4o & GPT-4o Mini", badge: "bg-green-100 text-green-700" },
@@ -71,7 +72,9 @@ export default function CreateAgent() {
   const navigate = useNavigate();
   const { id: editId } = useParams();
   const { agents, addAgent, updateAgent } = useAgents();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
+  const plan = normalizePlan(profile?.plan);
+  const limits = planLimits(profile?.plan);
   const existingAgent = editId ? agents.find((a) => a.id === editId) : null;
 
   const [tab, setTab] = useState(0);
@@ -83,7 +86,8 @@ export default function CreateAgent() {
     initialModel ? (isPresetModel ? initialModel : "__custom_openrouter__") : ""
   );
   const [customModel, setCustomModel] = useState(initialModel && !isPresetModel ? initialModel : "");
-  const effectiveModel = selectedModel === "__custom_openrouter__" ? customModel.trim() : selectedModel;
+  const effectiveModel =
+    plan === "free" ? FREE_MODEL_ID : selectedModel === "__custom_openrouter__" ? customModel.trim() : selectedModel;
   const [personality, setPersonality] = useState(existingAgent?.personality ?? "professional");
   const [sources, setSources] = useState<AgentSource[]>(existingAgent?.sources ?? []);
   const [chunks, setChunks] = useState<AgentChunk[]>(existingAgent?.chunks ?? []);
@@ -126,6 +130,17 @@ export default function CreateAgent() {
     if (!file) return;
     const ext = file.name.split(".").pop()?.toUpperCase() ?? "TXT";
     const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
+    // Plan cap: total uploaded document size per agent.
+    const usedDocMB = sources.filter((s) => s.type !== "URL").reduce((sum, s) => sum + parseSizeMB(s.size), 0);
+    if (usedDocMB + file.size / (1024 * 1024) > limits.docMB) {
+      toast.error(
+        `Your ${limits.label} plan includes ${limits.docMB} MB of documents per agent (${usedDocMB.toFixed(2)} MB used). Upgrade for more.`
+      );
+      e.target.value = "";
+      return;
+    }
+
     const newSource: AgentSource = {
       id: crypto.randomUUID(),
       name: file.name,
@@ -199,6 +214,16 @@ export default function CreateAgent() {
     const url = urlInput.trim();
     if (!url) {
       toast.error("Enter a URL first");
+      return;
+    }
+    // Plan cap: website indexing (0 = not on this plan).
+    const urlCount = sources.filter((s) => s.type === "URL").length;
+    if (limits.webPages === 0) {
+      toast.error("Website indexing is available on paid plans. Upgrade to index your site.");
+      return;
+    }
+    if (urlCount >= limits.webPages) {
+      toast.error(`Your ${limits.label} plan indexes up to ${limits.webPages} web pages per agent. Upgrade for more.`);
       return;
     }
     const newSource: AgentSource = {
@@ -503,6 +528,8 @@ export default function CreateAgent() {
             <div className="grid grid-cols-2 gap-1.5 overflow-y-auto p-0.5 flex-1 min-h-0">
               {models
                 .filter((m) => {
+                  // Plan gate: starter = budget models (+ OpenRouter); growth = all.
+                  if (plan === "starter" && m.provider !== "OpenRouter" && !STARTER_MODEL_IDS.has(m.id)) return false;
                   const matchProvider = modelFilter === "All" || m.provider === modelFilter;
                   const q = modelSearch.trim().toLowerCase();
                   const matchSearch = !q || m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q);
@@ -672,7 +699,20 @@ export default function CreateAgent() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-xs font-semibold text-foreground-secondary mb-1.5 block">AI Model</label>
-                      {(() => {
+                      {plan === "free" ? (
+                        // Free plan is locked to GPT-4o Mini on Osciva's key.
+                        <div>
+                          <div className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-secondary border border-border text-sm opacity-80 cursor-not-allowed">
+                            <span className="text-base leading-none">🟢</span>
+                            <span className="font-medium truncate flex-1 text-left text-foreground">GPT-4o Mini</span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold shrink-0">Included</span>
+                          </div>
+                          <p className="text-[10px] text-foreground-muted mt-1">
+                            Free plan runs on GPT-4o Mini (on us) — upgrade to choose your own models.
+                          </p>
+                        </div>
+                      ) : (
+                        (() => {
                         const sel = models.find((m) => m.id === selectedModel);
                         const meta = providers.find((p) => p.id === sel?.provider);
                         const isEmpty = !selectedModel;
@@ -692,7 +732,8 @@ export default function CreateAgent() {
                             <ChevronDown size={14} className="text-foreground-muted shrink-0" />
                           </button>
                         );
-                      })()}
+                        })()
+                      )}
                     </div>
                     <div>
                       <label className="text-xs font-semibold text-foreground-secondary mb-1.5 block">Personality</label>
@@ -727,7 +768,9 @@ export default function CreateAgent() {
                   >
                     <Upload size={24} className="mx-auto mb-2 text-foreground-muted" />
                     <p className="text-xs font-semibold text-foreground-secondary">Drop files here or click to browse</p>
-                    <p className="text-[10px] text-foreground-muted mt-1">PDF, DOCX, TXT supported · Max 50MB per file</p>
+                    <p className="text-[10px] text-foreground-muted mt-1">
+                      PDF, DOCX, TXT supported · {limits.docMB} MB of documents on your {limits.label} plan
+                    </p>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -751,7 +794,12 @@ export default function CreateAgent() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-foreground-secondary">Sources</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">{sources.length} sources</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                          {sources.length} sources ·{" "}
+                          {sources.filter((s) => s.type !== "URL").reduce((sum, s) => sum + parseSizeMB(s.size), 0).toFixed(2)}/
+                          {limits.docMB} MB docs
+                          {limits.webPages > 0 && ` · ${sources.filter((s) => s.type === "URL").length}/${limits.webPages} pages`}
+                        </span>
                       </div>
                       {sources.map((s) => (
                         <div key={s.id} className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg">
@@ -775,9 +823,17 @@ export default function CreateAgent() {
                 </>
               )}
 
-              {/* Tab 2: Appearance */}
+              {/* Tab 2: Appearance (locked on the free plan) */}
+              {tab === 2 && !limits.appearance && (
+                <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-xs text-foreground-secondary">
+                  <Sparkles size={14} className="inline mr-1.5 text-primary" />
+                  <strong className="text-primary">Appearance customization is a paid feature</strong> — upgrade to
+                  upload your logo, edit the welcome message, suggestions and widget position. Your widget uses the
+                  default Osciva look on the Free plan.
+                </div>
+              )}
               {tab === 2 && (
-                <>
+                <div className={!limits.appearance ? "opacity-50 pointer-events-none select-none space-y-5" : "contents"}>
                   <div>
                     <label className="text-xs font-semibold text-foreground-secondary mb-1.5 block">Business Logo (shown in the chat header)</label>
                     <input
@@ -904,12 +960,19 @@ export default function CreateAgent() {
                       ))}
                     </div>
                   </div>
-                </>
+                </div>
               )}
 
-              {/* Tab 3: Security */}
+              {/* Tab 3: Security (configurable on Growth; defaults protect everyone) */}
+              {tab === 3 && !limits.security && (
+                <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-xs text-foreground-secondary">
+                  <Sparkles size={14} className="inline mr-1.5 text-primary" />
+                  <strong className="text-primary">Custom rate limits are a Growth feature</strong> — your agents are
+                  protected with the default limit (20 messages per visitor per hour). Upgrade to tune or disable it.
+                </div>
+              )}
               {tab === 3 && (
-                <>
+                <div className={!limits.security ? "opacity-50 pointer-events-none select-none space-y-3" : "contents"}>
                   <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg">
                     <div>
                       <div className="text-xs font-semibold text-foreground">Rate Limiting</div>
@@ -938,7 +1001,7 @@ export default function CreateAgent() {
                       />
                     </div>
                   )}
-                </>
+                </div>
               )}
 
               {/* Tab 4: Preview Chat */}

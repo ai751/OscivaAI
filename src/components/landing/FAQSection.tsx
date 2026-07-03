@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "Can I try it before paying?",
-    a: "Yes — the Free plan gives you 1 agent and 500 messages a month, forever. No credit card required. Most businesses are live within 30 minutes of signing up.",
+    a: "Yes — the Free plan gives you 1 agent and 50 messages a month on our GPT-4o Mini, forever. No credit card, no API key needed to start. Most businesses are live within 30 minutes of signing up.",
   },
 ];
 

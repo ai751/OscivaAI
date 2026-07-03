@@ -5,22 +5,62 @@ import { toast } from "sonner";
 import { useAuth, getInitials } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { PLAN_LIMITS, PlanId, normalizePlan } from "@/lib/plans";
+
+// Feature bullets shown per plan on the billing card.
+const PLAN_FEATURES: Record<PlanId, string[]> = {
+  free: [
+    "1 AI agent",
+    "50 messages/month on our GPT-4o Mini",
+    "1 MB of documents",
+    "Basic analytics (7 days)",
+    '"Powered by Osciva" on the widget',
+  ],
+  starter: [
+    "2 AI agents",
+    "Unlimited messages (your API key)",
+    "5 MB of documents + 7 web pages",
+    "Full analytics · branding removed",
+    "Appearance customization",
+  ],
+  growth: [
+    "5 AI agents",
+    "Unlimited messages (your API key)",
+    "10 MB of documents + 15 web pages",
+    "All AI models, premium included",
+    "Custom rate limits · priority support",
+  ],
+};
 
 export default function SettingsPage() {
   const { user, profile, refreshProfile, signOut } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState(0);
   const [name, setName] = useState("");
-  const [plan, setPlan] = useState("Free");
   const [saving, setSaving] = useState(false);
   const [notifications, setNotifications] = useState({ email: true, browser: true, weekly: false });
+  const [monthMsgs, setMonthMsgs] = useState<number | null>(null);
+
+  const planId = normalizePlan(profile?.plan);
+  const limits = PLAN_LIMITS[planId];
+  const plan = limits.label;
 
   useEffect(() => {
-    if (profile) {
-      setName(profile.name || "");
-      setPlan(profile.plan || "Free");
-    }
+    if (profile) setName(profile.name || "");
   }, [profile]);
+
+  // Free tier: show this month's platform-key message usage.
+  useEffect(() => {
+    if (!user || planId !== "free") return;
+    const month = new Date().toISOString().slice(0, 7);
+    supabase
+      .from("monthly_usage")
+      .select("msgs")
+      .eq("user_id", user.id)
+      .eq("month", month)
+      .maybeSingle()
+      .then(({ data }) => setMonthMsgs(data?.msgs ?? 0));
+  }, [user, planId]);
 
   const email = user?.email || "";
 
@@ -134,37 +174,68 @@ export default function SettingsPage() {
                   <div>
                     <span className="text-[10px] text-foreground-muted uppercase tracking-wider font-semibold">Current Plan</span>
                     <h3 className="text-lg font-bold text-foreground">{plan} Plan</h3>
-                    <span className="text-2xl font-bold text-primary">₹2,499<span className="text-xs text-foreground-muted font-normal">/month</span></span>
+                    <span className="text-2xl font-bold text-primary">
+                      {limits.price}
+                      <span className="text-xs text-foreground-muted font-normal">/month</span>
+                    </span>
                   </div>
                   <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold">Active</span>
                 </div>
+
+                {planId === "free" && monthMsgs !== null && (
+                  <div className="mb-4 p-3 rounded-lg bg-secondary/60">
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="text-foreground-secondary font-medium">Messages this month</span>
+                      <span className="font-semibold text-foreground">{Math.min(monthMsgs, 50)} / 50</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-border overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full transition-all"
+                        style={{ width: `${Math.min(100, (monthMsgs / 50) * 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-foreground-muted mt-1.5">
+                      Free replies run on our GPT-4o Mini. Upgrade for unlimited messages with your own API key.
+                    </p>
+                  </div>
+                )}
+
                 <ul className="space-y-2 mb-4">
-                  {[
-                    "25 AI Agents", "50,000 messages/month", "100MB knowledge base per agent",
-                    "All AI models", "Custom branding", "Priority email support", "Analytics dashboard"
-                  ].map((f) => (
+                  {PLAN_FEATURES[planId].map((f) => (
                     <li key={f} className="flex items-center gap-2 text-xs text-foreground-secondary">
                       <span className="w-1.5 h-1.5 rounded-full bg-success" /> {f}
                     </li>
                   ))}
                 </ul>
-                <button className="w-full py-2.5 rounded-lg bg-secondary text-foreground-secondary text-sm font-semibold hover:bg-background-elevated transition-colors">
-                  Manage Billing
-                </button>
-                <p className="text-[10px] text-foreground-muted text-center mt-2">Invoice in INR · GST included</p>
+                {planId !== "growth" && (
+                  <button
+                    onClick={() => window.open("mailto:support@osciva.io?subject=Upgrade my Osciva AI plan", "_blank")}
+                    className="w-full py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#e05f40] transition-colors"
+                  >
+                    Upgrade plan
+                  </button>
+                )}
+                <p className="text-[10px] text-foreground-muted text-center mt-2">
+                  Upgrades are activated by our team within a few hours — email support@osciva.io.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="glass-card p-4">
-                  <div className="text-xs font-semibold text-foreground mb-1">Starter</div>
-                  <div className="text-lg font-bold text-foreground">₹999<span className="text-[10px] text-foreground-muted font-normal">/mo</span></div>
-                  <p className="text-[10px] text-foreground-muted mt-1">5 agents, 10k msgs</p>
-                </div>
-                <div className="glass-card p-4 border-primary/30">
-                  <div className="text-xs font-semibold text-foreground mb-1">Enterprise</div>
-                  <div className="text-lg font-bold text-foreground">Custom</div>
-                  <p className="text-[10px] text-foreground-muted mt-1">Unlimited everything</p>
-                </div>
+                {(Object.keys(PLAN_LIMITS) as PlanId[])
+                  .filter((p) => p !== planId)
+                  .map((p) => (
+                    <div key={p} className={`glass-card p-4 ${p === "growth" ? "border-primary/30" : ""}`}>
+                      <div className="text-xs font-semibold text-foreground mb-1">{PLAN_LIMITS[p].label}</div>
+                      <div className="text-lg font-bold text-foreground">
+                        {PLAN_LIMITS[p].price}
+                        <span className="text-[10px] text-foreground-muted font-normal">/mo</span>
+                      </div>
+                      <p className="text-[10px] text-foreground-muted mt-1">
+                        {PLAN_LIMITS[p].agents} agent{PLAN_LIMITS[p].agents > 1 ? "s" : ""} ·{" "}
+                        {PLAN_LIMITS[p].monthlyMsgs ? `${PLAN_LIMITS[p].monthlyMsgs} msgs/mo` : "unlimited msgs"}
+                      </p>
+                    </div>
+                  ))}
               </div>
             </div>
           )}

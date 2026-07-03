@@ -4,12 +4,14 @@ import { Check } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn } from "./xui";
 
+type Feature = { t: string; hot?: boolean };
 type Plan = {
   name: string;
   monthly: number | "custom";
   yearly: number | "custom";
   desc: string;
-  features: string[];
+  plusLabel?: string; // "Everything in X, plus:" — makes plan differences obvious
+  features: Feature[];
   cta: string;
   popular: boolean;
 };
@@ -19,8 +21,17 @@ const plans: Plan[] = [
     name: "Free",
     monthly: 0,
     yearly: 0,
-    desc: "Get started with no credit card required",
-    features: ["1 AI agent", "500 messages / month", "Knowledge base (5MB)", "GPT-4o Mini", "Basic analytics", "Community support"],
+    desc: "Your first agent answers on us — no credit card",
+    features: [
+      { t: "1 AI agent, live in 30 minutes" },
+      { t: "50 messages/mo on our GPT-4o Mini — no API key needed", hot: true },
+      { t: "Train it with your documents (1 MB)" },
+      { t: "Accurate RAG answers with source citations" },
+      { t: "Embed on any website with one snippet" },
+      { t: "Speaks 20+ Indian languages" },
+      { t: "Basic analytics (7 days)" },
+      { t: "Community support" },
+    ],
     cta: "Get started free",
     popular: false,
   },
@@ -28,17 +39,36 @@ const plans: Plan[] = [
     name: "Starter",
     monthly: 999,
     yearly: 799,
-    desc: "For solo founders and small teams",
-    features: ["3 AI agents", "10,000 messages / month", "25MB per agent", "GPT-4o Mini & Gemini Flash", "Basic analytics", "Email support"],
+    desc: "For small businesses going live",
+    plusLabel: "Everything in Free, plus:",
+    features: [
+      { t: "2 AI agents" },
+      { t: "UNLIMITED messages — your API key, zero markup", hot: true },
+      { t: "5× bigger knowledge base (5 MB of documents)" },
+      { t: "Website indexing — your key pages, auto-synced" },
+      { t: "Fast, affordable AI models (GPT-4o Mini, Gemini Flash…)" },
+      { t: "Remove 'Powered by Osciva' — fully white-label" },
+      { t: "Your logo, colors & widget position" },
+      { t: "Full analytics & conversation transcripts" },
+      { t: "Email support" },
+    ],
     cta: "Start free trial",
     popular: false,
   },
   {
     name: "Growth",
-    monthly: 1999,
-    yearly: 1599,
-    desc: "For growing businesses scaling AI",
-    features: ["10 AI agents", "25,000 messages / month", "50MB per agent", "GPT-4o & Gemini Pro", "Remove Osciva badge", "Advanced analytics", "Priority support", "API access"],
+    monthly: 2499,
+    yearly: 1999,
+    desc: "For growing teams that need it all",
+    plusLabel: "Everything in Starter, plus:",
+    features: [
+      { t: "5 AI agents — support, sales, FAQs & more" },
+      { t: "ALL premium AI models — GPT-4o, Claude, Gemini Pro", hot: true },
+      { t: "Double the knowledge — 10 MB docs + 15 web pages" },
+      { t: "Custom rate limits & abuse protection" },
+      { t: "Unlimited conversation history" },
+      { t: "Priority support — real humans, fast" },
+    ],
     cta: "Start free trial",
     popular: true,
   },
@@ -47,7 +77,14 @@ const plans: Plan[] = [
     monthly: "custom",
     yearly: "custom",
     desc: "For large-scale, mission-critical use",
-    features: ["Unlimited agents", "Unlimited messages", "Dedicated infra", "SSO / SAML", "Custom fine-tuning", "SLA guarantee", "Dedicated manager", "GST invoicing"],
+    plusLabel: "Everything in Growth, plus:",
+    features: [
+      { t: "As many agents as your business needs", hot: true },
+      { t: "Custom knowledge base scale" },
+      { t: "SLA guarantee & dedicated manager" },
+      { t: "Custom integrations with your stack" },
+      { t: "Hands-on onboarding & migration help" },
+    ],
     cta: "Contact sales",
     popular: false,
   },
@@ -70,7 +107,7 @@ export default function PricingSection() {
         <SectionHead
           hl="Simple Pricing."
           post="Zero Surprises."
-          sub="Start free. Scale as you grow. INR pricing with GST invoices — no hidden fees."
+          sub="Start free — your first agent answers on us. Upgrade for unlimited messages with your own API key."
         />
 
         <FadeIn delay={0.1}>
@@ -141,11 +178,16 @@ export default function PricingSection() {
                   {plan.cta}
                 </button>
 
-                <ul className="space-y-3 mt-auto">
+                {plan.plusLabel && (
+                  <div className="text-[11.5px] font-bold uppercase tracking-wide mb-3" style={{ color: X.coral }}>
+                    {plan.plusLabel}
+                  </div>
+                )}
+                <ul className="space-y-3">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-[13px]" style={{ color: X.sub }}>
+                    <li key={f.t} className="flex items-start gap-2.5 text-[13px]" style={{ color: f.hot ? X.ink : X.sub }}>
                       <Check size={15} className="mt-0.5 shrink-0" style={{ color: X.coral }} />
-                      <span>{f}</span>
+                      <span className={f.hot ? "font-bold" : ""}>{f.t}</span>
                     </li>
                   ))}
                 </ul>

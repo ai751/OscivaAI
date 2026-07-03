@@ -832,7 +832,7 @@ export default function HeroSection() {
             className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-[13.5px]"
             style={{ color: X.sub }}
           >
-            {["No credit card required", "50 free credits", "Live in 30 minutes"].map((t, i) => (
+            {["No credit card required", "50 free messages/mo", "Live in 30 minutes"].map((t, i) => (
               <span key={t} className="inline-flex items-center gap-3">
                 {i > 0 && <span style={{ color: X.borderStrong }}>|</span>}
                 <span className="inline-flex items-center gap-1.5">

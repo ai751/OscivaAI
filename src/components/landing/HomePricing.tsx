@@ -8,8 +8,14 @@ const tiers = [
     name: "Free",
     price: "₹0",
     per: "forever",
-    note: "Try it on your own site",
-    features: ["1 agent", "500 messages/mo", "Website + PDF training", "Community support"],
+    note: "Your first agent, on us",
+    plusLabel: "",
+    features: [
+      { t: "1 agent, live in 30 minutes", hot: false },
+      { t: "50 messages/mo — no API key needed", hot: true },
+      { t: "Train it with your documents", hot: false },
+      { t: "Embed anywhere with one snippet", hot: false },
+    ],
     popular: false,
   },
   {
@@ -17,15 +23,27 @@ const tiers = [
     price: "₹999",
     per: "/month",
     note: "For small businesses",
-    features: ["3 agents", "10,000 messages/mo", "All knowledge sources", "Remove Osciva branding"],
+    plusLabel: "Everything in Free, plus:",
+    features: [
+      { t: "2 agents", hot: false },
+      { t: "UNLIMITED messages — your API key", hot: true },
+      { t: "5 MB docs + website indexing", hot: false },
+      { t: "White-label — no Osciva branding", hot: false },
+    ],
     popular: false,
   },
   {
     name: "Growth",
-    price: "₹1,999",
+    price: "₹2,499",
     per: "/month",
     note: "For growing teams",
-    features: ["10 agents", "25,000 messages/mo", "Human handoff & inbox", "Priority support"],
+    plusLabel: "Everything in Starter, plus:",
+    features: [
+      { t: "5 agents — support, sales & more", hot: false },
+      { t: "ALL premium models — GPT-4o, Claude", hot: true },
+      { t: "2× knowledge + custom rate limits", hot: false },
+      { t: "Priority support", hot: false },
+    ],
     popular: true,
   },
   {
@@ -33,7 +51,13 @@ const tiers = [
     price: "Custom",
     per: "",
     note: "For serious volume",
-    features: ["Unlimited agents", "Custom message volume", "SLA & dedicated support", "Custom integrations"],
+    plusLabel: "Everything in Growth, plus:",
+    features: [
+      { t: "As many agents as you need", hot: true },
+      { t: "Custom knowledge scale", hot: false },
+      { t: "SLA & dedicated support", hot: false },
+      { t: "Custom integrations", hot: false },
+    ],
     popular: false,
   },
 ];
@@ -46,7 +70,7 @@ export default function HomePricing() {
         <SectionHead
           hl="Simple Pricing."
           post="Zero Surprises."
-          sub="Start free. Scale as you grow. INR pricing with GST invoices."
+          sub="Start free — your first agent answers on us. Upgrade for unlimited messages with your own API key."
         />
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -83,11 +107,20 @@ export default function HomePricing() {
                 <p className="mt-1 text-[12.5px] text-center" style={{ color: X.mute }}>
                   {t.note}
                 </p>
-                <ul className="mt-5 space-y-2.5 flex-1">
+                {t.plusLabel && (
+                  <div className="mt-5 text-[10.5px] font-bold uppercase tracking-wide" style={{ color: X.coral }}>
+                    {t.plusLabel}
+                  </div>
+                )}
+                <ul className={`${t.plusLabel ? "mt-2.5" : "mt-5"} space-y-2.5 flex-1`}>
                   {t.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-[13.5px]" style={{ color: X.sub }}>
+                    <li
+                      key={f.t}
+                      className="flex items-start gap-2 text-[13.5px]"
+                      style={{ color: f.hot ? X.ink : X.sub, fontWeight: f.hot ? 700 : 400 }}
+                    >
                       <Check size={15} className="mt-0.5 shrink-0" style={{ color: X.coral }} />
-                      {f}
+                      {f.t}
                     </li>
                   ))}
                 </ul>

@@ -61,7 +61,7 @@ export default function CTASection() {
               </div>
 
               <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px]" style={{ color: "rgba(255,255,255,0.65)" }}>
-                {["No credit card required", "50 free credits", "Cancel anytime"].map((t, i) => (
+                {["No credit card required", "50 free messages/mo", "Cancel anytime"].map((t, i) => (
                   <span key={t} className="inline-flex items-center gap-4">
                     {i > 0 && <span style={{ color: "rgba(255,255,255,0.25)" }}>|</span>}
                     <span className="inline-flex items-center gap-1.5">

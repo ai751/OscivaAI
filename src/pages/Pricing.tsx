@@ -16,19 +16,20 @@ const rows: { group: string; items: Row[] }[] = [
   {
     group: "Core",
     items: [
-      { label: "AI agents", values: ["1", "3", "10", "Unlimited"] },
-      { label: "Messages / month", values: ["500", "10,000", "25,000", "Unlimited"] },
-      { label: "Knowledge base size", values: ["5 MB", "25 MB", "50 MB", "Custom"] },
-      { label: "Models", values: ["GPT-4o Mini", "+ Gemini Flash", "GPT-4o & Gemini Pro", "All + fine-tuning"] },
+      { label: "AI agents", values: ["1", "2", "5", "Custom"] },
+      { label: "Messages / month", values: ["50 (on our key)", "Unlimited — your key", "Unlimited — your key", "Unlimited — your key"] },
+      { label: "Documents per agent", values: ["1 MB", "5 MB", "10 MB", "Custom"] },
+      { label: "Website indexing", values: [false, "7 pages", "15 pages", "Custom"] },
+      { label: "AI models", values: ["GPT-4o Mini (included)", "Budget models", "All models + premium", "All models + premium"] },
     ],
   },
   {
     group: "Features",
     items: [
-      { label: "Analytics & transcripts", values: ["Basic", "Basic", "Advanced", "Advanced"] },
-      { label: "Remove Osciva badge", values: [false, false, true, true] },
-      { label: "API access", values: [false, false, true, true] },
-      { label: "Human handoff", values: [true, true, true, true] },
+      { label: "Analytics & transcripts", values: ["7 days", "Full", "Full history", "Full history"] },
+      { label: "Remove Osciva badge", values: [false, true, true, true] },
+      { label: "Widget customization", values: [false, true, true, true] },
+      { label: "Custom rate limits", values: [false, false, true, true] },
       { label: "20+ Indian languages", values: [true, true, true, true] },
     ],
   },
@@ -36,9 +37,8 @@ const rows: { group: string; items: Row[] }[] = [
     group: "Support & ops",
     items: [
       { label: "Support", values: ["Community", "Email", "Priority", "Dedicated manager"] },
-      { label: "SSO / SAML", values: [false, false, false, true] },
       { label: "SLA guarantee", values: [false, false, false, true] },
-      { label: "GST invoicing", values: [true, true, true, true] },
+      { label: "Custom integrations", values: [false, false, false, true] },
     ],
   },
 ];
@@ -64,7 +64,7 @@ export default function PricingPage() {
         breadcrumb="Pricing"
         title="Pricing That Scales"
         highlight="With You"
-        subtitle="Start free, upgrade when you grow. Every plan includes GST invoices and India-hosted data — no hidden fees, ever."
+        subtitle="Start free — your first agent answers on us. Upgrade for unlimited messages with your own API key. No hidden fees, ever."
         primaryCta={{ label: "Start Free Trial", to: "/auth" }}
         secondaryCta={{ label: "Talk to sales", to: "/contact" }}
       />

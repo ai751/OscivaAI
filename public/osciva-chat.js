@@ -68,6 +68,7 @@
     suggestions: cfg.suggestions || [],
     bubbleMessages: cfg.bubbleMessages || ["Need help? 💬", "We're here for you 👋", "Ask me anything 💡", "Let's chat! 🤖"],
     passwordRequired: false,
+    branding: true, // "Powered by Osciva" — hidden for paid plans via backend config
   };
 
   var conversationId = null;
@@ -197,7 +198,9 @@
       '      <textarea id="input" placeholder="Type your message..."></textarea>' +
       '      <button class="send-btn" id="send" title="Send">➤</button>' +
       '    </div>' +
-      '    <div class="chat-footer">Powered by <a href="https://osciva.io/" target="_blank" rel="noopener">Osciva⚡</a></div>' +
+      (settings.branding
+        ? '    <div class="chat-footer">Powered by <a href="https://osciva.io/" target="_blank" rel="noopener">Osciva⚡</a></div>'
+        : "") +
       '    <div class="pw-gate" id="pwgate">' +
       '      <div class="pw-lock">🔒</div>' +
       '      <h4>Password required</h4>' +
@@ -477,6 +480,8 @@
         if (!manual.position && data.position) settings.position = data.position;
         if (!manual.suggestions && data.suggestions) settings.suggestions = data.suggestions;
         settings.passwordRequired = data.passwordRequired === true;
+        // Old backends don't send the flag — keep branding on in that case.
+        settings.branding = data.branding !== false;
       }
     })
     .catch(function () { /* render with defaults / manual config */ })
