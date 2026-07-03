@@ -57,17 +57,6 @@ export default function FooterSection() {
               AI support agents trained on your business. Stop answering the same
               questions — start automating every conversation.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {["India hosted", "DPDP ready", "GST invoices"].map((b) => (
-                <span
-                  key={b}
-                  className="text-[11px] font-medium px-3 py-1 rounded-full border"
-                  style={{ borderColor: X.border, color: X.mute }}
-                >
-                  {b}
-                </span>
-              ))}
-            </div>
           </div>
 
           {/* Link columns */}
@@ -114,12 +103,9 @@ export default function FooterSection() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: X.border }}>
+        <div className="mt-12 pt-6 border-t flex items-center justify-center" style={{ borderColor: X.border }}>
           <p className="text-[13px]" style={{ color: X.faint }}>
             © {year} Osciva AI. All rights reserved.
-          </p>
-          <p className="text-[13px]" style={{ color: X.faint }}>
-            Made in India 🇮🇳
           </p>
         </div>
       </div>

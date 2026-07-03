@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Check, Play } from "lucide-react";
+import { Check, Play, Send, Sparkles } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { FadeIn } from "./xui";
 
@@ -11,45 +11,112 @@ export default function CTASection() {
       <div className="max-w-[1280px] mx-auto">
         <FadeIn>
           <div
-            className="rounded-[16px] px-6 py-16 md:py-20 text-center"
-            style={{ background: `linear-gradient(135deg, #f08a67 0%, ${X.coral} 45%, #e2603f 100%)` }}
+            className="relative overflow-hidden rounded-[16px] px-7 sm:px-12 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 items-center"
+            style={{ background: X.inkSolid }}
           >
-            <h2 className="text-[32px] md:text-[44px] font-bold text-white tracking-[-0.01em]">
-              Your AI Agent is Ready. Are You?
-            </h2>
-            <p className="mt-4 text-[16px] md:text-[17px]" style={{ color: "rgba(255,255,255,0.9)" }}>
-              Get live in 30 minutes. Answer customers forever.
-            </p>
+            {/* Soft coral glow, echoing the dashboard welcome banner */}
+            <div
+              aria-hidden
+              className="absolute -top-24 -right-16 w-[380px] h-[380px] rounded-full"
+              style={{ background: "rgba(239,120,91,0.25)", filter: "blur(90px)" }}
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-32 -left-20 w-[300px] h-[300px] rounded-full"
+              style={{ background: "rgba(239,120,91,0.12)", filter: "blur(80px)" }}
+            />
 
-            <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => navigate("/auth")}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-[15px] font-bold text-white transition-opacity hover:opacity-90"
-                style={{ background: X.inkSolid }}
-              >
-                Start Free Trial
-              </button>
-              <button
-                onClick={() => navigate("/how-it-works")}
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[15px] font-bold text-white border transition-colors"
-                style={{ borderColor: "rgba(255,255,255,0.7)", background: "transparent" }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-              >
-                <Play size={12} style={{ fill: "#fff" }} />
-                Watch Overview
-              </button>
+            {/* Copy */}
+            <div className="relative">
+              <h2 className="text-[30px] md:text-[40px] font-bold text-white tracking-[-0.01em] leading-[1.15]">
+                Your AI agent is ready.
+                <br />
+                <span style={{ color: X.coral }}>Your customers are waiting.</span>
+              </h2>
+              <p className="mt-4 text-[16px] md:text-[17px] max-w-[480px]" style={{ color: "rgba(255,255,255,0.65)" }}>
+                Upload your docs, brand the widget, paste one snippet — and every
+                question gets answered from tonight onwards.
+              </p>
+
+              <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <button
+                  onClick={() => navigate("/auth")}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-full text-[15px] font-bold text-white transition-colors"
+                  style={{ background: X.coralGrad, boxShadow: X.btnShadow }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = X.coralGradHover)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = X.coralGrad)}
+                >
+                  Start Free Trial
+                </button>
+                <button
+                  onClick={() => navigate("/how-it-works")}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[15px] font-medium text-white border transition-colors"
+                  style={{ borderColor: "rgba(255,255,255,0.35)", background: "transparent" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                >
+                  <Play size={12} style={{ fill: "#fff" }} />
+                  Watch Overview
+                </button>
+              </div>
+
+              <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px]" style={{ color: "rgba(255,255,255,0.65)" }}>
+                {["No credit card required", "50 free credits", "Cancel anytime"].map((t, i) => (
+                  <span key={t} className="inline-flex items-center gap-4">
+                    {i > 0 && <span style={{ color: "rgba(255,255,255,0.25)" }}>|</span>}
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={14} style={{ color: X.green }} /> {t}
+                    </span>
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13.5px]" style={{ color: "rgba(255,255,255,0.9)" }}>
-              {["No credit card required", "50 free credits", "Cancel anytime"].map((t, i) => (
-                <span key={t} className="inline-flex items-center gap-4">
-                  {i > 0 && <span style={{ color: "rgba(255,255,255,0.45)" }}>|</span>}
-                  <span className="inline-flex items-center gap-1.5">
-                    <Check size={14} /> {t}
+            {/* Product visual: the widget your customers will see */}
+            <div className="relative hidden lg:block">
+              <div
+                className="w-[340px] ml-auto rounded-[16px] overflow-hidden"
+                style={{ background: X.white, boxShadow: "0 24px 60px rgba(0,0,0,0.45)" }}
+              >
+                <div className="flex items-center gap-2.5 px-4 py-3" style={{ background: "#1b2130" }}>
+                  <span className="w-7 h-7 rounded-full grid place-items-center" style={{ background: X.coral }}>
+                    <Sparkles size={13} className="text-white" />
                   </span>
-                </span>
-              ))}
+                  <div>
+                    <div className="text-[12.5px] font-bold text-white leading-tight">Your assistant</div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-white/55">
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: X.green }} />
+                      Live on your website
+                    </div>
+                  </div>
+                </div>
+                <div className="px-3.5 py-4 space-y-2" style={{ background: "#f3f4f6" }}>
+                  <div
+                    className="rounded-[12px] rounded-bl-[4px] px-3 py-2 text-[12.5px] leading-relaxed border w-fit max-w-[85%]"
+                    style={{ background: "#ffffff", borderColor: "#e5e7eb", color: "#111827" }}
+                  >
+                    Hi! I'm trained on your business. Try me.
+                  </div>
+                  <div
+                    className="ml-auto rounded-[12px] rounded-br-[4px] px-3 py-2 text-[12.5px] leading-relaxed text-white w-fit max-w-[85%]"
+                    style={{ background: X.coral }}
+                  >
+                    What are your store hours?
+                  </div>
+                  <div
+                    className="rounded-[12px] rounded-bl-[4px] px-3 py-2 text-[12.5px] leading-relaxed border w-fit max-w-[85%]"
+                    style={{ background: "#ffffff", borderColor: "#e5e7eb", color: "#111827" }}
+                  >
+                    Mon–Sat, 10 am to 9 pm. Open till 11 pm during festivals 🪔
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-3 border-t" style={{ borderColor: "#e5e7eb", background: "#ffffff" }}>
+                  <span className="flex-1 text-[12px]" style={{ color: "#6b7280" }}>Type a message…</span>
+                  <span className="w-7 h-7 rounded-full grid place-items-center" style={{ background: X.coral }}>
+                    <Send size={12} className="text-white" />
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </FadeIn>

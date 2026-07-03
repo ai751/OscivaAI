@@ -26,24 +26,45 @@ export default function IntegrationsSection() {
         />
 
         <FadeIn delay={0.1}>
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-[900px] mx-auto">
-            {platforms.map((p, i) => (
-              <div
-                key={p.name}
-                className="flex flex-col items-center gap-3 rounded-[16px] border px-4 py-6 transition-all duration-300 hover:-translate-y-1"
-                style={{ borderColor: X.border, background: X.white, boxShadow: "rgba(0,0,0,0.04) 0px 2px 8px" }}
-              >
-                <span
-                  className="w-12 h-12 rounded-[12px] grid place-items-center text-[16px] font-bold text-white"
-                  style={{ background: p.hue }}
+          {/* One continuous line of platforms, drifting left forever.
+              The list is rendered twice so the loop is seamless. */}
+          <style>{`
+            @keyframes osciva-marquee {
+              from { transform: translateX(0); }
+              to { transform: translateX(-50%); }
+            }
+            .osciva-marquee-track { animation: osciva-marquee 28s linear infinite; }
+            .osciva-marquee:hover .osciva-marquee-track { animation-play-state: paused; }
+            @media (prefers-reduced-motion: reduce) {
+              .osciva-marquee-track { animation: none; }
+            }
+          `}</style>
+          <div
+            className="osciva-marquee mt-12 overflow-hidden"
+            style={{
+              maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+              WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+            }}
+          >
+            <div className="osciva-marquee-track flex w-max gap-4">
+              {[...platforms, ...platforms].map((p, i) => (
+                <div
+                  key={`${p.name}-${i}`}
+                  className="flex items-center gap-3 rounded-[16px] border pl-3 pr-5 py-3 shrink-0"
+                  style={{ borderColor: X.border, background: X.white, boxShadow: "rgba(0,0,0,0.04) 0px 2px 8px" }}
                 >
-                  {p.mark}
-                </span>
-                <span className="text-[13px] font-medium" style={{ color: X.sub }}>
-                  {p.name}
-                </span>
-              </div>
-            ))}
+                  <span
+                    className="w-10 h-10 rounded-[12px] grid place-items-center text-[14px] font-bold text-white shrink-0"
+                    style={{ background: p.hue }}
+                  >
+                    {p.mark}
+                  </span>
+                  <span className="text-[13.5px] font-medium whitespace-nowrap" style={{ color: X.sub }}>
+                    {p.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </FadeIn>
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, HeadphonesIcon, MessageCircle, BookOpenCheck, UserPlus, Languages, LineChart } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn, DiamondItem, CoralButton, HL } from "./xui";
@@ -103,6 +104,92 @@ const agents = [
   },
 ];
 
+/* A compact chat widget that plays the conversation in a loop: the visitor's
+   message slides in, the agent "types", replies, holds, then it restarts.
+   Neutral site colors — no solid coral panel. */
+function MiniChat({
+  icon: Icon,
+  tag,
+  chat,
+}: {
+  icon: (typeof agents)[number]["icon"];
+  tag: string;
+  chat: { from: string; text: string }[];
+}) {
+  const [step, setStep] = useState(0); // 0: empty, 1: user msg, 2: typing, 3: reply
+
+  useEffect(() => {
+    const DUR = [900, 1100, 1400, 2600]; // per-step hold before advancing
+    const id = window.setTimeout(() => setStep((s) => (s + 1) % 4), DUR[step]);
+    return () => clearTimeout(id);
+  }, [step]);
+
+  return (
+    <div
+      className="rounded-[12px] border flex flex-col overflow-hidden min-h-[210px]"
+      style={{ background: X.white, borderColor: X.border }}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-2 px-3 py-2.5" style={{ background: X.inkSolid }}>
+        <span className="w-6 h-6 rounded-full grid place-items-center shrink-0" style={{ background: X.coral }}>
+          <Icon size={12} className="text-white" />
+        </span>
+        <div className="min-w-0">
+          <div className="text-[10.5px] font-bold text-white leading-tight truncate">{tag} agent</div>
+          <div className="flex items-center gap-1 text-[8.5px] text-white/55">
+            <span className="w-1 h-1 rounded-full" style={{ background: X.green }} />
+            Online
+          </div>
+        </div>
+      </div>
+
+      {/* Conversation */}
+      <div className="flex-1 flex flex-col justify-end gap-1.5 px-2.5 py-2.5" style={{ background: X.surface }}>
+        {step >= 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.25 }}
+            className="ml-auto max-w-[92%] rounded-[10px] rounded-br-[3px] px-2.5 py-1.5 text-[11px] leading-snug text-white w-fit"
+            style={{ background: X.inkSolid }}
+          >
+            {chat[0].text}
+          </motion.div>
+        )}
+        {step === 2 && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-1 rounded-[10px] rounded-bl-[3px] px-2.5 py-2 border w-fit"
+            style={{ background: X.white, borderColor: X.border }}
+          >
+            {[0, 1, 2].map((d) => (
+              <motion.span
+                key={d}
+                className="w-1 h-1 rounded-full"
+                style={{ background: X.faint }}
+                animate={{ opacity: [0.25, 1, 0.25] }}
+                transition={{ duration: 0.9, repeat: Infinity, delay: d * 0.15 }}
+              />
+            ))}
+          </motion.div>
+        )}
+        {step === 3 && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.25 }}
+            className="max-w-[92%] rounded-[10px] rounded-bl-[3px] px-2.5 py-1.5 text-[11px] leading-snug border w-fit"
+            style={{ background: X.white, borderColor: X.border, color: X.ink }}
+          >
+            {chat[1].text}
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function AgentsCarousel() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
@@ -184,30 +271,8 @@ export default function AgentsCarousel() {
               className="snap-start shrink-0 w-[88%] sm:w-[560px] border rounded-[16px] p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-6"
               style={{ borderColor: X.border, background: X.white }}
             >
-              {/* Visual */}
-              <div
-                className="rounded-[12px] p-4 flex flex-col justify-between min-h-[210px]"
-                style={{ background: X.coral }}
-              >
-                <span className="w-9 h-9 rounded-full grid place-items-center" style={{ background: "rgba(255,255,255,0.22)" }}>
-                  <a.icon size={17} className="text-white" />
-                </span>
-                <div className="space-y-2">
-                  {a.chat.map((m, j) => (
-                    <div
-                      key={j}
-                      className="rounded-[10px] px-2.5 py-1.5 text-[11px] leading-snug max-w-[95%]"
-                      style={
-                        m.from === "them"
-                          ? { background: "rgba(255,255,255,0.92)", color: X.ink }
-                          : { background: "rgba(17,24,39,0.85)", color: "#fff", marginLeft: "auto" }
-                      }
-                    >
-                      {m.text}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* Visual: the agent live in a chat, looping */}
+              <MiniChat icon={a.icon} tag={a.tag} chat={a.chat} />
 
               {/* Copy */}
               <div className="flex flex-col">

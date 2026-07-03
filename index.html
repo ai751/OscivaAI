@@ -12,6 +12,9 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@OscivaAI" />
+    <!-- Splash intro + navbar logo: fetch before React mounts so the intro's
+         first frame already has the mark. -->
+    <link rel="preload" as="image" href="https://osciva.io/images/osciva-web.png" />
   </head>
 
   <body>

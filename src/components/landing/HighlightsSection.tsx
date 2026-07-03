@@ -35,7 +35,7 @@ export default function HighlightsSection() {
       <div className="max-w-[1280px] mx-auto">
         <SectionHead
           pre="Why Choose"
-          hl="Osciva"
+          hl="Osciva AI"
           sub="Four reasons we're different from every other chatbot tool"
         />
 

@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  BarChart3,
+  BookOpen,
   Bot,
   BrainCircuit,
   Check,
   ChevronRight,
+  Code2,
   Gauge,
   KeyRound,
   Languages,
@@ -14,6 +17,7 @@ import {
   MessagesSquare,
   Play,
   Plus,
+  PlusCircle,
   Send,
   Settings,
   Sparkles,
@@ -175,9 +179,115 @@ function CollageSlide() {
 }
 
 /* ----------------------------------------------------------------------------
- * Slide 2 — dashboard overview (the owner's view)
+ * Slide 2 — the owner's app, cycling through Dashboard → My Agents → Analytics
+ * so visitors see all three sections. The sidebar highlight follows the view.
  * ------------------------------------------------------------------------- */
+const APP_VIEWS = ["Dashboard", "My Agents", "Analytics"] as const;
+const VIEW_MS = 2500;
+
+const demoAgents = [
+  { init: "S", name: "Support bot", msgs: "8,214 msgs", rating: "4.9" },
+  { init: "V", name: "Sales bot", msgs: "3,102 msgs", rating: "4.7" },
+  { init: "F", name: "FAQ bot", msgs: "1,164 msgs", rating: "4.8" },
+];
+
+/* View 1 — mirrors pages/Agents.tsx (cards with Active status + messages) */
+function AgentsView() {
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-[12px] font-extrabold" style={{ color: X.ink }}>My Agents</div>
+          <div className="text-[8.5px]" style={{ color: X.faint }}>3 agents deployed</div>
+        </div>
+        <span className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[9px] font-semibold text-white" style={{ background: X.coral }}>
+          <Plus size={9} /> New agent
+        </span>
+      </div>
+      <div className="mt-2.5 grid grid-cols-3 gap-2">
+        {demoAgents.map((a) => (
+          <div key={a.name} className="rounded-[10px] border px-2.5 py-2.5" style={{ borderColor: X.border, background: X.white }}>
+            <div className="flex items-center justify-between">
+              <span className="w-7 h-7 rounded-[8px] grid place-items-center text-[10px] font-bold" style={{ background: X.coralSoft, color: X.coral }}>
+                {a.init}
+              </span>
+              <span className="w-6 h-3.5 rounded-full relative" style={{ background: X.green }}>
+                <span className="absolute right-0.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white" />
+              </span>
+            </div>
+            <div className="mt-2 text-[10px] font-bold truncate" style={{ color: X.ink }}>{a.name}</div>
+            <div className="mt-0.5 flex items-center gap-1 text-[8px] font-medium" style={{ color: "#16a34a" }}>
+              <span className="w-1 h-1 rounded-full" style={{ background: X.green }} /> Active
+            </div>
+            <div className="mt-1.5 flex items-center gap-1 text-[8px]" style={{ color: X.faint }}>
+              <MessageSquare size={8} /> {a.msgs}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div
+        className="mt-2 rounded-[10px] border border-dashed px-2.5 py-2 text-center text-[8.5px] font-medium"
+        style={{ borderColor: X.borderStrong, color: X.faint }}
+      >
+        + Create your next agent — live in 30 minutes
+      </div>
+    </div>
+  );
+}
+
+/* View 2 — mirrors pages/Analytics.tsx (stat cards + Agent Performance) */
+function AnalyticsView() {
+  return (
+    <div>
+      <div className="text-[12px] font-extrabold" style={{ color: X.ink }}>Analytics</div>
+      <div className="text-[8.5px]" style={{ color: X.faint }}>Performance insights</div>
+      <div className="mt-2 grid grid-cols-4 gap-2">
+        {[
+          { l: "Total Messages", v: "12,480" },
+          { l: "Conversations", v: "1,284" },
+          { l: "Active Agents", v: "3" },
+          { l: "Avg Rating", v: "4.8/5" },
+        ].map((s) => (
+          <div key={s.l} className="rounded-[10px] border px-2 py-2" style={{ borderColor: X.border, background: X.white }}>
+            <div className="text-[7.5px] font-medium truncate" style={{ color: X.faint }}>{s.l}</div>
+            <div className="mt-1 text-[12px] font-extrabold leading-none" style={{ color: X.ink }}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 rounded-[10px] border overflow-hidden" style={{ borderColor: X.border, background: X.white }}>
+        <div className="px-2.5 py-1.5 text-[9px] font-bold border-b" style={{ color: X.ink, borderColor: X.border }}>
+          Agent Performance
+        </div>
+        <div className="grid grid-cols-3 px-2.5 py-1 text-[7px] font-semibold uppercase tracking-wider border-b" style={{ color: X.faint, borderColor: X.border }}>
+          <span>Agent</span>
+          <span className="text-center">Messages</span>
+          <span className="text-right">Rating</span>
+        </div>
+        {demoAgents.map((a) => (
+          <div key={a.name} className="grid grid-cols-3 items-center px-2.5 py-1.5 border-b last:border-b-0" style={{ borderColor: X.hairline }}>
+            <span className="flex items-center gap-1.5 text-[8.5px] font-semibold truncate" style={{ color: X.ink }}>
+              <span className="w-4 h-4 rounded-[5px] grid place-items-center text-[7px] font-bold shrink-0" style={{ background: X.coralSoft, color: X.coral }}>
+                {a.init}
+              </span>
+              {a.name}
+            </span>
+            <span className="text-center text-[8.5px]" style={{ color: X.sub }}>{a.msgs.replace(" msgs", "")}</span>
+            <span className="text-right text-[8.5px] font-semibold" style={{ color: X.coral }}>★ {a.rating}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function DashboardSlide() {
+  const [view, setView] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setView((v) => (v + 1) % APP_VIEWS.length), VIEW_MS);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div className="absolute inset-0">
       {/* Pastel blobs */}
@@ -207,33 +317,73 @@ function DashboardSlide() {
         </div>
 
         <div className="flex">
-          {/* Sidebar */}
-          <div className="w-[118px] shrink-0 border-r px-2.5 py-3" style={{ borderColor: X.border, background: X.surface }}>
-            <div className="flex items-center gap-1.5 px-1.5 mb-3">
+          {/* Sidebar — mirrors the real app sidebar (layout/Sidebar.tsx) */}
+          <div className="w-[126px] shrink-0 border-r px-2.5 py-3" style={{ borderColor: X.border, background: X.surface }}>
+            <div className="flex items-center gap-1.5 px-1.5 mb-2.5">
               <span className="w-5 h-5 rounded-full grid place-items-center" style={{ background: X.coral }}>
                 <Sparkles size={10} className="text-white" />
               </span>
               <span className="text-[11px] font-extrabold" style={{ color: X.ink }}>Osciva <span style={{ color: X.coral }}>AI</span></span>
             </div>
             {[
-              { icon: LayoutDashboard, l: "Dashboard", active: true },
-              { icon: Bot, l: "My Agents", active: false },
-              { icon: KeyRound, l: "API Keys", active: false },
-              { icon: Settings, l: "Settings", active: false },
-            ].map((n) => (
-              <div
-                key={n.l}
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-[7px] mb-0.5 text-[9.5px] font-semibold"
-                style={n.active ? { background: X.coralSoft, color: X.coral } : { color: X.faint }}
-              >
-                <n.icon size={11} />
-                {n.l}
+              {
+                group: "Overview",
+                items: [
+                  { icon: LayoutDashboard, l: "Dashboard" },
+                  { icon: Bot, l: "My Agents" },
+                  { icon: BarChart3, l: "Analytics" },
+                ],
+              },
+              {
+                group: "Build",
+                items: [
+                  { icon: PlusCircle, l: "Create Agent" },
+                  { icon: Code2, l: "Embed & Deploy" },
+                  { icon: KeyRound, l: "API Keys" },
+                ],
+              },
+              {
+                group: "Account",
+                items: [
+                  { icon: BookOpen, l: "Documentation" },
+                  { icon: Settings, l: "Settings" },
+                ],
+              },
+            ].map((g) => (
+              <div key={g.group} className="mb-1.5">
+                <div className="px-1.5 pb-0.5 text-[6.5px] font-bold uppercase tracking-[0.08em]" style={{ color: X.faint }}>
+                  {g.group}
+                </div>
+                {g.items.map((n) => (
+                  <div
+                    key={n.l}
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-[7px] mb-0.5 text-[9px] font-semibold whitespace-nowrap transition-colors duration-300"
+                    style={n.l === APP_VIEWS[view] ? { background: X.coralSoft, color: X.coral } : { color: X.faint }}
+                  >
+                    <n.icon size={10} className="shrink-0" />
+                    {n.l}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
 
-          {/* Main */}
-          <div className="flex-1 min-w-0 px-3.5 py-3">
+          {/* Main — fades between Dashboard / My Agents / Analytics */}
+          <div className="flex-1 min-w-0 px-3.5 py-3 relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={APP_VIEWS[view]}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                {view === 1 ? (
+                  <AgentsView />
+                ) : view === 2 ? (
+                  <AnalyticsView />
+                ) : (
+                  <>
             {/* Welcome banner */}
             <div className="relative overflow-hidden rounded-[12px] px-3.5 py-3 flex items-center justify-between gap-3" style={{ background: X.inkSolid }}>
               <div
@@ -242,7 +392,7 @@ function DashboardSlide() {
                 style={{ background: "rgba(239,120,91,0.3)", filter: "blur(30px)" }}
               />
               <div className="relative">
-                <div className="text-[12.5px] font-extrabold text-white">Good morning, Aarav</div>
+                <div className="text-[12.5px] font-extrabold text-white">Good morning, Aman</div>
                 <div className="text-[9.5px] text-white/60 mt-0.5">Here's how your AI agents are performing today.</div>
               </div>
               <span className="relative flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[9.5px] font-semibold text-white shrink-0" style={{ background: X.coral }}>
@@ -254,7 +404,7 @@ function DashboardSlide() {
             <div className="mt-2.5 grid grid-cols-4 gap-2">
               {[
                 { l: "Total agents", v: "3", t: "2 active", icon: Bot, tint: X.coral, tintBg: X.coralSoft },
-                { l: "Messages", v: "12,480", t: "Live", icon: MessageSquare, tint: "#16a34a", tintBg: "rgba(34,197,94,0.12)" },
+                { l: "Total messages", v: "12,480", t: "Live", icon: MessageSquare, tint: "#16a34a", tintBg: "rgba(34,197,94,0.12)" },
                 { l: "Conversations", v: "1,284", t: "Live", icon: MessagesSquare, tint: "#2563eb", tintBg: "rgba(37,99,235,0.12)" },
                 { l: "Avg response", v: "1.2s", t: "0.3s faster", icon: Gauge, tint: "#d97706", tintBg: "rgba(217,119,6,0.12)" },
               ].map((s) => (
@@ -327,6 +477,10 @@ function DashboardSlide() {
                 ))}
               </div>
             </div>
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -513,7 +667,7 @@ function ChatDemoSlide() {
 /* Per-slide display time. The chat slide gets longer so the whole scripted
    conversation (~9s) plays out before the carousel moves on. */
 const SLIDES = [
-  { key: "dashboard", dur: 6000, node: <DashboardSlide /> },
+  { key: "dashboard", dur: 8000, node: <DashboardSlide /> },
   { key: "chat", dur: 10500, node: <ChatDemoSlide /> },
   { key: "collage", dur: 6000, node: <CollageSlide /> },
 ];

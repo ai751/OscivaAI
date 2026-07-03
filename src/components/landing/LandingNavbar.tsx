@@ -78,7 +78,14 @@ export default function LandingNavbar() {
       >
         <div className="flex items-center justify-between pl-5 pr-3 h-[72px]">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2.5 shrink-0">
+          <a
+            href="/"
+            className="flex items-center gap-2.5 shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/");
+            }}
+          >
             <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="h-9 w-9" />
             <span className="text-[22px] font-bold tracking-[-0.01em]" style={{ color: X.ink }}>
               Osciva <span style={{ color: X.coral }}>AI</span>

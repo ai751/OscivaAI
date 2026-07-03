@@ -1,3 +1,4 @@
+import SplashIntro from "@/components/landing/SplashIntro";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import HeroSection from "@/components/landing/HeroSection";
 import HighlightsSection from "@/components/landing/HighlightsSection";
@@ -15,6 +16,7 @@ import FooterSection from "@/components/landing/FooterSection";
 export default function Landing() {
   return (
     <div className="mkt-x min-h-screen" style={{ background: "var(--mx-card)" }}>
+      <SplashIntro />
       <LandingNavbar />
       <HeroSection />
       <HighlightsSection />

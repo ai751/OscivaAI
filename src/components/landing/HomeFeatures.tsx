@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FileText, Globe, HelpCircle, UploadCloud, Palette, MessageSquareText, Languages, SlidersHorizontal, Sparkles } from "lucide-react";
 import { X } from "./LandingNavbar";
@@ -124,10 +124,24 @@ function TabbedPanel({
   visualBg: string;
 }) {
   const [active, setActive] = useState(0);
+  const paused = useRef(false);
   const a = items[active] as (typeof sources)[number] & { visual?: { icon: typeof Globe; label: string; meta: string } };
 
+  // Cycle through every tab automatically; pause while the visitor hovers.
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!paused.current) setActive((v) => (v + 1) % items.length);
+    }, 4200);
+    return () => clearInterval(id);
+  }, [items.length]);
+
   return (
-    <div className="rounded-[16px] overflow-hidden" style={{ background: bg }}>
+    <div
+      className="rounded-[16px] overflow-hidden"
+      style={{ background: bg }}
+      onMouseEnter={() => (paused.current = true)}
+      onMouseLeave={() => (paused.current = false)}
+    >
       {/* Tabs */}
       <div className="flex gap-1 overflow-x-auto justify-start sm:justify-center px-4 pt-4 border-b" style={{ borderColor: "rgba(17,24,39,0.08)" }}>
         {items.map((s, i) => (
