@@ -30,6 +30,17 @@ import Embed from "@/pages/Embed";
 import ApiKeys from "@/pages/ApiKeys";
 import Docs from "@/pages/Docs";
 import SettingsPage from "@/pages/Settings";
+import AdminConsole from "@/pages/admin/AdminConsole";
+import ConsoleDashboard from "@/pages/admin/ConsoleDashboard";
+import ConsoleAnalytics from "@/pages/admin/ConsoleAnalytics";
+import ConsoleUsers from "@/pages/admin/ConsoleUsers";
+import ConsoleAgents from "@/pages/admin/ConsoleAgents";
+import ConsolePlans from "@/pages/admin/ConsolePlans";
+import ConsoleBilling from "@/pages/admin/ConsoleBilling";
+import ConsoleUsage from "@/pages/admin/ConsoleUsage";
+import ConsoleSupport from "@/pages/admin/ConsoleSupport";
+import ConsoleTeam from "@/pages/admin/ConsoleTeam";
+import ConsoleSettings from "@/pages/admin/ConsoleSettings";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -88,6 +99,21 @@ const App = () => {
                   <Route path="/api-keys" element={<ApiKeys />} />
                   <Route path="/settings" element={<SettingsPage />} />
                 </Route>
+                {/* Standalone admin console — its own login gate, outside the app shell */}
+                <Route path="/adminosciva" element={<AdminConsole />}>
+                  <Route index element={<Navigate to="/adminosciva/dashboard" replace />} />
+                  <Route path="dashboard" element={<ConsoleDashboard />} />
+                  <Route path="analytics" element={<ConsoleAnalytics />} />
+                  <Route path="users" element={<ConsoleUsers />} />
+                  <Route path="agents" element={<ConsoleAgents />} />
+                  <Route path="plans" element={<ConsolePlans />} />
+                  <Route path="billing" element={<ConsoleBilling />} />
+                  <Route path="usage" element={<ConsoleUsage />} />
+                  <Route path="support" element={<ConsoleSupport />} />
+                  <Route path="team" element={<ConsoleTeam />} />
+                  <Route path="settings" element={<ConsoleSettings />} />
+                </Route>
+                <Route path="/admin" element={<Navigate to="/adminosciva" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Bot, PlusCircle, BarChart3, Code2, Key,
-  BookOpen, Settings, LogOut, ChevronLeft, ChevronRight, X, Sparkles,
+  BookOpen, Settings, LogOut, ChevronLeft, ChevronRight, X, Sparkles, ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -54,6 +54,11 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   const showLabels = !collapsed || isMobile;
 
+  // Admin group only renders for is_admin accounts; the real gate is server-side.
+  const navGroups = profile?.is_admin
+    ? [...groups, { label: "Platform", items: [{ label: "Admin console", icon: ShieldCheck, path: "/adminosciva/dashboard" }] }]
+    : groups;
+
   const handleNav = (path: string) => {
     navigate(path);
     onClose?.();
@@ -92,7 +97,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
         {/* Nav */}
         <nav className="flex-1 px-3 pb-3 space-y-5 overflow-y-auto">
-          {groups.map((group) => (
+          {navGroups.map((group) => (
             <div key={group.label}>
               {showLabels && (
                 <p className="px-2.5 mb-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-foreground-muted/70">

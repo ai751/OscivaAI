@@ -8,6 +8,7 @@ export interface Profile {
   name: string | null;
   plan: string;
   avatar_url: string | null;
+  is_admin?: boolean;
 }
 
 interface AuthContextType {
