@@ -10,6 +10,42 @@ export class MissingApiKeyError extends Error {
   }
 }
 
+export class ProviderError extends Error {
+  provider: string;
+  status: number;
+  constructor(provider: string, status: number, message: string) {
+    super(message);
+    this.provider = provider;
+    this.status = status;
+  }
+}
+
+// Turn a provider's HTTP failure into one short human sentence instead of a
+// raw JSON dump — this string is rendered directly in chat bubbles and toasts.
+async function providerError(provider: string, res: Response): Promise<ProviderError> {
+  let detail = "";
+  try {
+    const j = JSON.parse(await res.text());
+    detail = j?.error?.message ?? j?.message ?? (Array.isArray(j) ? j[0]?.error?.message : "") ?? "";
+  } catch {
+    /* body wasn't JSON */
+  }
+  const status = res.status;
+  let msg: string;
+  if (status === 401 || status === 403 || /api key not valid|invalid api key|incorrect api key|invalid x-api-key/i.test(detail)) {
+    msg = `Your ${provider} API key was rejected. Double-check the key in Settings → API Keys.`;
+  } else if (status === 429 || /quota|rate limit/i.test(detail)) {
+    msg = `${provider} rate limit or quota reached. Wait a minute and try again, or check your ${provider} usage limits.`;
+  } else if (status === 404 || /not found|does not exist|is not supported/i.test(detail)) {
+    msg = `This model isn't available on your ${provider} account. Pick a different model and try again.`;
+  } else if (detail) {
+    msg = `${provider}: ${detail.length > 160 ? detail.slice(0, 160) + "…" : detail}`;
+  } else {
+    msg = `${provider} request failed (HTTP ${status}). Please try again in a moment.`;
+  }
+  return new ProviderError(provider, status, msg);
+}
+
 const OPENAI_MODELS: Record<string, string> = {
   "gpt-4o": "gpt-4o",
   "gpt-4o-mini": "gpt-4o-mini",
@@ -47,7 +83,7 @@ export async function chatComplete(
         messages: [{ role: "system", content: systemPrompt }, ...history],
       }),
     });
-    if (!res.ok) throw new Error(`OpenRouter error: ${res.status} ${await res.text()}`);
+    if (!res.ok) throw await providerError("OpenRouter", res);
     const data = await res.json();
     return data.choices?.[0]?.message?.content ?? "";
   }
@@ -62,7 +98,7 @@ export async function chatComplete(
         messages: [{ role: "system", content: systemPrompt }, ...history],
       }),
     });
-    if (!res.ok) throw new Error(`OpenAI error: ${res.status} ${await res.text()}`);
+    if (!res.ok) throw await providerError("OpenAI", res);
     const data = await res.json();
     return data.choices?.[0]?.message?.content ?? "";
   }
@@ -84,7 +120,7 @@ export async function chatComplete(
         messages: history.map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
       }),
     });
-    if (!res.ok) throw new Error(`Anthropic error: ${res.status} ${await res.text()}`);
+    if (!res.ok) throw await providerError("Anthropic", res);
     const data = await res.json();
     return data.content?.[0]?.text ?? "";
   }
@@ -106,7 +142,7 @@ export async function chatComplete(
       }),
     }
   );
-  if (!res.ok) throw new Error(`Google error: ${res.status} ${await res.text()}`);
+  if (!res.ok) throw await providerError("Google AI", res);
   const data = await res.json();
   return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 }

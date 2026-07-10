@@ -17,7 +17,7 @@ const rows: { group: string; items: Row[] }[] = [
     group: "Core",
     items: [
       { label: "AI agents", values: ["1", "2", "5", "Custom"] },
-      { label: "Messages / month", values: ["50 (on our key)", "Unlimited — your key", "Unlimited — your key", "Unlimited — your key"] },
+      { label: "Messages / month", values: ["50 (on our key)", "Unlimited, your key", "Unlimited, your key", "Unlimited, your key"] },
       { label: "Documents per agent", values: ["1 MB", "5 MB", "10 MB", "Custom"] },
       { label: "Website indexing", values: [false, "7 pages", "15 pages", "Custom"] },
       { label: "AI models", values: ["GPT-4o Mini (included)", "Budget models", "All models + premium", "All models + premium"] },
@@ -46,7 +46,7 @@ const rows: { group: string; items: Row[] }[] = [
 const guarantees = [
   { icon: ShieldCheck, title: "No lock-in", desc: "Month-to-month billing. Cancel anytime, export your data whenever." },
   { icon: RefreshCw, title: "Switch plans freely", desc: "Upgrade or downgrade instantly as your volume changes." },
-  { icon: Headphones, title: "Real human support", desc: "Talk to people who know the product — not a script." },
+  { icon: Headphones, title: "Real human support", desc: "Talk to people who know the product, not a script." },
 ];
 
 function Cell({ v }: { v: string | boolean }) {
@@ -64,7 +64,7 @@ export default function PricingPage() {
         breadcrumb="Pricing"
         title="Pricing That Scales"
         highlight="With You"
-        subtitle="Start free — your first agent answers on us. Upgrade for unlimited messages with your own API key. No hidden fees, ever."
+        subtitle="Start free, your first agent answers on us. Upgrade for unlimited messages with your own API key. No hidden fees, ever."
         primaryCta={{ label: "Start Free Trial", to: "/auth" }}
         secondaryCta={{ label: "Talk to sales", to: "/contact" }}
       />

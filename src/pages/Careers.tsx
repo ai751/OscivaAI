@@ -51,7 +51,7 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Why join — split with image */}
+      {/* Why join, split with image */}
       <section className="py-14 md:py-20 px-5 sm:px-8" style={{ background: X.white }}>
         <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <FadeIn>
@@ -90,7 +90,7 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Open application — share your idea */}
+      {/* Open application, share your idea */}
       <section className="px-5 sm:px-8 pb-20 md:pb-24" style={{ background: X.white }}>
         <div className="max-w-[900px] mx-auto">
           <FadeIn>

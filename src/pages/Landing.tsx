@@ -5,6 +5,7 @@ import HighlightsSection from "@/components/landing/HighlightsSection";
 import AgentsCarousel from "@/components/landing/AgentsCarousel";
 import HomeHowItWorks from "@/components/landing/HomeHowItWorks";
 import HomeFeatures from "@/components/landing/HomeFeatures";
+import IndustriesSection from "@/components/landing/IndustriesSection";
 import PillarsSection from "@/components/landing/PillarsSection";
 import IntegrationsSection from "@/components/landing/IntegrationsSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
@@ -23,6 +24,7 @@ export default function Landing() {
       <HomeHowItWorks />
       <AgentsCarousel />
       <HomeFeatures />
+      <IndustriesSection />
       <PillarsSection />
       <IntegrationsSection />
       <TestimonialsSection />

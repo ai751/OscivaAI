@@ -14,8 +14,8 @@ export function imgFallback(e: React.SyntheticEvent<HTMLImageElement>, seed: str
 }
 
 /**
- * A single framed image that crossfades through `images` one by one on a timer,
- * with clickable progress dots. Stays static under reduced-motion.
+ * A single framed image that crossfades through `images` one by one on a timer.
+ * Stays static under reduced-motion.
  */
 export default function ImageCycler({
   images,
@@ -52,19 +52,6 @@ export default function ImageCycler({
           className="absolute inset-0 w-full h-full object-cover"
         />
       </AnimatePresence>
-
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-        {images.map((s, j) => (
-          <button
-            key={s.seed}
-            aria-label={`Show image ${j + 1}`}
-            onClick={() => setI(j)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              j === i ? "w-6 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
-            }`}
-          />
-        ))}
-      </div>
     </div>
   );
 }

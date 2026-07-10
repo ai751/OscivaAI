@@ -55,7 +55,7 @@ export default function Analytics() {
         const { data, error } = await q;
         if (!error && active && data) setConversations(data as ConversationRow[]);
       } catch {
-        // table may not be deployed yet — silently skip the section
+        // table may not be deployed yet, silently skip the section
       }
     })();
     return () => { active = false; };
@@ -160,7 +160,7 @@ export default function Analytics() {
               <h3 className="text-sm font-semibold text-foreground">Recent Conversations</h3>
               <p className="text-[11px] text-foreground-muted mt-0.5">
                 Real visitor chats from your embedded widget. Click to view the transcript.
-                {limits.analyticsDays ? ` Free plan shows the last ${limits.analyticsDays} days — upgrade for full history.` : ""}
+                {limits.analyticsDays ? ` Free plan shows the last ${limits.analyticsDays} days, upgrade for full history.` : ""}
               </p>
             </div>
             <div className="divide-y divide-border/50">

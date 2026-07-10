@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X as CloseIcon, Sun, Moon } from "lucide-react";
+import { Menu, X as CloseIcon, Sun, Moon, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/hooks/useTheme";
+import { industries } from "@/data/industries";
 
 /* Expedify-style token set (from design-system skill). Most values resolve to
    CSS variables defined under .mkt-x / .dark .mkt-x in index.css, so every
@@ -34,9 +35,8 @@ export const X = {
   shadow3: "rgba(0,0,0,0.15) 0px 4px 12px 0px",
 } as const;
 
-const navLinks = [
-  { label: "Features", path: "/features" },
-  { label: "How it works", path: "/how-it-works" },
+const navLinksBefore = [{ label: "Features", path: "/features" }];
+const navLinksAfter = [
   { label: "Pricing", path: "/pricing" },
   { label: "Docs", path: "/docs" },
   { label: "Contact us", path: "/contact" },
@@ -48,6 +48,7 @@ export default function LandingNavbar() {
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
 
   const ThemeToggle = (
     <button
@@ -94,7 +95,75 @@ export default function LandingNavbar() {
 
           {/* Links */}
           <div className="hidden lg:flex items-center gap-1 ml-6 mr-auto">
-            {navLinks.map((l) => (
+            {navLinksBefore.map((l) => (
+              <button
+                key={l.label}
+                onClick={() => navigate(l.path)}
+                className="px-3.5 py-2 text-[15px] font-medium transition-colors"
+                style={{ color: X.ink }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = X.coral)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = X.ink)}
+              >
+                {l.label}
+              </button>
+            ))}
+
+            {/* Solutions dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setSolutionsOpen(true)}
+              onMouseLeave={() => setSolutionsOpen(false)}
+            >
+              <button
+                className="flex items-center gap-1 px-3.5 py-2 text-[15px] font-medium transition-colors"
+                style={{ color: solutionsOpen ? X.coral : X.ink }}
+                aria-expanded={solutionsOpen}
+                onClick={() => setSolutionsOpen((o) => !o)}
+              >
+                Solutions
+                <ChevronDown
+                  size={14}
+                  className="transition-transform duration-200"
+                  style={{ transform: solutionsOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                />
+              </button>
+              {solutionsOpen && (
+                <div
+                  className="absolute left-0 top-full pt-2 w-[220px]"
+                >
+                  <div
+                    className="p-2 rounded-[14px]"
+                    style={{ background: X.white, boxShadow: X.shadow1, border: `1px solid ${X.border}` }}
+                  >
+                    {industries.map((ind) => (
+                      <button
+                        key={ind.slug}
+                        onClick={() => {
+                          setSolutionsOpen(false);
+                          navigate(`/solutions/${ind.slug}`);
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-left transition-colors"
+                        style={{ background: "transparent" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = X.coralSoft)}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <span
+                          className="w-8 h-8 rounded-[9px] grid place-items-center shrink-0"
+                          style={{ background: X.coralSoft }}
+                        >
+                          <ind.icon size={16} strokeWidth={1.8} style={{ color: X.coral }} />
+                        </span>
+                        <span className="text-[14px] font-bold" style={{ color: X.ink }}>
+                          {ind.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {navLinksAfter.map((l) => (
               <button
                 key={l.label}
                 onClick={() => navigate(l.path)}
@@ -162,7 +231,39 @@ export default function LandingNavbar() {
         {/* Mobile menu */}
         {mobileOpen && (
           <div className="lg:hidden px-4 pb-4 pt-1 border-t" style={{ borderColor: X.border }}>
-            {navLinks.map((l) => (
+            {navLinksBefore.map((l) => (
+              <button
+                key={l.label}
+                onClick={() => {
+                  setMobileOpen(false);
+                  navigate(l.path);
+                }}
+                className="block w-full text-left py-3 px-2 text-[15px] font-medium"
+                style={{ color: X.ink }}
+              >
+                {l.label}
+              </button>
+            ))}
+            <div className="py-2 px-2">
+              <span className="block text-[12.5px] font-bold uppercase tracking-[0.08em] mb-1" style={{ color: X.faint }}>
+                Solutions
+              </span>
+              {industries.map((ind) => (
+                <button
+                  key={ind.slug}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    navigate(`/solutions/${ind.slug}`);
+                  }}
+                  className="flex items-center gap-2.5 w-full text-left py-2.5 px-1 text-[15px] font-medium"
+                  style={{ color: X.ink }}
+                >
+                  <ind.icon size={16} strokeWidth={1.8} style={{ color: X.coral }} />
+                  {ind.name}
+                </button>
+              ))}
+            </div>
+            {navLinksAfter.map((l) => (
               <button
                 key={l.label}
                 onClick={() => {

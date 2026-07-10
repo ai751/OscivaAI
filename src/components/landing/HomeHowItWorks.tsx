@@ -9,21 +9,21 @@ import { SectionHead, FadeIn } from "./xui";
 const steps = [
   {
     icon: Upload,
-    time: "Minute 0–10",
+    time: "Minute 0-10",
     title: "Upload your knowledge",
     desc: "Drop in PDFs, docs and your website URL. Osciva reads and indexes everything automatically.",
   },
   {
     icon: Wand2,
-    time: "Minute 10–20",
+    time: "Minute 10-20",
     title: "Shape your agent",
     desc: "Pick the tone, greeting, languages and brand colors in a point-and-click editor. Preview it live.",
   },
   {
     icon: Code2,
-    time: "Minute 20–30",
+    time: "Minute 20-30",
     title: "Embed with one line",
-    desc: "Paste a single script tag — or one-click install on WordPress and Shopify. That's the whole job.",
+    desc: "Paste a single script tag, or one-click install on WordPress and Shopify. That's the whole job.",
   },
   {
     icon: Rocket,
@@ -48,7 +48,7 @@ export default function HomeHowItWorks() {
           pre="Go"
           hl="Live in 30 Minutes,"
           post="Not 30 Days"
-          sub="From signup to your first answered customer — here's the whole journey"
+          sub="From signup to your first answered customer, here's the whole journey"
         />
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 relative">
@@ -101,7 +101,7 @@ export default function HomeHowItWorks() {
         <FadeIn delay={0.3}>
           <div className="mt-12 flex justify-center">
             <Link
-              to="/how-it-works"
+              to="/features"
               className="inline-flex items-center gap-1.5 text-[15px] font-bold transition-colors"
               style={{ color: X.coral }}
             >

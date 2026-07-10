@@ -20,7 +20,6 @@ import {
   PlusCircle,
   Send,
   Settings,
-  Sparkles,
   TrendingUp,
 } from "lucide-react";
 import { X } from "./LandingNavbar";
@@ -42,7 +41,7 @@ const float = (delay: number, dur = 5.5) => ({
 });
 
 /* ----------------------------------------------------------------------------
- * Slide 1 — floating-card collage
+ * Slide 1, floating-card collage
  * ------------------------------------------------------------------------- */
 function CollageSlide() {
   return (
@@ -82,7 +81,7 @@ function CollageSlide() {
           </div>
         </div>
         <div className="rounded-[12px] px-3 py-2 text-[12px] leading-relaxed" style={{ background: X.surface, color: X.ink }}>
-          mera order kab tak aayega? 🙏
+          mera order kab tak aayega?
         </div>
       </motion.div>
 
@@ -93,16 +92,14 @@ function CollageSlide() {
         style={{ background: X.white, boxShadow: X.shadow1 }}
       >
         <div className="flex items-center gap-2 mb-3">
-          <span className="w-7 h-7 rounded-full grid place-items-center" style={{ background: X.coral }}>
-            <Sparkles size={13} className="text-white" />
-          </span>
+          <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="w-7 h-7 rounded-full" />
           <div>
             <div className="text-[12px] font-bold" style={{ color: X.ink }}>Your Osciva agent</div>
             <div className="text-[10px]" style={{ color: X.faint }}>replied in 1.1s</div>
           </div>
         </div>
         <div className="rounded-[12px] px-3 py-2 text-[12px] leading-relaxed text-white" style={{ background: X.coral }}>
-          आपका ऑर्डर #4218 कल शाम तक डिलीवर होगा 🚚
+          आपका ऑर्डर #4218 कल शाम तक डिलीवर होगा
         </div>
         <div className="mt-2 text-[10px]" style={{ color: X.faint }}>
           Source: shipping-policy.pdf
@@ -135,9 +132,7 @@ function CollageSlide() {
         style={{ background: X.white, boxShadow: X.shadow1 }}
       >
         <div className="flex items-center gap-2 px-3.5 py-2.5" style={{ background: X.inkSolid }}>
-          <span className="w-6 h-6 rounded-full grid place-items-center" style={{ background: X.coral }}>
-            <Sparkles size={11} className="text-white" />
-          </span>
+          <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="w-6 h-6 rounded-full" />
           <span className="text-[11px] font-bold text-white">Support assistant</span>
           <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ background: X.green }} />
         </div>
@@ -149,7 +144,7 @@ function CollageSlide() {
             Do you ship to Pune?
           </div>
           <div className="rounded-[10px] px-2.5 py-1.5 text-[10.5px] border" style={{ background: X.white, borderColor: X.border, color: X.ink }}>
-            Yes — 2-day delivery, free above ₹499 ✅
+            Yes, 2-day delivery, free above ₹499
           </div>
         </div>
         <div className="flex items-center gap-2 px-3 py-2 border-t" style={{ borderColor: X.border, background: X.white }}>
@@ -179,7 +174,7 @@ function CollageSlide() {
 }
 
 /* ----------------------------------------------------------------------------
- * Slide 2 — the owner's app, cycling through Dashboard → My Agents → Analytics
+ * Slide 2, the owner's app, cycling through Dashboard → My Agents → Analytics
  * so visitors see all three sections. The sidebar highlight follows the view.
  * ------------------------------------------------------------------------- */
 const APP_VIEWS = ["Dashboard", "My Agents", "Analytics"] as const;
@@ -191,7 +186,7 @@ const demoAgents = [
   { init: "F", name: "FAQ bot", msgs: "1,164 msgs", rating: "4.8" },
 ];
 
-/* View 1 — mirrors pages/Agents.tsx (cards with Active status + messages) */
+/* View 1, mirrors pages/Agents.tsx (cards with Active status + messages) */
 function AgentsView() {
   return (
     <div>
@@ -229,13 +224,13 @@ function AgentsView() {
         className="mt-2 rounded-[10px] border border-dashed px-2.5 py-2 text-center text-[8.5px] font-medium"
         style={{ borderColor: X.borderStrong, color: X.faint }}
       >
-        + Create your next agent — live in 30 minutes
+        + Create your next agent, live in 30 minutes
       </div>
     </div>
   );
 }
 
-/* View 2 — mirrors pages/Analytics.tsx (stat cards + Agent Performance) */
+/* View 2, mirrors pages/Analytics.tsx (stat cards + Agent Performance) */
 function AnalyticsView() {
   return (
     <div>
@@ -317,12 +312,10 @@ function DashboardSlide() {
         </div>
 
         <div className="flex">
-          {/* Sidebar — mirrors the real app sidebar (layout/Sidebar.tsx) */}
+          {/* Sidebar, mirrors the real app sidebar (layout/Sidebar.tsx) */}
           <div className="w-[126px] shrink-0 border-r px-2.5 py-3" style={{ borderColor: X.border, background: X.surface }}>
             <div className="flex items-center gap-1.5 px-1.5 mb-2.5">
-              <span className="w-5 h-5 rounded-full grid place-items-center" style={{ background: X.coral }}>
-                <Sparkles size={10} className="text-white" />
-              </span>
+              <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="w-5 h-5 rounded-full" />
               <span className="text-[11px] font-extrabold" style={{ color: X.ink }}>Osciva <span style={{ color: X.coral }}>AI</span></span>
             </div>
             {[
@@ -350,10 +343,7 @@ function DashboardSlide() {
                 ],
               },
             ].map((g) => (
-              <div key={g.group} className="mb-1.5">
-                <div className="px-1.5 pb-0.5 text-[6.5px] font-bold uppercase tracking-[0.08em]" style={{ color: X.faint }}>
-                  {g.group}
-                </div>
+              <div key={g.group} className="mb-2">
                 {g.items.map((n) => (
                   <div
                     key={n.l}
@@ -368,7 +358,7 @@ function DashboardSlide() {
             ))}
           </div>
 
-          {/* Main — fades between Dashboard / My Agents / Analytics */}
+          {/* Main, fades between Dashboard / My Agents / Analytics */}
           <div className="flex-1 min-w-0 px-3.5 py-3 relative">
             <AnimatePresence mode="wait">
               <motion.div
@@ -489,7 +479,7 @@ function DashboardSlide() {
 }
 
 /* ----------------------------------------------------------------------------
- * Slide 3 — auto-playing chat demo (all English). Runs once per mount; the
+ * Slide 3, auto-playing chat demo (all English). Runs once per mount; the
  * carousel remounts it on every cycle, so it starts fresh each time.
  * ------------------------------------------------------------------------- */
 type ChatEvent =
@@ -498,9 +488,9 @@ type ChatEvent =
 
 const SCRIPT: ChatEvent[] = [
   { kind: "user", text: "Do you ship to Pune?" },
-  { kind: "agent", text: "Yes — 2-day delivery, free above ₹499 ✅", source: "shipping-policy.pdf" },
+  { kind: "agent", text: "Yes, 2-day delivery, free above ₹499", source: "shipping-policy.pdf" },
   { kind: "user", text: "When will my order arrive?" },
-  { kind: "agent", text: "Your order #4218 arrives tomorrow by 6 pm 🚚", source: "orders · live lookup" },
+  { kind: "agent", text: "Your order #4218 arrives tomorrow by 6 pm", source: "orders · live lookup" },
 ];
 
 function ChatDemoSlide() {
@@ -567,14 +557,12 @@ function ChatDemoSlide() {
       >
         {/* Header */}
         <div className="flex items-center gap-2.5 px-4 py-3" style={{ background: X.inkSolid }}>
-          <span className="w-7 h-7 rounded-full grid place-items-center" style={{ background: X.coral }}>
-            <Sparkles size={13} className="text-white" />
-          </span>
+          <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="w-7 h-7 rounded-full" />
           <div>
             <div className="text-[12.5px] font-bold text-white leading-tight">Support assistant</div>
             <div className="flex items-center gap-1.5 text-[10px] text-white/55">
               <span className="w-1.5 h-1.5 rounded-full" style={{ background: X.green }} />
-              Online — replies in seconds
+              Online, replies in seconds
             </div>
           </div>
         </div>
@@ -749,7 +737,7 @@ export default function HeroSection() {
             className="mt-5 text-[16px] leading-[24px]"
             style={{ color: X.mute }}
           >
-            So every customer gets an instant, accurate answer — 24/7.
+            So every customer gets an instant, accurate answer, 24/7.
           </motion.p>
 
           <motion.div
@@ -768,7 +756,7 @@ export default function HeroSection() {
               Start Free Trial
             </button>
             <button
-              onClick={() => navigate("/how-it-works")}
+              onClick={() => navigate("/features")}
               className="flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-[16px] font-medium border transition-colors w-full sm:w-auto"
               style={{ borderColor: X.coral, color: X.coral, background: "transparent" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = X.coralSoft)}
@@ -864,21 +852,6 @@ export default function HeroSection() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Slide dots */}
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
-            {SLIDES.map((s, i) => (
-              <button
-                key={s.key}
-                onClick={() => setSlide(i)}
-                aria-label={`Show slide ${i + 1}`}
-                className="h-2 rounded-full transition-all duration-300"
-                style={{
-                  width: i === slide ? 20 : 8,
-                  background: i === slide ? X.coral : X.borderStrong,
-                }}
-              />
-            ))}
-          </div>
         </motion.div>
       </div>
     </section>

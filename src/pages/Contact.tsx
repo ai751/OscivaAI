@@ -9,7 +9,7 @@ import { SectionHead, FadeIn, CoralButton } from "@/components/landing/xui";
 
 const methods = [
   { icon: Mail, label: "Email us", value: "hello@osciva.io", sub: "We reply within 24 hours" },
-  { icon: Phone, label: "Call us", value: "+91 98765 43210", sub: "Mon–Sat, 9am–7pm IST" },
+  { icon: Phone, label: "Call us", value: "+91 98765 43210", sub: "Mon-Sat, 9am-7pm IST" },
   { icon: MessageCircle, label: "WhatsApp", value: "Chat with us", sub: "Fastest way to reach us" },
   { icon: MapPin, label: "Visit", value: "Bengaluru, India", sub: "Koramangala, 560034" },
 ];
@@ -107,7 +107,7 @@ export default function ContactPage() {
                     <CheckCircle2 size={30} style={{ color: "#16a34a" }} />
                   </div>
                   <h3 className="text-[22px] font-bold mb-2" style={{ color: X.ink }}>Message sent</h3>
-                  <p className="text-[14px] mb-7" style={{ color: X.sub }}>Thanks — we'll get back to you within 24 hours.</p>
+                  <p className="text-[14px] mb-7" style={{ color: X.sub }}>Thanks, we'll get back to you within 24 hours.</p>
                   <CoralButton onClick={() => navigate("/")}>Back to home</CoralButton>
                 </div>
               ) : (
@@ -170,7 +170,7 @@ export default function ContactPage() {
           <SectionHead
             pre="You Don't Have to"
             hl="Wait to Start"
-            sub="Create your first agent free in minutes — no sales call required"
+            sub="Create your first agent free in minutes, no sales call required"
           />
           <FadeIn delay={0.1}>
             <div className="mt-8 flex justify-center">

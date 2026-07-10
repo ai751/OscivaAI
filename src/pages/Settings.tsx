@@ -7,6 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { PLAN_LIMITS, PlanId, normalizePlan } from "@/lib/plans";
 
+// Test accounts allowed to use the dev-only plan switcher below. Keep in sync
+// with the guard_plan_change() trigger (plan_change_guard migration).
+const DEV_PLAN_TESTERS = new Set(["amanboud29@gmail.com", "vijay@adyatech.com"]);
+
 // Feature bullets shown per plan on the billing card.
 const PLAN_FEATURES: Record<PlanId, string[]> = {
   free: [
@@ -40,6 +44,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [notifications, setNotifications] = useState({ email: true, browser: true, weekly: false });
   const [monthMsgs, setMonthMsgs] = useState<number | null>(null);
+  const [switchingPlan, setSwitchingPlan] = useState<PlanId | null>(null);
 
   const planId = normalizePlan(profile?.plan);
   const limits = PLAN_LIMITS[planId];
@@ -84,6 +89,22 @@ export default function SettingsPage() {
     toast.success("Profile saved!");
   };
 
+  // Dev-only plan switcher (local builds only, the block below is gated on
+  // import.meta.env.DEV, so it never renders in production). Updates the
+  // signed-in user's own profiles row; RLS permits self-updates.
+  const devSetPlan = async (p: PlanId) => {
+    if (!user || switchingPlan) return;
+    setSwitchingPlan(p);
+    const { error } = await supabase.from("profiles").update({ plan: p }).eq("user_id", user.id);
+    setSwitchingPlan(null);
+    if (error) {
+      toast.error(`Plan switch failed: ${error.message}`);
+      return;
+    }
+    await refreshProfile();
+    toast.success(`You're on the ${PLAN_LIMITS[p].label} plan now, all its features are unlocked.`);
+  };
+
   const handleDelete = async () => {
     await signOut();
     navigate("/auth", { replace: true });
@@ -124,8 +145,8 @@ export default function SettingsPage() {
                   {getInitials(name || profile?.name, email)}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-foreground">{name || "—"}</div>
-                  <div className="text-xs text-foreground-muted">{email || "—"}</div>
+                  <div className="text-sm font-semibold text-foreground">{name || "-"}</div>
+                  <div className="text-xs text-foreground-muted">{email || "-"}</div>
                   <span className="text-[9px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium mt-1 inline-block">{plan} Plan</span>
                 </div>
               </div>
@@ -137,10 +158,12 @@ export default function SettingsPage() {
                 <label className="text-xs font-semibold text-foreground-secondary mb-1.5 block">Email</label>
                 <input value={email} disabled className="w-full px-3.5 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground-muted cursor-not-allowed" />
               </div>
-              <button onClick={saveProfile} disabled={saving} className="w-full py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#e05f40] transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
-                {saving && <Loader2 size={14} className="animate-spin" />}
-                Save Changes
-              </button>
+              <div className="flex justify-end pt-1">
+                <button onClick={saveProfile} disabled={saving} className="px-5 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-[#e05f40] transition-colors disabled:opacity-60 inline-flex items-center gap-2">
+                  {saving && <Loader2 size={14} className="animate-spin" />}
+                  Save changes
+                </button>
+              </div>
             </div>
           )}
 
@@ -216,9 +239,34 @@ export default function SettingsPage() {
                   </button>
                 )}
                 <p className="text-[10px] text-foreground-muted text-center mt-2">
-                  Upgrades are activated by our team within a few hours — email support@osciva.io.
+                  Upgrades are activated by our team within a few hours, email support@osciva.io.
                 </p>
               </div>
+
+              {import.meta.env.DEV && DEV_PLAN_TESTERS.has(email.toLowerCase()) && (
+                <div className="glass-card p-4 border border-dashed border-primary/40">
+                  <div className="text-xs font-semibold text-foreground mb-1">Testing: switch plan instantly</div>
+                  <p className="text-[10px] text-foreground-muted mb-3">
+                    Visible on local dev builds only. Changes your real plan in the database for this account.
+                  </p>
+                  <div className="flex gap-2">
+                    {(Object.keys(PLAN_LIMITS) as PlanId[]).map((p) => (
+                      <button
+                        key={p}
+                        disabled={switchingPlan !== null || p === planId}
+                        onClick={() => devSetPlan(p)}
+                        className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                          p === planId
+                            ? "bg-primary text-white cursor-default"
+                            : "bg-secondary text-foreground hover:bg-primary/10 disabled:opacity-50"
+                        }`}
+                      >
+                        {switchingPlan === p ? <Loader2 size={13} className="animate-spin mx-auto" /> : PLAN_LIMITS[p].label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 {(Object.keys(PLAN_LIMITS) as PlanId[])

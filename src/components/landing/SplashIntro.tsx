@@ -19,7 +19,7 @@ const HOLD_MS_REDUCED = 1000;
 
 /* Brand intro shown before the homepage (kore.ai-style: brand mark over an
    ambient ripple, then the whole layer dissolves while the page sharpens in).
-   The homepage renders underneath from the first frame — this layer only
+   The homepage renders underneath from the first frame, this layer only
    covers it, so nothing is gated on the animation finishing.
    Colors come from the mkt-x tokens, so the splash follows the site theme. */
 export default function SplashIntro() {
@@ -43,7 +43,7 @@ export default function SplashIntro() {
     try {
       sessionStorage.setItem(SEEN_KEY, "1");
     } catch {
-      /* private mode — splash just replays next visit */
+      /* private mode, splash just replays next visit */
     }
     document.body.style.overflow = "hidden";
     const t = setTimeout(() => setShow(false), reduceMotion ? HOLD_MS_REDUCED : HOLD_MS);

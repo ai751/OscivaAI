@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FileText, Globe, HelpCircle, UploadCloud, Palette, MessageSquareText, Languages, SlidersHorizontal, Sparkles } from "lucide-react";
+import { FileText, Globe, HelpCircle, UploadCloud, Palette, MessageSquareText, Languages, SlidersHorizontal, CheckCircle2 } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn, DiamondItem } from "./xui";
 
@@ -11,7 +11,7 @@ const sources = [
     tab: "Website",
     icon: Globe,
     title: "Website Crawling",
-    desc: "Point Osciva at your domain — it reads every page and keeps re-reading them on a schedule",
+    desc: "Point Osciva at your domain, it reads every page and keeps re-reading them on a schedule",
     points: [
       "Indexes your key pages automatically",
       "Re-syncs nightly so answers never go stale",
@@ -24,7 +24,7 @@ const sources = [
     tab: "PDFs & Docs",
     icon: FileText,
     title: "Documents & PDFs",
-    desc: "Price lists, manuals, brochures, policies — if you can upload it, your agent can answer from it",
+    desc: "Price lists, manuals, brochures, policies, if you can upload it, your agent can answer from it",
     points: [
       "PDF, Word, text and markdown files",
       "Up to 10 MB of documents per agent",
@@ -50,7 +50,7 @@ const sources = [
     tab: "Manual Notes",
     icon: UploadCloud,
     title: "Tribal Knowledge",
-    desc: "The stuff that lives in your head — store timings, unwritten rules, seasonal exceptions",
+    desc: "The stuff that lives in your head, store timings, unwritten rules, seasonal exceptions",
     points: [
       "Type notes straight into the knowledge base",
       "Great for temporary info like festival hours",
@@ -68,7 +68,7 @@ const custom = [
     tab: "Personality",
     icon: MessageSquareText,
     title: "Tone & Personality",
-    desc: "Warm, professional, playful or concise — your agent talks the way your brand does",
+    desc: "Warm, professional, playful or concise, your agent talks the way your brand does",
     points: [
       "Pick a base tone, then fine-tune the greeting",
       "Set what it should never say or promise",
@@ -80,7 +80,7 @@ const custom = [
     tab: "Appearance",
     icon: Palette,
     title: "Your Brand, Not Ours",
-    desc: "Logo, colors and position — the widget looks like you built it in-house",
+    desc: "Logo, colors and position, the widget looks like you built it in-house",
     points: [
       "Upload your logo, pick your brand color",
       "Light or dark widget theme",
@@ -92,7 +92,7 @@ const custom = [
     tab: "Languages",
     icon: Languages,
     title: "20+ Indian Languages",
-    desc: "Enable the languages your customers actually use — the agent switches automatically",
+    desc: "Enable the languages your customers actually use, the agent switches automatically",
     points: [
       "Hindi, Tamil, Telugu, Marathi, Bengali & more",
       "Detects language mid-conversation",
@@ -200,7 +200,7 @@ function TabbedPanel({
                 />
               </div>
               <div className="mt-2 flex items-center gap-1.5 text-[11px]" style={{ color: "#16a34a" }}>
-                <Sparkles size={11} /> Ready — your agent can answer from this
+                <CheckCircle2 size={11} /> Ready, your agent can answer from this
               </div>
             </div>
           </div>
@@ -234,7 +234,7 @@ export default function HomeFeatures() {
             pre="Train It on"
             hl="Everything You Know"
             post=""
-            sub="Four ways to feed your agent — without writing a single line of code"
+            sub="Four ways to feed your agent, without writing a single line of code"
           />
           <FadeIn delay={0.15} className="mt-12">
             <TabbedPanel items={sources} bg={X.lavender} visualBg="#dde1f7" />
@@ -246,7 +246,7 @@ export default function HomeFeatures() {
             pre="Make It"
             hl="Unmistakably Yours"
             post=""
-            sub="Your voice, your look, your rules — customers should never feel a difference"
+            sub="Your voice, your look, your rules, customers should never feel a difference"
           />
           <FadeIn delay={0.15} className="mt-12">
             <TabbedPanel items={custom} bg={X.coralSoft} visualBg="#fbdccd" />

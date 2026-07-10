@@ -1,7 +1,7 @@
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn } from "./xui";
 
-/* Simple monogram tiles — no third-party logo assets needed. */
+/* Simple monogram tiles, no third-party logo assets needed. */
 const platforms = [
   { name: "WordPress", mark: "W", hue: "#21759b" },
   { name: "Shopify", mark: "S", hue: "#5e8e3e" },
@@ -22,7 +22,7 @@ export default function IntegrationsSection() {
         <SectionHead
           pre="One Snippet."
           hl="Works Everywhere."
-          sub="A single script tag for anything with HTML — plus one-click installs for the platforms you already use"
+          sub="A single script tag for anything with HTML, plus one-click installs for the platforms you already use"
         />
 
         <FadeIn delay={0.1}>

@@ -27,7 +27,7 @@ const floatingIcons = [
 const rotatingWords = ["agents", "chatbots", "assistants"];
 
 export default function AuthPage() {
-  // The auth page is part of the marketing funnel — always light, like the site.
+  // The auth page is part of the marketing funnel, always light, like the site.
   useForceLightTheme();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);

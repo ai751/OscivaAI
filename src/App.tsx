@@ -13,7 +13,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { ensureDataVersion } from "@/lib/userStore";
 import Landing from "@/pages/Landing";
 import FeaturesPage from "@/pages/Features";
-import HowItWorksPage from "@/pages/HowItWorks";
+import SolutionPage from "@/pages/Solution";
 import PricingPage from "@/pages/Pricing";
 import ContactPage from "@/pages/Contact";
 import About from "@/pages/About";
@@ -70,7 +70,9 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/features" element={<FeaturesPage />} />
-                <Route path="/how-it-works" element={<HowItWorksPage />} />
+                {/* How-it-works merged into Features; keep old URL alive */}
+                <Route path="/how-it-works" element={<Navigate to="/features" replace />} />
+                <Route path="/solutions/:slug" element={<SolutionPage />} />
                 <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about" element={<About />} />

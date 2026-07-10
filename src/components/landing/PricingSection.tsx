@@ -10,7 +10,7 @@ type Plan = {
   monthly: number | "custom";
   yearly: number | "custom";
   desc: string;
-  plusLabel?: string; // "Everything in X, plus:" — makes plan differences obvious
+  plusLabel?: string; // "Everything in X, plus:", makes plan differences obvious
   features: Feature[];
   cta: string;
   popular: boolean;
@@ -21,10 +21,10 @@ const plans: Plan[] = [
     name: "Free",
     monthly: 0,
     yearly: 0,
-    desc: "Your first agent answers on us — no credit card",
+    desc: "Your first agent answers on us, no credit card",
     features: [
       { t: "1 AI agent, live in 30 minutes" },
-      { t: "50 messages/mo on our GPT-4o Mini — no API key needed", hot: true },
+      { t: "50 messages/mo on our GPT-4o Mini, no API key needed", hot: true },
       { t: "Train it with your documents (1 MB)" },
       { t: "Accurate RAG answers with source citations" },
       { t: "Embed on any website with one snippet" },
@@ -43,11 +43,11 @@ const plans: Plan[] = [
     plusLabel: "Everything in Free, plus:",
     features: [
       { t: "2 AI agents" },
-      { t: "UNLIMITED messages — your API key, zero markup", hot: true },
+      { t: "UNLIMITED messages, your API key, zero markup", hot: true },
       { t: "5× bigger knowledge base (5 MB of documents)" },
-      { t: "Website indexing — your key pages, auto-synced" },
+      { t: "Website indexing, your key pages, auto-synced" },
       { t: "Fast, affordable AI models (GPT-4o Mini, Gemini Flash…)" },
-      { t: "Remove 'Powered by Osciva' — fully white-label" },
+      { t: "Remove 'Powered by Osciva', fully white-label" },
       { t: "Your logo, colors & widget position" },
       { t: "Full analytics & conversation transcripts" },
       { t: "Email support" },
@@ -62,12 +62,12 @@ const plans: Plan[] = [
     desc: "For growing teams that need it all",
     plusLabel: "Everything in Starter, plus:",
     features: [
-      { t: "5 AI agents — support, sales, FAQs & more" },
-      { t: "ALL premium AI models — GPT-4o, Claude, Gemini Pro", hot: true },
-      { t: "Double the knowledge — 10 MB docs + 15 web pages" },
+      { t: "5 AI agents, support, sales, FAQs & more" },
+      { t: "ALL premium AI models, GPT-4o, Claude, Gemini Pro", hot: true },
+      { t: "Double the knowledge, 10 MB docs + 15 web pages" },
       { t: "Custom rate limits & abuse protection" },
       { t: "Unlimited conversation history" },
-      { t: "Priority support — real humans, fast" },
+      { t: "Priority support, real humans, fast" },
     ],
     cta: "Start free trial",
     popular: true,
@@ -107,7 +107,7 @@ export default function PricingSection() {
         <SectionHead
           hl="Simple Pricing."
           post="Zero Surprises."
-          sub="Start free — your first agent answers on us. Upgrade for unlimited messages with your own API key."
+          sub="Start free, your first agent answers on us. Upgrade for unlimited messages with your own API key."
         />
 
         <FadeIn delay={0.1}>

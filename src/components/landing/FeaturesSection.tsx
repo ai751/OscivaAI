@@ -6,17 +6,17 @@ import { SectionHead, FadeIn } from "./xui";
 const spotlight = {
   icon: Database,
   title: "Train on your own data",
-  desc: "Upload PDFs, documents, URLs and FAQs — anything. Osciva embeds your content into a private knowledge base so every answer is grounded in your real business, never made up.",
+  desc: "Upload PDFs, documents, URLs and FAQs, anything. Osciva embeds your content into a private knowledge base so every answer is grounded in your real business, never made up.",
 };
 
 const features = [
-  { icon: Workflow, title: "Any use case", desc: "Support, sales, lead capture, internal helpdesk, tutoring — design it for whatever you need." },
-  { icon: BarChart3, title: "Built-in analytics", desc: "Every conversation, top questions and resolution rate — no extra tools to wire up." },
+  { icon: Workflow, title: "Any use case", desc: "Support, sales, lead capture, internal helpdesk, tutoring, design it for whatever you need." },
+  { icon: BarChart3, title: "Built-in analytics", desc: "Every conversation, top questions and resolution rate, no extra tools to wire up." },
   { icon: MessageSquare, title: "Human handoff", desc: "When the AI can't help, it hands off to your team with full context preserved." },
   { icon: Globe, title: "20+ Indian languages", desc: "Native Hindi, Tamil, Telugu, Bengali, Kannada, Marathi, Gujarati and more." },
   { icon: Shield, title: "India-first security", desc: "DPDP-ready, encrypted everywhere, data hosted in India." },
   { icon: Code2, title: "Embed anywhere", desc: "One line of code. Native WordPress, Shopify, React and WhatsApp support." },
-  { icon: Paintbrush, title: "Your brand, not ours", desc: "Your colors, logo and welcome message — it looks like part of your product." },
+  { icon: Paintbrush, title: "Your brand, not ours", desc: "Your colors, logo and welcome message, it looks like part of your product." },
   { icon: Zap, title: "Truly no-code", desc: "No JSON, no APIs, no developer. If you've filled a form, you can build one." },
 ];
 
@@ -87,7 +87,7 @@ export default function FeaturesSection() {
         <FadeIn>
           <div className="mt-14 py-10" style={{ background: X.cream, borderRadius: 16 }}>
             <p className="text-center text-[13.5px] mb-6" style={{ color: X.sub }}>
-              <span className="font-bold" style={{ color: X.ink }}>Works with your stack</span> — connect the tools your team already uses
+              <span className="font-bold" style={{ color: X.ink }}>Works with your stack</span>, connect the tools your team already uses
             </p>
             <div className="relative overflow-hidden mask-fade-x">
               <div className="flex w-max gap-3 animate-marquee-slow">

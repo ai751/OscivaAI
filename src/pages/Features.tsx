@@ -5,6 +5,9 @@ import { X } from "@/components/landing/LandingNavbar";
 import FooterSection from "@/components/landing/FooterSection";
 import PageHero from "@/components/landing/PageHero";
 import FeaturesSection from "@/components/landing/FeaturesSection";
+import HowItWorksSection from "@/components/landing/HowItWorksSection";
+import IndustriesSection from "@/components/landing/IndustriesSection";
+import OldWayCompare from "@/components/landing/OldWayCompare";
 import CTASection from "@/components/landing/CTASection";
 import { SectionHead, FadeIn, DiamondItem, HL } from "@/components/landing/xui";
 import { WizardMockup, DashboardMockup, WidgetMockup } from "@/components/landing/UIMockups";
@@ -15,14 +18,14 @@ const deepDive = [
   {
     tag: "Knowledge",
     title: "Answers grounded in your real content",
-    desc: "Upload PDFs, docs, spreadsheets, your website URL and FAQs. Osciva chunks and embeds everything into a private vector index, so every reply is retrieved from your data — never hallucinated.",
+    desc: "Upload PDFs, docs, spreadsheets, your website URL and FAQs. Osciva chunks and embeds everything into a private vector index, so every reply is retrieved from your data, never hallucinated.",
     points: ["PDF, DOCX, CSV, URL & raw text", "Automatic re-indexing on update", "Per-agent isolated knowledge base"],
     Mockup: WizardMockup,
   },
   {
     tag: "Insight",
     title: "See exactly how your AI performs",
-    desc: "Every conversation is logged with full transcripts. Track message volume, top questions and resolution rate from a clean dashboard — no Google Analytics setup, no spreadsheets.",
+    desc: "Every conversation is logged with full transcripts. Track message volume, top questions and resolution rate from a clean dashboard, no Google Analytics setup, no spreadsheets.",
     points: ["Live conversation transcripts", "Top questions & resolution rate", "Per-agent usage breakdown"],
     Mockup: DashboardMockup,
   },
@@ -39,7 +42,7 @@ const security = [
   { icon: Lock, title: "Encrypted everywhere", desc: "TLS in transit and encryption at rest for all data and knowledge bases." },
   { icon: Server, title: "Hosted in India", desc: "Your data stays on Indian infrastructure to meet local residency needs." },
   { icon: FileCheck2, title: "DPDP ready", desc: "Controls and data handling aligned with India's DPDP Act." },
-  { icon: KeyRound, title: "Bring your own key", desc: "Use your own LLM provider key — it's stored server-side, never exposed to visitors." },
+  { icon: KeyRound, title: "Bring your own key", desc: "Use your own LLM provider key, it's stored server-side, never exposed to visitors." },
 ];
 
 export default function FeaturesPage() {
@@ -51,9 +54,12 @@ export default function FeaturesPage() {
         breadcrumb="Features"
         title="Everything You Need to Ship a"
         highlight="Production AI Agent"
-        subtitle="From private knowledge bases to live analytics and one-line embedding — Osciva covers the whole journey, without a single line of glue code."
-        secondaryCta={{ label: "See how it works", to: "/how-it-works" }}
+        subtitle="From private knowledge bases to live analytics and one-line embedding, Osciva covers the whole journey, without a single line of glue code."
+        secondaryCta={{ label: "View pricing", to: "/pricing" }}
       />
+
+      {/* 3-step process (merged in from the retired How-it-works page) */}
+      <HowItWorksSection />
 
       {/* Deep-dive alternating rows */}
       <section className="py-12 md:py-16 px-5 sm:px-8" style={{ background: X.white }}>
@@ -98,13 +104,16 @@ export default function FeaturesPage() {
       {/* Full capability grid + integrations */}
       <FeaturesSection />
 
+      {/* Industry solutions */}
+      <IndustriesSection />
+
       {/* Security band */}
       <section className="py-20 md:py-24 px-5 sm:px-8" style={{ background: X.cream }}>
         <div className="max-w-[1280px] mx-auto">
           <SectionHead
             pre="Enterprise-Grade"
             hl="By Default"
-            sub="The controls serious businesses expect — without an enterprise contract"
+            sub="The controls serious businesses expect, without an enterprise contract"
           />
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {security.map((s, i) => (
@@ -121,6 +130,8 @@ export default function FeaturesPage() {
           </div>
         </div>
       </section>
+
+      <OldWayCompare />
 
       <CTASection />
       <FooterSection />

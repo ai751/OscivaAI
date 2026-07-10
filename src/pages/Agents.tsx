@@ -38,7 +38,7 @@ export default function Agents() {
       toast.success(
         next
           ? `"${a.name}" is live and responding`
-          : `"${a.name}" is paused — it won't reply until you turn it back on`,
+          : `"${a.name}" is paused, it won't reply until you turn it back on`,
       );
     } catch {
       toast.error("Couldn't update the agent. Please try again.");

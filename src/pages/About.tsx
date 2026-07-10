@@ -29,7 +29,7 @@ export default function About() {
         highlight="Every Indian Business"
         subtitle="Osciva is the no-code platform to build, train and deploy AI assistants on your own data. Our goal is simple: put a capable AI teammate within reach of any business, without an engineering team."
         primaryCta={{ label: "Start Free Trial", to: "/auth" }}
-        secondaryCta={{ label: "See how it works", to: "/how-it-works" }}
+        secondaryCta={{ label: "Explore features", to: "/features" }}
       />
 
       {/* Stats band */}

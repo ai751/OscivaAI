@@ -24,7 +24,7 @@ const cards = [
   {
     icon: Puzzle,
     title: "Fits Your Business",
-    desc: "Stores, clinics, institutes, SaaS, agencies — if customers ask you questions, Osciva answers them.",
+    desc: "Stores, clinics, institutes, SaaS, agencies, if customers ask you questions, Osciva answers them.",
     bg: X.lavender,
   },
 ];

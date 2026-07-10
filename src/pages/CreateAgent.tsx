@@ -1,6 +1,6 @@
 import Topbar from "@/components/layout/Topbar";
 import { useState, useRef } from "react";
-import { Check, Upload, X, Plus, Send, RotateCcw, Sparkles, Copy, AlertCircle, Maximize2, Minimize2, ChevronDown, Search } from "lucide-react";
+import { Check, Upload, X, Plus, Send, RotateCcw, Sparkles, Copy, AlertCircle, Maximize2, Minimize2, ChevronDown, Search, FileText, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAgents, Agent, AgentSource, AgentChunk } from "@/context/AgentContext";
@@ -13,10 +13,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { normalizePlan, planLimits, FREE_MODEL_ID, STARTER_MODEL_IDS, parseSizeMB } from "@/lib/plans";
 
 const providers = [
-  { id: "OpenAI", label: "OpenAI", emoji: "🟢", desc: "GPT-4o & GPT-4o Mini", badge: "bg-green-100 text-green-700" },
-  { id: "Anthropic", label: "Anthropic", emoji: "🟠", desc: "Claude Sonnet & Haiku", badge: "bg-orange-100 text-orange-700" },
-  { id: "Google", label: "Google", emoji: "🔵", desc: "Gemini Flash & Pro", badge: "bg-blue-100 text-blue-700" },
-  { id: "OpenRouter", label: "OpenRouter", emoji: "🟣", desc: "Llama, Mistral, DeepSeek +more", badge: "bg-purple-100 text-purple-700" },
+  { id: "OpenAI", label: "OpenAI", dot: "#16a34a", desc: "GPT-4o & GPT-4o Mini", badge: "bg-green-100 text-green-700" },
+  { id: "Anthropic", label: "Anthropic", dot: "#ea580c", desc: "Claude Sonnet & Haiku", badge: "bg-orange-100 text-orange-700" },
+  { id: "Google", label: "Google", dot: "#2563eb", desc: "Gemini Flash & Pro", badge: "bg-blue-100 text-blue-700" },
+  { id: "OpenRouter", label: "OpenRouter", dot: "#7c3aed", desc: "Llama, Mistral, DeepSeek +more", badge: "bg-purple-100 text-purple-700" },
 ];
 
 const models = [
@@ -91,7 +91,7 @@ export default function CreateAgent() {
   const [personality, setPersonality] = useState(existingAgent?.personality ?? "professional");
   const [sources, setSources] = useState<AgentSource[]>(existingAgent?.sources ?? []);
   const [chunks, setChunks] = useState<AgentChunk[]>(existingAgent?.chunks ?? []);
-  const [welcomeMsg, setWelcomeMsg] = useState(existingAgent?.welcomeMsg ?? "Hi 👋 How can I help you today?");
+  const [welcomeMsg, setWelcomeMsg] = useState(existingAgent?.welcomeMsg ?? "Hi! How can I help you today?");
   const [logoUrl, setLogoUrl] = useState(existingAgent?.logoUrl ?? "");
   // Friendly name for an uploaded logo; truthy means "came from upload" (so we
   // show the filename instead of the raw storage URL, and hide the URL field).
@@ -187,7 +187,7 @@ export default function CreateAgent() {
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      toast.error("Image too large — max 2 MB. Try a smaller file.");
+      toast.error("Image too large, max 2 MB. Try a smaller file.");
       return;
     }
     setUploadingLogo(true);
@@ -230,7 +230,7 @@ export default function CreateAgent() {
       id: crypto.randomUUID(),
       name: url,
       type: "URL",
-      size: "—",
+      size: "-",
       status: "Processing...",
     };
     setSources((prev) => [...prev, newSource]);
@@ -260,7 +260,7 @@ export default function CreateAgent() {
     }
   };
 
-  const DEFAULT_WELCOME = "Hi 👋 How can I help you today?";
+  const DEFAULT_WELCOME = "Hi! How can I help you today?";
   const DEFAULT_SUGGESTIONS = ["What services do you offer?", "How can I contact support?"];
 
   const applyTemplate = (tpl: PromptTemplate) => {
@@ -275,13 +275,13 @@ export default function CreateAgent() {
     if (tpl.suggestions && JSON.stringify(suggestions) === JSON.stringify(DEFAULT_SUGGESTIONS)) {
       setSuggestions(tpl.suggestions);
     }
-    toast.success(`${tpl.emoji} ${tpl.label} template applied — fill in the [BRACKETS]`);
+    toast.success(`${tpl.label} template applied. Fill in the [BRACKETS].`);
   };
 
   const refineInstructions = async () => {
     const current = instructions.trim();
     if (current.length < 20) {
-      toast.error("Write a bit of your prompt first — then I'll clean it up.");
+      toast.error("Write a bit of your prompt first, then I'll clean it up.");
       return;
     }
     if (refining) return;
@@ -290,20 +290,24 @@ export default function CreateAgent() {
       const metaSystem =
         "You are a prompt engineer. You rewrite a chatbot's system prompt to be clean, " +
         "well-structured, and easy for an LLM to follow. RULES: (1) Preserve ALL of the user's " +
-        "intent, rules, facts, names, contact details, links, and placeholders like [BRACKETS] — " +
+        "intent, rules, facts, names, contact details, links, and placeholders like [BRACKETS], " +
         "never drop or invent information. (2) Organise it with clear section headings and short " +
-        "bullet points. (3) Keep it concise — remove repetition and filler. (4) Keep the same " +
-        "language. (5) Output ONLY the rewritten system prompt — no preamble, no explanation, no code fences.";
+        "bullet points. (3) Keep it concise, remove repetition and filler. (4) Keep the same " +
+        "language. (5) Output ONLY the rewritten system prompt, no preamble, no explanation, no code fences.";
       const refined = await chatComplete(effectiveModel, metaSystem, [
         { role: "user", content: `Clean up and structure this system prompt:\n\n${current}` },
       ]);
       const cleaned = (refined || "").trim().replace(/^```[a-z]*\n?|\n?```$/g, "").trim();
       if (!cleaned) throw new Error("Empty response");
       setInstructions(cleaned);
-      toast.success("✨ Prompt refined — review the result");
+      toast.success("Prompt refined. Review the result.");
     } catch (err) {
       if (err instanceof MissingApiKeyError) {
-        toast.error(`Add your ${err.provider} API key in Settings → API Keys to use AI refine`);
+        toast.error(
+          plan === "free"
+            ? "AI refine on the Free plan needs an OpenAI key (Settings → API Keys), it runs on GPT-4o Mini."
+            : `Add your ${err.provider} API key in Settings → API Keys to use AI refine`,
+        );
       } else {
         toast.error(`Refine failed: ${err instanceof Error ? err.message : "unknown error"}`);
       }
@@ -337,8 +341,10 @@ export default function CreateAgent() {
     } catch (err) {
       const message =
         err instanceof MissingApiKeyError
-          ? `⚠️ Please add your **${err.provider}** API key in Settings → API Keys to use this model.`
-          : `❌ ${err instanceof Error ? err.message : "Something went wrong"}`;
+          ? plan === "free"
+            ? `The Free plan runs on GPT-4o Mini, so testing here needs an **OpenAI** key (Settings → API Keys). Keys for other providers (Google, Anthropic…) work on paid plans.`
+            : `Please add your **${err.provider}** API key in Settings → API Keys to use this model.`
+          : `Error: ${err instanceof Error ? err.message : "Something went wrong"}`;
       setChatMessages((prev) => [...prev, { role: "assistant", content: message }]);
       if (err instanceof MissingApiKeyError) toast.error(`Missing ${err.provider} API key`);
     } finally {
@@ -366,7 +372,7 @@ export default function CreateAgent() {
       personality,
       color: "#1e293b",
       position,
-      chatIcon: "🤖",
+      chatIcon: "",
       logoUrl: logoUrl.trim(),
       welcomeMsg,
       suggestions,
@@ -395,7 +401,7 @@ export default function CreateAgent() {
           active: true,
         };
         await addAgent(newAgent);
-        toast.success("🎉 Agent created successfully!");
+        toast.success("Agent created successfully!");
         navigate("/agents");
       }
     } catch (err) {
@@ -435,10 +441,9 @@ export default function CreateAgent() {
                   key={tpl.id}
                   type="button"
                   onClick={() => applyTemplate(tpl)}
-                  title={`${tpl.label} — ${tpl.desc}`}
+                  title={`${tpl.label}, ${tpl.desc}`}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary border border-border text-[10px] font-medium text-foreground-secondary hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
                 >
-                  <span>{tpl.emoji}</span>
                   <span>{tpl.label}</span>
                 </button>
               ))}
@@ -452,7 +457,7 @@ export default function CreateAgent() {
                 placeholder="Write your system prompt here, or pick a template above…"
                 className="absolute inset-0 w-full h-full px-4 py-3 pb-12 rounded-lg bg-secondary border border-border text-sm leading-relaxed text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none font-mono"
               />
-              {/* AI refine — bottom corner */}
+              {/* AI refine, bottom corner */}
               <button
                 type="button"
                 onClick={refineInstructions}
@@ -472,7 +477,7 @@ export default function CreateAgent() {
               </button>
             </div>
             <div className="flex justify-between mt-2 shrink-0">
-              <span className="text-[10px] text-foreground-muted">💡 Messy prompt? Hit <span className="text-primary font-medium">Refine with AI</span> to clean &amp; structure it — your details are kept.</span>
+              <span className="text-[10px] text-foreground-muted">Messy prompt? Hit <span className="text-primary font-medium">Refine with AI</span> to clean &amp; structure it, your details are kept.</span>
               <span className="text-[10px] text-foreground-muted">{instructions.length} chars</span>
             </div>
           </div>
@@ -485,7 +490,7 @@ export default function CreateAgent() {
             <div className="flex items-center justify-between mb-3 shrink-0">
               <div>
                 <h3 className="text-sm font-bold text-foreground">Choose a model</h3>
-                <p className="text-[10px] text-foreground-muted">Uses your own API key for the provider — add keys in Settings → API Keys.</p>
+                <p className="text-[10px] text-foreground-muted">Uses your own API key for the provider, add keys in Settings → API Keys.</p>
               </div>
               <button type="button" onClick={() => setModelPickerOpen(false)} className="p-1.5 rounded-lg hover:bg-secondary text-foreground-muted hover:text-foreground">
                 <X size={16} />
@@ -518,7 +523,7 @@ export default function CreateAgent() {
                         : "bg-secondary text-foreground-secondary border-border hover:border-primary/50"
                     }`}
                   >
-                    {meta?.emoji} {meta?.label ?? "All"}
+                    {meta?.label ?? "All"}
                   </button>
                 );
               })}
@@ -558,7 +563,7 @@ export default function CreateAgent() {
                       </div>
                       <div className="text-[9px] text-foreground-muted truncate mb-1">{m.desc}</div>
                       <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-medium ${meta?.badge ?? "bg-secondary text-foreground-muted"}`}>
-                        {meta?.emoji} {meta?.label}
+                        {meta?.label}
                       </span>
                     </button>
                   );
@@ -703,12 +708,12 @@ export default function CreateAgent() {
                         // Free plan is locked to GPT-4o Mini on Osciva's key.
                         <div>
                           <div className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-secondary border border-border text-sm opacity-80 cursor-not-allowed">
-                            <span className="text-base leading-none">🟢</span>
+                            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: "#16a34a" }} />
                             <span className="font-medium truncate flex-1 text-left text-foreground">GPT-4o Mini</span>
                             <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold shrink-0">Included</span>
                           </div>
                           <p className="text-[10px] text-foreground-muted mt-1">
-                            Free plan runs on GPT-4o Mini (on us) — upgrade to choose your own models.
+                            Free plan runs on GPT-4o Mini (on us), upgrade to choose your own models.
                           </p>
                         </div>
                       ) : (
@@ -727,7 +732,7 @@ export default function CreateAgent() {
                             onClick={() => setModelPickerOpen(true)}
                             className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-secondary border border-border text-sm hover:border-primary/50 transition-all"
                           >
-                            {!isEmpty && <span className="text-base leading-none">{meta?.emoji ?? "🤖"}</span>}
+                            {!isEmpty && <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: meta?.dot ?? "#9ca3af" }} />}
                             <span className={`font-medium truncate flex-1 text-left ${isEmpty ? "text-foreground-muted" : "text-foreground"}`}>{label}</span>
                             <ChevronDown size={14} className="text-foreground-muted shrink-0" />
                           </button>
@@ -760,7 +765,7 @@ export default function CreateAgent() {
                 <>
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-xs text-foreground-secondary">
                     <Sparkles size={14} className="inline mr-1.5 text-primary" />
-                    <strong className="text-primary">How RAG works</strong> — Your documents are chunked, embedded, and retrieved to give your AI accurate answers from YOUR data.
+                    <strong className="text-primary">How RAG works</strong>, Your documents are chunked, embedded, and retrieved to give your AI accurate answers from YOUR data.
                   </div>
                   <div
                     onClick={() => fileInputRef.current?.click()}
@@ -803,7 +808,7 @@ export default function CreateAgent() {
                       </div>
                       {sources.map((s) => (
                         <div key={s.id} className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg">
-                          <span className="text-sm">{s.type === "PDF" ? "📄" : s.type === "URL" ? "🌐" : s.type === "DOCX" ? "📄" : "📝"}</span>
+                          <span className="text-sm">{s.type === "URL" ? <Globe size={14} className="text-foreground-muted" /> : <FileText size={14} className="text-foreground-muted" />}</span>
                           <div className="flex-1 min-w-0">
                             <div className="text-xs font-medium text-foreground truncate">{s.name}</div>
                             <div className="text-[10px] text-foreground-muted">{s.type} · {s.size}</div>
@@ -827,7 +832,7 @@ export default function CreateAgent() {
               {tab === 2 && !limits.appearance && (
                 <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-xs text-foreground-secondary">
                   <Sparkles size={14} className="inline mr-1.5 text-primary" />
-                  <strong className="text-primary">Appearance customization is a paid feature</strong> — upgrade to
+                  <strong className="text-primary">Appearance customization is a paid feature</strong>, upgrade to
                   upload your logo, edit the welcome message, suggestions and widget position. Your widget uses the
                   default Osciva look on the Free plan.
                 </div>
@@ -845,7 +850,7 @@ export default function CreateAgent() {
                     />
 
                     {logoUrl ? (
-                      /* Filled state — preview + replace/remove */
+                      /* Filled state, preview + replace/remove */
                       <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
                         <img
                           src={logoUrl}
@@ -874,7 +879,7 @@ export default function CreateAgent() {
                         </button>
                       </div>
                     ) : (
-                      /* Empty state — dashed dropzone */
+                      /* Empty state, dashed dropzone */
                       <button
                         type="button"
                         onClick={() => logoInputRef.current?.click()}
@@ -967,7 +972,7 @@ export default function CreateAgent() {
               {tab === 3 && !limits.security && (
                 <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-xs text-foreground-secondary">
                   <Sparkles size={14} className="inline mr-1.5 text-primary" />
-                  <strong className="text-primary">Custom rate limits are a Growth feature</strong> — your agents are
+                  <strong className="text-primary">Custom rate limits are a Growth feature</strong>, your agents are
                   protected with the default limit (20 messages per visitor per hour). Upgrade to tune or disable it.
                 </div>
               )}
@@ -976,7 +981,7 @@ export default function CreateAgent() {
                   <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg">
                     <div>
                       <div className="text-xs font-semibold text-foreground">Rate Limiting</div>
-                      <div className="text-[10px] text-foreground-muted">Caps messages per visitor each hour — protects your API costs.</div>
+                      <div className="text-[10px] text-foreground-muted">Caps messages per visitor each hour, protects your API costs.</div>
                     </div>
                     <button
                       onClick={() => setRateLimitEnabled(!rateLimitEnabled)}
@@ -1027,7 +1032,7 @@ export default function CreateAgent() {
                           {m.content}
                         </div>
                         {m.role === "assistant" && sources.length > 0 && (
-                          <span className="text-[9px] text-foreground-muted mt-1 inline-block">📄 Source: {sources[0].name}</span>
+                          <span className="text-[9px] text-foreground-muted mt-1 inline-block">Source: {sources[0].name}</span>
                         )}
                       </div>
                     ))}
@@ -1103,7 +1108,7 @@ export default function CreateAgent() {
                       }`}
                       style={{ border: `1px solid rgba(30,41,59,0.2)` }}
                     >
-                      {/* Header — logo + name aligned to the start (matches the live widget) */}
+                      {/* Header, logo + name aligned to the start (matches the live widget) */}
                       <div className="px-3 py-2.5 flex items-center gap-2 relative overflow-hidden" style={{ backgroundColor: "#1e293b" }}>
                         <div className="absolute inset-0 opacity-20" style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.2), transparent)` }} />
                         <img
@@ -1153,7 +1158,7 @@ export default function CreateAgent() {
                       </div>
                       {/* Footer */}
                       <div className="text-center py-1" style={{ backgroundColor: "#ffffff" }}>
-                        <span className="text-[7px]" style={{ color: "#9ca3af" }}>Powered by Osciva⚡</span>
+                        <span className="text-[7px]" style={{ color: "#9ca3af" }}>Powered by Osciva</span>
                       </div>
                     </div>
                   ) : null}
@@ -1161,7 +1166,7 @@ export default function CreateAgent() {
                   <div className={`absolute bottom-3 ${position === "right" ? "right-3" : "left-3"}`}>
                     {!widgetOpen && (
                       <div className="mb-2 px-3 py-1.5 rounded-full bg-foreground text-background text-[9px] font-medium shadow-lg whitespace-nowrap">
-                        Need help? 💬
+                        Need help?
                       </div>
                     )}
                     <button

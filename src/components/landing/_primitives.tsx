@@ -13,7 +13,7 @@ export const C = {
   brandSoft: "#FFF1EC",
 } as const;
 
-/* One easing curve everywhere — calm, premium. */
+/* One easing curve everywhere, calm, premium. */
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export const reveal: Variants = {
@@ -58,7 +58,7 @@ export function SectionHeading({
   subtitle,
   align = "center",
 }: {
-  /** @deprecated No longer rendered — the orange dot-eyebrow was removed site-wide. */
+  /** @deprecated No longer rendered, the orange dot-eyebrow was removed site-wide. */
   eyebrow?: string;
   title: ReactNode;
   subtitle?: ReactNode;

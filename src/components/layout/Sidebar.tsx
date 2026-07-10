@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Bot, PlusCircle, BarChart3, Code2, Key,
-  BookOpen, Settings, LogOut, ChevronLeft, ChevronRight, X, Sparkles, ShieldCheck,
+  BookOpen, Settings, LogOut, ChevronLeft, ChevronRight, X, ArrowUpRight, ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -99,11 +99,6 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         <nav className="flex-1 px-3 pb-3 space-y-5 overflow-y-auto">
           {navGroups.map((group) => (
             <div key={group.label}>
-              {showLabels && (
-                <p className="px-2.5 mb-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-foreground-muted/70">
-                  {group.label}
-                </p>
-              )}
               <div className="space-y-0.5">
                 {group.items.map((item) => {
                   const active = isActive(item.path, location.pathname);
@@ -131,27 +126,21 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        {/* Upgrade card */}
+        {/* Current plan + upgrade */}
         {showLabels && (
           <div className="px-3 pb-2">
-            <div className="relative overflow-hidden rounded-xl bg-[#0B0E14] p-3.5 text-white">
-              <div className="absolute -top-8 -right-6 w-24 h-24 rounded-full bg-primary/30 blur-2xl" />
-              <div className="relative">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <Sparkles size={13} className="text-primary" />
-                  <span className="text-[12px] font-bold">Upgrade to Growth</span>
-                </div>
-                <p className="text-[11px] text-white/60 leading-snug mb-2.5">
-                  Unlock more agents, API access and advanced analytics.
-                </p>
-                <button
-                  onClick={() => navigate("/pricing")}
-                  className="w-full py-1.5 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-[#e05f40] transition-colors"
-                >
-                  See plans
-                </button>
-              </div>
-            </div>
+            <button
+              onClick={() => navigate("/pricing")}
+              className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-border hover:border-primary/40 hover:bg-secondary/60 transition-colors text-left"
+            >
+              <span className="min-w-0">
+                <span className="block text-[12px] font-semibold text-foreground capitalize truncate">
+                  {(profile?.plan || "Free")} plan
+                </span>
+                <span className="block text-[10.5px] text-foreground-muted">Upgrade for more agents</span>
+              </span>
+              <ArrowUpRight size={15} className="text-primary shrink-0" />
+            </button>
           </div>
         )}
 

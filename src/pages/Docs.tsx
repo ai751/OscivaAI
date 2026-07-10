@@ -1,8 +1,8 @@
-// Osciva AI — public product documentation.
+// Osciva AI, public product documentation.
 // A self-contained docs site (grouped sidebar + content pane) styled to match the
 // marketing site. Every section below describes the REAL platform: the dashboard
 // flow, the BYOK key model, the embeddable widget, and the live `chat` edge
-// function. Keep this in sync with the app — do not document features that aren't
+// function. Keep this in sync with the app, do not document features that aren't
 // actually shipped.
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -251,15 +251,15 @@ const CONTENT: Record<string, React.ReactNode> = {
       <H2>What makes Osciva different</H2>
       <P>
         Osciva is <strong>bring-your-own-key (BYOK)</strong> and multi-provider. You connect your own LLM key from
-        OpenAI, Anthropic, Google, or OpenRouter, and your agent answers using whichever model you choose — there's no
+        OpenAI, Anthropic, Google, or OpenRouter, and your agent answers using whichever model you choose, there's no
         forced model and no token markup. Every other platform in this category locks you to one hosted model; Osciva
         lets you pick the best (or cheapest) model for the job.
       </P>
       <UL>
-        <LI><strong>Real RAG</strong> — answers are grounded in your uploaded content using hybrid (semantic + keyword) search, so the agent doesn't hallucinate.</LI>
-        <LI><strong>Any model</strong> — GPT, Claude, Gemini, or open-source models (Llama, DeepSeek, Mistral, Qwen…) via OpenRouter.</LI>
-        <LI><strong>Your key, server-side</strong> — your provider key is stored on the server and never exposed to website visitors.</LI>
-        <LI><strong>One-line embed</strong> — a self-contained widget (Shadow DOM) that drops onto any website and streams replies in real time.</LI>
+        <LI><strong>Real RAG</strong>, answers are grounded in your uploaded content using hybrid (semantic + keyword) search, so the agent doesn't hallucinate.</LI>
+        <LI><strong>Any model</strong>, GPT, Claude, Gemini, or open-source models (Llama, DeepSeek, Mistral, Qwen…) via OpenRouter.</LI>
+        <LI><strong>Your key, server-side</strong>, your provider key is stored on the server and never exposed to website visitors.</LI>
+        <LI><strong>One-line embed</strong>, a self-contained widget (Shadow DOM) that drops onto any website and streams replies in real time.</LI>
       </UL>
 
       <H2>How it fits together</H2>
@@ -293,7 +293,7 @@ const CONTENT: Record<string, React.ReactNode> = {
             title: "Configure the agent (General tab)",
             body: (
               <>
-                Enter a name, click <strong>Choose a model</strong>, and write <strong>System Instructions</strong> — or
+                Enter a name, click <strong>Choose a model</strong>, and write <strong>System Instructions</strong>, or
                 pick an industry template (Education, Healthcare, E-commerce, General) and fill in the{" "}
                 <Code>[BRACKETS]</Code>. Choose a personality tone.
               </>
@@ -314,11 +314,11 @@ const CONTENT: Record<string, React.ReactNode> = {
           },
           {
             title: "Test it",
-            body: <>Open the <Code>Embed</Code> page and use the <strong>Live Test Chat</strong> — it talks to the real backend and your knowledge base, exactly like a visitor would.</>,
+            body: <>Open the <Code>Embed</Code> page and use the <strong>Live Test Chat</strong>, it talks to the real backend and your knowledge base, exactly like a visitor would.</>,
           },
           {
             title: "Embed on your site",
-            body: <>Copy the HTML snippet from the Embed page and paste it before <Code>{"</body>"}</Code> on your website. That's it — the chat bubble appears.</>,
+            body: <>Copy the HTML snippet from the Embed page and paste it before <Code>{"</body>"}</Code> on your website. That's it, the chat bubble appears.</>,
           },
         ]}
       />
@@ -352,7 +352,7 @@ const CONTENT: Record<string, React.ReactNode> = {
       <H3>Knowledge base (RAG)</H3>
       <P>
         The documents and URLs you attach to an agent. Osciva splits them into chunks, embeds each chunk into a vector,
-        and retrieves the most relevant pieces at question time — this is <strong>Retrieval-Augmented Generation</strong>.
+        and retrieves the most relevant pieces at question time, this is <strong>Retrieval-Augmented Generation</strong>.
         It keeps answers grounded in your real content. See <Code>Knowledge base (RAG)</Code>.
       </P>
 
@@ -394,10 +394,10 @@ const CONTENT: Record<string, React.ReactNode> = {
 
       <H2>General tab</H2>
       <UL>
-        <LI><strong>Name</strong> — shown in your dashboard and (by default) in the widget header.</LI>
-        <LI><strong>AI model</strong> — click <em>Choose a model</em> to open the picker (search + filter by provider). See <Code>Choose a model</Code>.</LI>
-        <LI><strong>System instructions</strong> — the agent's behaviour spec. Click the field to open the full-screen editor, or start from an industry template. See <Code>System instructions</Code>.</LI>
-        <LI><strong>Personality</strong> — a tone preset applied on top of your instructions.</LI>
+        <LI><strong>Name</strong>, shown in your dashboard and (by default) in the widget header.</LI>
+        <LI><strong>AI model</strong>, click <em>Choose a model</em> to open the picker (search + filter by provider). See <Code>Choose a model</Code>.</LI>
+        <LI><strong>System instructions</strong>, the agent's behaviour spec. Click the field to open the full-screen editor, or start from an industry template. See <Code>System instructions</Code>.</LI>
+        <LI><strong>Personality</strong>, a tone preset applied on top of your instructions.</LI>
       </UL>
 
       <H3>Personality presets</H3>
@@ -513,7 +513,7 @@ const CONTENT: Record<string, React.ReactNode> = {
     <>
       <H1>System instructions</H1>
       <Lead>
-        System instructions are the rules that shape how your agent behaves — its role, tone, boundaries, and any
+        System instructions are the rules that shape how your agent behaves, its role, tone, boundaries, and any
         step-by-step logic. They are the single most important setting for answer quality.
       </Lead>
 
@@ -521,7 +521,7 @@ const CONTENT: Record<string, React.ReactNode> = {
       <P>
         At answer time, Osciva builds a system prompt that places your instructions in a fenced{" "}
         <strong>OPERATING INSTRUCTIONS</strong> block, explicitly marked as authoritative. The model is told to follow
-        them exactly and in full — they take priority over Osciva's generic defaults. Your knowledge base is then
+        them exactly and in full, they take priority over Osciva's generic defaults. Your knowledge base is then
         attached as the source of facts.
       </P>
 
@@ -541,10 +541,10 @@ Always answer from the knowledge base.          // Behaviour`}
         point, then replace everything in <Code>[SQUARE BRACKETS]</Code>:
       </P>
       <UL>
-        <LI><strong>🎓 Education</strong> — schools, colleges, coaching & ed-tech.</LI>
-        <LI><strong>🏥 Healthcare</strong> — hospitals, clinics & diagnostics (includes an emergency-first rule and a no-medical-advice boundary).</LI>
-        <LI><strong>🛒 E-commerce</strong> — online stores, D2C & retail (order, shipping, returns handling).</LI>
-        <LI><strong>💼 General Business</strong> — services, agencies, SaaS & local businesses.</LI>
+        <LI><strong>Education</strong>, schools, colleges, coaching & ed-tech.</LI>
+        <LI><strong>Healthcare</strong>, hospitals, clinics & diagnostics (includes an emergency-first rule and a no-medical-advice boundary).</LI>
+        <LI><strong>E-commerce</strong>, online stores, D2C & retail (order, shipping, returns handling).</LI>
+        <LI><strong>General Business</strong>, services, agencies, SaaS & local businesses.</LI>
       </UL>
       <Note type="tip">
         Put <strong>behaviour</strong> in the instructions and <strong>facts</strong> (courses, prices, doctors,
@@ -574,7 +574,7 @@ Always answer from the knowledge base.          // Behaviour`}
           ["PDF", "Upload in the Knowledge Base tab"],
           ["DOCX", "Upload in the Knowledge Base tab"],
           ["TXT", "Upload in the Knowledge Base tab"],
-          ["Website URL", "Paste a URL — Osciva fetches the clean, rendered text"],
+          ["Website URL", "Paste a URL, Osciva fetches the clean, rendered text"],
         ]}
       />
       <Note type="info">
@@ -586,7 +586,7 @@ Always answer from the knowledge base.          // Behaviour`}
       <Steps
         items={[
           { title: "Chunking", body: <>Your content is split into sentence-aware chunks (~180 words with ~30 words of overlap) so related context stays together.</> },
-          { title: "Embedding", body: <>Each chunk is converted to a 384-dimension vector using a built-in embedding model. This is free — it doesn't use your LLM key.</> },
+          { title: "Embedding", body: <>Each chunk is converted to a 384-dimension vector using a built-in embedding model. This is free, it doesn't use your LLM key.</> },
           { title: "Storage", body: <>Vectors are stored in a private, per-agent index. One agent can never read another's content.</> },
         ]}
       />
@@ -622,7 +622,7 @@ Always answer from the knowledge base.          // Behaviour`}
         rows={[
           ["Welcome message", "The first message the bot shows when the chat opens."],
           ["Suggestions", "Up to 4 quick-reply chips shown under the welcome message."],
-          ["Position", "Which corner the bubble sits in — left or right."],
+          ["Position", "Which corner the bubble sits in, left or right."],
           ["Logo URL", "A logo shown in the widget header (your brand)."],
         ]}
       />
@@ -633,7 +633,7 @@ Always answer from the knowledge base.          // Behaviour`}
         message, logo, colour, position, and suggestions from the backend. You don't have to hard-code any of it.
       </P>
       <Note type="tip">
-        The header logo is your per-agent brand logo. The floating bubble icon is always the universal Osciva logo —
+        The header logo is your per-agent brand logo. The floating bubble icon is always the universal Osciva logo -
         that's by design. You can still override the header logo per embed (see Widget configuration).
       </Note>
     </>
@@ -649,8 +649,8 @@ Always answer from the knowledge base.          // Behaviour`}
 
       <H2>Defaults</H2>
       <UL>
-        <LI><strong>On by default</strong> — every agent is rate-limited unless you explicitly turn it off.</LI>
-        <LI><strong>20 messages per visitor per hour</strong> by default, configurable per agent (1–1000).</LI>
+        <LI><strong>On by default</strong>, every agent is rate-limited unless you explicitly turn it off.</LI>
+        <LI><strong>20 messages per visitor per hour</strong> by default, configurable per agent (1-1000).</LI>
         <LI>Counted per visitor IP, per agent, in a rolling 1-hour window.</LI>
         <LI>Your own <strong>Live Test</strong> chats are never rate-limited.</LI>
       </UL>
@@ -666,7 +666,7 @@ Always answer from the knowledge base.          // Behaviour`}
       <CodeBlock
         label="HTTP 429"
         code={`{
-  "reply": "You've reached the message limit for now — please try again later. 🙏",
+  "reply": "You've reached the message limit for now, please try again later.",
   "error": "rate_limited",
   "conversationId": null
 }`}
@@ -678,7 +678,7 @@ Always answer from the knowledge base.          // Behaviour`}
     <>
       <H1>Password protection</H1>
       <Lead>
-        Lock an agent behind a password so only people you share it with can chat — useful for internal tools, staging,
+        Lock an agent behind a password so only people you share it with can chat, useful for internal tools, staging,
         or paid/members-only assistants.
       </Lead>
 
@@ -693,7 +693,7 @@ Always answer from the knowledge base.          // Behaviour`}
 
       <H2>How it works</H2>
       <UL>
-        <LI>Your password is hashed (SHA-256) in your browser before it's saved — plaintext never leaves your device.</LI>
+        <LI>Your password is hashed (SHA-256) in your browser before it's saved, plaintext never leaves your device.</LI>
         <LI>The hash is stored in a private, owner-only table that visitors and the widget can never read.</LI>
         <LI>The widget shows a lock screen; once a visitor enters the correct password it's remembered for their browser session.</LI>
         <LI>Enforcement happens server-side <em>before</em> any model call, so locked agents cost you nothing for blocked attempts.</LI>
@@ -725,7 +725,7 @@ Always answer from the knowledge base.          // Behaviour`}
 
       <H2>What counts as a match</H2>
       <UL>
-        <LI>Enter the bare domain, e.g. <Code>example.com</Code> — <Code>https://</Code>, <Code>www.</Code>, and paths are ignored.</LI>
+        <LI>Enter the bare domain, e.g. <Code>example.com</Code>, <Code>https://</Code>, <Code>www.</Code>, and paths are ignored.</LI>
         <LI>Subdomains are allowed automatically: <Code>example.com</Code> also permits <Code>shop.example.com</Code>.</LI>
         <LI>An empty whitelist means the agent works on any site (the default).</LI>
       </UL>
@@ -764,13 +764,13 @@ Always answer from the knowledge base.          // Behaviour`}
         items={[
           { title: "Open API Keys", body: <>Go to <Code>Settings → API Keys</Code>.</> },
           { title: "Paste the key", body: <>Find your provider card, paste the key, and click <strong>Save</strong>. The card shows <strong>Connected</strong> and a masked preview.</> },
-          { title: "Match the model", body: <>Make sure your agent's model belongs to a provider you've connected — e.g. a Claude model needs the Anthropic key.</> },
+          { title: "Match the model", body: <>Make sure your agent's model belongs to a provider you've connected, e.g. a Claude model needs the Anthropic key.</> },
         ]}
       />
 
       <Note type="warn">
         If a visitor messages an agent whose provider has no key, the agent replies:{" "}
-        <em>"This assistant isn't ready yet — the owner needs to add their [Provider] API key in Settings → API Keys."</em>{" "}
+        <em>"This assistant isn't ready yet, the owner needs to add their [Provider] API key in Settings → API Keys."</em>{" "}
         Add the key to fix it instantly.
       </Note>
 
@@ -800,7 +800,7 @@ Always answer from the knowledge base.          // Behaviour`}
         <Code>Add your provider key</Code>.
       </P>
       <Note type="tip">
-        The BYOK model means no token markup — you pay your provider directly at their rates, and you can switch models
+        The BYOK model means no token markup, you pay your provider directly at their rates, and you can switch models
         anytime by editing the agent.
       </Note>
     </>
@@ -811,10 +811,10 @@ Always answer from the knowledge base.          // Behaviour`}
       <H1>How keys are kept safe</H1>
       <Lead>Your provider key is a server-side secret. Website visitors never see it.</Lead>
       <UL>
-        <LI><strong>Stored server-side</strong> — keys are saved to your account on the server, scoped to you with row-level security.</LI>
-        <LI><strong>Used only at answer time</strong> — when a visitor asks a question, the backend looks up your key, calls your chosen provider, and returns only the answer.</LI>
-        <LI><strong>Never sent to the browser</strong> — the embeddable widget never receives the key. It only ever sees the agent id and the reply text.</LI>
-        <LI><strong>Masked in the dashboard</strong> — once saved, only a short preview (first 6 / last 4 characters) is shown.</LI>
+        <LI><strong>Stored server-side</strong>, keys are saved to your account on the server, scoped to you with row-level security.</LI>
+        <LI><strong>Used only at answer time</strong>, when a visitor asks a question, the backend looks up your key, calls your chosen provider, and returns only the answer.</LI>
+        <LI><strong>Never sent to the browser</strong>, the embeddable widget never receives the key. It only ever sees the agent id and the reply text.</LI>
+        <LI><strong>Masked in the dashboard</strong>, once saved, only a short preview (first 6 / last 4 characters) is shown.</LI>
       </UL>
       <Note type="info">
         Because it's your own key on your own provider account, you keep full control: rotate or revoke it anytime from
@@ -841,7 +841,7 @@ Always answer from the knowledge base.          // Behaviour`}
   data-api="${CHAT_FN}"></script>`}
       />
       <P>
-        It's a single script tag, so it works the same way on any host that lets you add HTML — a static site, a CMS, or a
+        It's a single script tag, so it works the same way on any host that lets you add HTML, a static site, a CMS, or a
         framework like React, Vue, or WordPress. Add it to a global template/footer to load it site-wide, or to one page's
         HTML to scope it there.
       </P>
@@ -865,7 +865,7 @@ Always answer from the knowledge base.          // Behaviour`}
     <>
       <H1>Widget configuration</H1>
       <Lead>
-        For most sites, <Code>data-agent-id</Code> is enough — the widget pulls everything else from the agent. To
+        For most sites, <Code>data-agent-id</Code> is enough, the widget pulls everything else from the agent. To
         override any value per page, define <Code>window.OscivaConfig</Code> <strong>before</strong> the script tag.
       </Lead>
 
@@ -875,13 +875,13 @@ Always answer from the knowledge base.          // Behaviour`}
   window.OscivaConfig = {
     agentId: "YOUR_AGENT_ID",            // or use data-agent-id
     companyName: "Adya Hospital",        // header title
-    tagline: "🏥 24/7 Care",            // header subtitle
-    welcomeMessage: "Hi there! 👋",      // first bot message
+    tagline: "24/7 Care",            // header subtitle
+    welcomeMessage: "Hi there!",      // first bot message
     headerLogo: "https://site.com/logo.png",
     color: "#111827",                    // header / accent colour
     position: "right",                   // "left" or "right"
     suggestions: ["Book appointment", "Find a doctor"],
-    bubbleMessages: ["Need help? 💬", "Ask me anything 💡"]
+    bubbleMessages: ["Need help?", "Ask me anything"]
   };
 </script>
 <script src="${WIDGET_SRC}" data-agent-id="YOUR_AGENT_ID"></script>`}
@@ -915,7 +915,7 @@ Always answer from the knowledge base.          // Behaviour`}
     <>
       <H1>Test your agent</H1>
       <Lead>
-        Before (or after) embedding, test against the <em>real</em> backend — same model, same knowledge base, same
+        Before (or after) embedding, test against the <em>real</em> backend, same model, same knowledge base, same
         retrieval a visitor would get.
       </Lead>
       <H2>Live Test Chat</H2>
@@ -929,7 +929,7 @@ Always answer from the knowledge base.          // Behaviour`}
         <LI>It's never rate-limited, so you can test freely.</LI>
       </UL>
       <Note type="tip">
-        If the Live Test says the assistant isn't ready, you haven't added a provider key for the agent's model yet —
+        If the Live Test says the assistant isn't ready, you haven't added a provider key for the agent's model yet -
         see <Code>Add your provider key</Code>.
       </Note>
     </>
@@ -937,7 +937,7 @@ Always answer from the knowledge base.          // Behaviour`}
 
   "api-overview": (
     <>
-      <H1>Chat API — overview</H1>
+      <H1>Chat API, overview</H1>
       <Lead>
         The widget is a thin client over one public endpoint. You can call it directly to build custom integrations.
       </Lead>
@@ -952,7 +952,7 @@ Always answer from the knowledge base.          // Behaviour`}
       />
       <Note type="info">
         The endpoint is public (no auth header needed) and CORS-enabled, so it can be called from any browser or server.
-        The agent owner's LLM key is resolved server-side — it's never part of the request or response.
+        The agent owner's LLM key is resolved server-side, it's never part of the request or response.
       </Note>
     </>
   ),
@@ -967,10 +967,10 @@ Always answer from the knowledge base.          // Behaviour`}
         label="200 OK"
         code={`{
   "name": "Adya Hospital",
-  "welcomeMsg": "Hi 👋 How can I help you today?",
+  "welcomeMsg": "Hi! How can I help you today?",
   "color": "#111827",
   "position": "right",
-  "chatIcon": "🤖",
+  "chatIcon": "https://site.com/icon.png",
   "logoUrl": "https://site.com/logo.png",
   "suggestions": ["Book appointment", "Find a doctor"],
   "passwordRequired": false
@@ -1018,7 +1018,7 @@ Always answer from the knowledge base.          // Behaviour`}
       <CodeBlock
         label="200 OK"
         code={`{
-  "reply": "Our OPD is open Mon–Sat, 8:00 AM – 8:00 PM.",
+  "reply": "Our OPD is open Mon-Sat, 8:00 AM - 8:00 PM.",
   "conversationId": "b1f2…"
 }`}
       />
@@ -1055,14 +1055,14 @@ content-type: application/json
         label="text/event-stream"
         code={`data: {"delta":"Our OPD "}
 data: {"delta":"is open "}
-data: {"delta":"Mon–Sat."}
+data: {"delta":"Mon-Sat."}
 data: {"done":true,"conversationId":"b1f2…"}
 data: [DONE]`}
       />
       <Table
         head={["Event", "Meaning"]}
         rows={[
-          [<Code>{`{"delta":"…"}`}</Code>, "An incremental chunk of text — append it to the message."],
+          [<Code>{`{"delta":"…"}`}</Code>, "An incremental chunk of text, append it to the message."],
           [<Code>{`{"done":true,"conversationId":"…"}`}</Code>, "Final marker with the session id."],
           [<Code>[DONE]</Code>, "Stream terminator."],
         ]}
@@ -1084,7 +1084,7 @@ data: [DONE]`}
         head={["Code", "Meaning"]}
         rows={[
           [<Code>200</Code>, "Success (JSON or stream)."],
-          [<Code>400</Code>, <>Bad request — missing <Code>agentId</Code> or <Code>messages</Code>.</>],
+          [<Code>400</Code>, <>Bad request, missing <Code>agentId</Code> or <Code>messages</Code>.</>],
           [<Code>401</Code>, <>Password required or incorrect (<Code>error: "password_required"</Code>).</>],
           [<Code>403</Code>, <>Domain not allowed by the whitelist (<Code>error: "domain_not_allowed"</Code>).</>],
           [<Code>404</Code>, "Agent not found or inactive."],
@@ -1116,9 +1116,9 @@ data: [DONE]`}
 
       <H2>What's tracked</H2>
       <UL>
-        <LI><strong>Conversations</strong> — each visitor session is a conversation, threaded by <Code>conversationId</Code>.</LI>
-        <LI><strong>Messages</strong> — every user and assistant turn is stored for full transcripts.</LI>
-        <LI><strong>Counts</strong> — message and conversation totals feed your dashboard metrics.</LI>
+        <LI><strong>Conversations</strong>, each visitor session is a conversation, threaded by <Code>conversationId</Code>.</LI>
+        <LI><strong>Messages</strong>, every user and assistant turn is stored for full transcripts.</LI>
+        <LI><strong>Counts</strong>, message and conversation totals feed your dashboard metrics.</LI>
       </UL>
 
       <H2>Recent conversations</H2>
@@ -1138,7 +1138,7 @@ data: [DONE]`}
       <H1>FAQ</H1>
 
       <H3>Do I need an API key?</H3>
-      <P>Yes — one for your chat model's provider. Embeddings for RAG are free and need no key.</P>
+      <P>Yes, one for your chat model's provider. Embeddings for RAG are free and need no key.</P>
 
       <H3>Can I switch models later?</H3>
       <P>Anytime. Edit the agent and pick a different model; just make sure the matching provider key is connected.</P>
@@ -1153,7 +1153,7 @@ data: [DONE]`}
       <P>PDF, DOCX, and TXT files, plus website URLs. See <Code>Knowledge base (RAG)</Code>.</P>
 
       <H3>Does the widget work on any website?</H3>
-      <P>Yes — it's a single HTML script tag, isolated in a Shadow DOM, so it runs on any site or CMS that lets you add HTML.</P>
+      <P>Yes, it's a single HTML script tag, isolated in a Shadow DOM, so it runs on any site or CMS that lets you add HTML.</P>
 
       <H3>Is there token markup?</H3>
       <P>No. Because it's bring-your-own-key, you pay your provider directly at their rates.</P>
@@ -1166,14 +1166,14 @@ data: [DONE]`}
 
       <H3>"This assistant isn't ready yet…"</H3>
       <P>
-        The agent's model has no matching provider key. Add it in <Code>Settings → API Keys</Code> — e.g. an Anthropic
+        The agent's model has no matching provider key. Add it in <Code>Settings → API Keys</Code>, e.g. an Anthropic
         key for a Claude model.
       </P>
 
       <H3>The widget doesn't appear</H3>
       <UL>
         <LI>Confirm the script tag is present and <Code>data-agent-id</Code> is set to a valid agent.</LI>
-        <LI>Open the browser console — a missing agent id logs an Osciva error.</LI>
+        <LI>Open the browser console, a missing agent id logs an Osciva error.</LI>
         <LI>Ensure the agent is <strong>active</strong>; inactive agents return 404.</LI>
       </UL>
 
@@ -1186,7 +1186,7 @@ data: [DONE]`}
 
       <H3>Visitors are getting "message limit" replies</H3>
       <P>
-        That's rate limiting. Raise the per-hour cap (or disable it) in the agent's <strong>Security</strong> tab — see{" "}
+        That's rate limiting. Raise the per-hour cap (or disable it) in the agent's <strong>Security</strong> tab, see{" "}
         <Code>Rate limiting</Code>.
       </P>
 

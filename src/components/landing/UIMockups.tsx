@@ -1,7 +1,8 @@
-// High-fidelity, animated product mockups — pure CSS/SVG + Framer Motion.
+// High-fidelity, animated product mockups, pure CSS/SVG + Framer Motion.
 // No external images; crisp at any size. Designed to look like real screen
 // recordings of the Osciva dashboard.
 import { motion, AnimatePresence } from "framer-motion";
+import { SendHorizonal } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -317,9 +318,9 @@ function SecurityPanel() {
 
 function PreviewPanel() {
   const lines = [
-    { bot: true, t: "Hi 👋 How can I help you today?" },
+    { bot: true, t: "Hi! How can I help you today?" },
     { bot: false, t: "What's your return policy?" },
-    { bot: true, t: "We offer 30-day returns on all items 📦" },
+    { bot: true, t: "We offer 30-day returns on all items" },
   ];
   return (
     <div className="space-y-2">
@@ -343,7 +344,7 @@ function PreviewPanel() {
           Type a message…
         </div>
         <div className="w-6 h-6 rounded-full bg-[#E8613C] flex items-center justify-center text-white text-[9px]">
-          ➤
+          <SendHorizonal size={10} />
         </div>
       </div>
     </div>
@@ -433,9 +434,9 @@ export function WizardMockup() {
 
 export function WidgetMockup() {
   const lines = [
-    { bot: true, t: "Hi 👋 How can I help you today?" },
+    { bot: true, t: "Hi! How can I help you today?" },
     { bot: false, t: "What's your return policy?" },
-    { bot: true, t: "We offer 30-day returns on all items 📦" },
+    { bot: true, t: "We offer 30-day returns on all items" },
   ];
   return (
     <div className={frame}>
@@ -507,7 +508,7 @@ export function WidgetMockup() {
               Type a message…
             </div>
             <div className="w-6 h-6 rounded-full bg-[#E8613C] flex items-center justify-center text-white text-[9px]">
-              ➤
+              <SendHorizonal size={10} />
             </div>
           </div>
         </motion.div>
@@ -516,16 +517,16 @@ export function WidgetMockup() {
   );
 }
 
-// Full-size chat mockup for the hero — no browser chrome, just the assistant
+// Full-size chat mockup for the hero, no browser chrome, just the assistant
 // holding a real conversation. Fills the slide height (h-full) so it lines up
 // with the dashboard slide.
 export function ChatMockup() {
   const convo = [
-    { bot: true, t: "Hi 👋 I'm your Osciva assistant. Ask me anything about your order." },
+    { bot: true, t: "Hi! I'm your Osciva assistant. Ask me anything about your order." },
     { bot: false, t: "Where's my order #1043?" },
     { bot: true, t: "It shipped yesterday and arrives Thursday. Here's your tracking:", card: true },
     { bot: false, t: "Can I change the delivery address?" },
-    { bot: true, t: "Done ✅ Updated to your new address — you'll get a confirmation email." },
+    { bot: true, t: "Done! Your address is updated. A confirmation email is on its way." },
   ];
   return (
     <div className={`${frame} h-full flex flex-col`}>
@@ -610,23 +611,24 @@ export function ChatMockup() {
           Type a message…
         </div>
         <div className="w-9 h-9 rounded-full bg-[#E8613C] flex items-center justify-center text-white text-[12px] shadow-brand">
-          ➤
+          <SendHorizonal size={10} />
         </div>
       </div>
     </div>
   );
 }
 
-// "Embed anywhere" mockup — install snippet + the channels the assistant
+// "Embed anywhere" mockup, install snippet + the channels the assistant
 // plugs into. Fills the slide height to match the other slides.
 export function EmbedMockup() {
+  // Monogram tiles, same treatment as IntegrationsSection (no emoji, no logo assets).
   const channels = [
-    { n: "Website", e: "🌐", s: "Connected" },
-    { n: "WhatsApp", e: "💬", s: "Connected" },
-    { n: "Instagram", e: "📸", s: "Connected" },
-    { n: "Slack", e: "💼", s: "Connected" },
-    { n: "Email", e: "✉️", s: "Connected" },
-    { n: "REST API", e: "⚙️", s: "Connected" },
+    { n: "Website", e: "W", s: "Connected" },
+    { n: "WhatsApp", e: "WA", s: "Connected" },
+    { n: "Instagram", e: "IG", s: "Connected" },
+    { n: "Slack", e: "SL", s: "Connected" },
+    { n: "Email", e: "@", s: "Connected" },
+    { n: "REST API", e: "</>", s: "Connected" },
   ];
   return (
     <div className={`${frame} h-full flex flex-col`}>
@@ -640,7 +642,7 @@ export function EmbedMockup() {
         <div>
           <div className="text-[9px] font-semibold text-[#586072] mb-1.5">Paste one line before &lt;/body&gt;</div>
           <div className="rounded-xl bg-[#0B0E14] p-3 font-mono text-[10px] leading-relaxed">
-            <span className="text-[#5B6472]">{"// Drop in once — works everywhere"}</span>
+            <span className="text-[#5B6472]">{"// Drop in once, works everywhere"}</span>
             <br />
             <span className="text-[#8C94A1]">&lt;script </span>
             <span className="text-[#7DD3FC]">src</span>
@@ -671,7 +673,7 @@ export function EmbedMockup() {
                 transition={{ delay: 0.15 + i * 0.07, duration: 0.4, ease: EASE }}
                 className="flex items-center gap-2 rounded-xl bg-white border border-[#EBEDF0] px-2.5 py-2.5"
               >
-                <span className="w-7 h-7 rounded-lg bg-[#F2F4F7] flex items-center justify-center text-[13px]">{c.e}</span>
+                <span className="w-7 h-7 rounded-lg bg-[#F2F4F7] flex items-center justify-center text-[9px] font-bold text-[#586072]">{c.e}</span>
                 <div className="flex-1 min-w-0">
                   <div className="text-[11px] font-semibold text-[#0B0E14] leading-none">{c.n}</div>
                   <div className="text-[9px] text-[#16A34A] mt-1 flex items-center gap-1">
@@ -683,7 +685,7 @@ export function EmbedMockup() {
           </div>
         </div>
 
-        {/* Footer status — pinned to the bottom so the card fills cleanly */}
+        {/* Footer status, pinned to the bottom so the card fills cleanly */}
         <div className="mt-auto rounded-xl bg-white border border-[#EBEDF0] px-3 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2 text-[10px] font-semibold text-[#0B0E14]">
             <span className="w-5 h-5 rounded-full bg-[#16A34A]/10 flex items-center justify-center text-[#16A34A] text-[10px]">✓</span>
@@ -753,7 +755,7 @@ export function HeroCarousel({
         ))}
       </div>
 
-      {/* Slide controls — absolute so they don't change the card's layout height */}
+      {/* Slide controls, absolute so they don't change the card's layout height */}
       <div className="absolute left-1/2 -translate-x-1/2 -bottom-11 flex items-center gap-3">
         {HERO_SLIDES.map((s, i) => (
           <button

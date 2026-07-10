@@ -62,10 +62,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    // Clear local state first so the UI signs out instantly; the server-side
+    // token revocation finishes in the background.
     setSession(null);
     setUser(null);
     setProfile(null);
+    supabase.auth.signOut().catch(() => {});
   };
 
   const refreshProfile = async () => {

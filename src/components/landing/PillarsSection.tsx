@@ -11,7 +11,7 @@ const pillars = [
     points: [
       "Reads and remembers everything you upload",
       "Re-syncs your website and docs automatically",
-      "Grounded answers only — no making things up",
+      "Grounded answers only, no making things up",
     ],
   },
   {
@@ -44,7 +44,7 @@ export default function PillarsSection() {
         <SectionHead
           pre="One Platform That"
           hl="Learns, Talks, and Reports"
-          sub="Three parts working together — so support runs itself"
+          sub="Three parts working together, so support runs itself"
         />
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1080px] mx-auto">

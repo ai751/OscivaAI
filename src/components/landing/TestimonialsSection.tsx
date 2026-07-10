@@ -6,7 +6,7 @@ const featured = {
   company: "ShopKart",
   industry: "D2C Store",
   quote:
-    "Setting up our agent took under 30 minutes. It now handles 70% of customer queries with no human in the loop — including the midnight 'where is my order' wave.",
+    "Setting up our agent took under 30 minutes. It now handles 70% of customer queries with no human in the loop, including the midnight 'where is my order' wave.",
   name: "Rahul Menon",
   role: "Founder, ShopKart",
   stats: [
@@ -77,7 +77,7 @@ export default function TestimonialsSection() {
                 “{featured.quote}”
               </p>
               <div className="mt-4 text-[14px]" style={{ color: X.mute }}>
-                <span className="font-bold" style={{ color: X.ink }}>{featured.name}</span> — {featured.role}
+                <span className="font-bold" style={{ color: X.ink }}>{featured.name}</span>, {featured.role}
               </div>
               <div className="mt-7 grid grid-cols-2 md:grid-cols-4 gap-3">
                 {featured.stats.map((s) => (

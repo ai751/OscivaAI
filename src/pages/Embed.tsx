@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useAgents } from "@/context/AgentContext";
 import { recordAgentActivity } from "@/lib/agentStats";
 
-// Public chat edge function — the same backend the embedded widget uses.
+// Public chat edge function, the same backend the embedded widget uses.
 const CHAT_FN = `${import.meta.env.VITE_SUPABASE_URL ?? "https://ydvzfinuypdjkfnzdpkt.supabase.co"}/functions/v1/chat`;
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
@@ -18,7 +18,7 @@ const configOptions = [
 const installSteps = [
   {
     title: "Copy the snippet",
-    body: "Hit Copy above. It's a single <script> tag — no build step, no dependencies, no npm install.",
+    body: "Hit Copy above. It's a single <script> tag, no build step, no dependencies, no npm install.",
   },
   {
     title: "Open your site's HTML",
@@ -30,7 +30,7 @@ const installSteps = [
   },
   {
     title: "Save & publish, then reload",
-    body: "Refresh the live page — a chat bubble appears in the corner. That's it; the widget pulls its config, knowledge base, and styling from this agent automatically.",
+    body: "Refresh the live page, a chat bubble appears in the corner. That's it; the widget pulls its config, knowledge base, and styling from this agent automatically.",
   },
 ];
 
@@ -76,13 +76,13 @@ export default function Embed() {
         body: JSON.stringify({ agentId: currentAgent.id, messages: newHistory.slice(-12), test: true }),
       });
       const data = await res.json();
-      const reply = data?.reply || (data?.error ? `❌ ${data.error}` : "(no response)");
+      const reply = data?.reply || (data?.error ? `Error: ${data.error}` : "(no response)");
       setChatMessages((prev) => [...prev, { role: "assistant", content: reply }]);
       recordAgentActivity(currentAgent.id);
     } catch (err) {
       setChatMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `❌ ${err instanceof Error ? err.message : "Connection failed"}` },
+        { role: "assistant", content: `Error: ${err instanceof Error ? err.message : "Connection failed"}` },
       ]);
     } finally {
       setChatLoading(false);
@@ -165,7 +165,7 @@ export default function Embed() {
                     <h4 className="text-xs font-semibold text-foreground-secondary mb-2">Where it shows up</h4>
                     <p className="text-[11px] text-foreground-muted leading-relaxed">
                       The widget injects a floating chat launcher pinned to the bottom corner of the page (left or right, per the agent's
-                      Appearance settings) — it doesn't take over your layout. Add the snippet to a global template/footer to load it
+                      Appearance settings), it doesn't take over your layout. Add the snippet to a global template/footer to load it
                       site-wide, or to a single page's HTML to scope it to that page only.
                     </p>
                   </div>
@@ -174,11 +174,11 @@ export default function Embed() {
                     <h4 className="text-xs font-semibold text-foreground-secondary mb-2">Technical notes</h4>
                     <ul className="space-y-1.5 text-[11px] text-foreground-muted leading-relaxed list-disc pl-4">
                       <li>The script is loaded <span className="text-foreground-secondary">async</span> and renders into its own container, so it never blocks page render.</li>
-                      <li>Add it <span className="text-foreground-secondary">once per page</span> — a second copy of the tag will load a duplicate widget.</li>
+                      <li>Add it <span className="text-foreground-secondary">once per page</span>, a second copy of the tag will load a duplicate widget.</li>
                       <li>
-                        <span className="text-foreground-secondary">data-agent-id</span> is required; <span className="text-foreground-secondary">data-api</span> is pre-filled — leave it as-is.
+                        <span className="text-foreground-secondary">data-agent-id</span> is required; <span className="text-foreground-secondary">data-api</span> is pre-filled, leave it as-is.
                       </li>
-                      <li>No cookies, no framework, no build step — it runs on plain HTML, React, Vue, Webflow, Shopify, WordPress, or any host that allows a script tag.</li>
+                      <li>No cookies, no framework, no build step, it runs on plain HTML, React, Vue, Webflow, Shopify, WordPress, or any host that allows a script tag.</li>
                     </ul>
                   </div>
                 </div>
@@ -192,10 +192,10 @@ export default function Embed() {
                       <RotateCcw size={10} /> Clear
                     </button>
                   </div>
-                  <p className="text-[10px] text-foreground-muted mb-3">Live answers from your agent's real backend + knowledge base — exactly what visitors get.</p>
+                  <p className="text-[10px] text-foreground-muted mb-3">Live answers from your agent's real backend + knowledge base, exactly what visitors get.</p>
                   <div className="bg-secondary/30 rounded-lg p-3 h-56 overflow-y-auto space-y-2 mb-2">
                     <div className="bg-background p-2 rounded-lg rounded-bl-none max-w-[85%] border border-border">
-                      <p className="text-[11px] text-foreground-secondary">{currentAgent?.welcomeMsg ?? "Hi 👋 How can I help you today?"}</p>
+                      <p className="text-[11px] text-foreground-secondary">{currentAgent?.welcomeMsg ?? "Hi! How can I help you today?"}</p>
                     </div>
                     {chatMessages.map((m, i) => (
                       <div key={i} className={`max-w-[85%] ${m.role === "user" ? "ml-auto" : ""}`}>

@@ -7,9 +7,17 @@ const columns = [
     title: "Platform",
     links: [
       { label: "Features", path: "/features" },
-      { label: "How it works", path: "/how-it-works" },
       { label: "Pricing", path: "/pricing" },
       { label: "Docs", path: "/docs" },
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      { label: "Education", path: "/solutions/education" },
+      { label: "Healthcare", path: "/solutions/healthcare" },
+      { label: "E-commerce", path: "/solutions/ecommerce" },
+      { label: "General Business", path: "/solutions/business" },
     ],
   },
   {
@@ -46,7 +54,7 @@ export default function FooterSection() {
   return (
     <footer className="mkt-x border-t px-5 sm:px-8 pt-14 pb-8" style={{ background: X.white, borderColor: X.border }}>
       <div className="max-w-[1280px] mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-10">
           {/* Brand */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
@@ -55,7 +63,7 @@ export default function FooterSection() {
             </div>
             <p className="text-[14px] leading-[22px] max-w-[280px]" style={{ color: X.mute }}>
               AI support agents trained on your business. Stop answering the same
-              questions — start automating every conversation.
+              questions, start automating every conversation.
             </p>
           </div>
 

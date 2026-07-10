@@ -9,7 +9,7 @@ const steps = [
   {
     num: "01",
     title: "Configure your assistant",
-    desc: "Use the point-and-click wizard to name your AI, set its personality, pick a model, and describe what it should do — all in plain English.",
+    desc: "Use the point-and-click wizard to name your AI, set its personality, pick a model, and describe what it should do, all in plain English.",
     Mockup: WizardMockup,
   },
   {
@@ -21,7 +21,7 @@ const steps = [
   {
     num: "03",
     title: "Embed anywhere in one click",
-    desc: "Copy a single snippet — or use the WordPress, React and Shopify integrations — and your assistant is live, helping customers 24/7.",
+    desc: "Copy a single snippet, or use the WordPress, React and Shopify integrations, and your assistant is live, helping customers 24/7.",
     Mockup: WidgetMockup,
   },
 ];

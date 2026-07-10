@@ -1,5 +1,5 @@
 import Topbar from "@/components/layout/Topbar";
-import { Bot, MessageSquare, MessagesSquare, Clock, TrendingUp, TrendingDown, Plus, ArrowRight, ArrowUpRight } from "lucide-react";
+import { Bot, MessageSquare, MessagesSquare, BookOpen, TrendingUp, Plus, ArrowRight, ArrowUpRight, Check, Code2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAgents } from "@/context/AgentContext";
 import { useTheme } from "@/hooks/useTheme";
@@ -50,11 +50,14 @@ export default function Dashboard() {
   const activeAgents = useMemo(() => agents.filter((a) => a.active), [agents]);
   const weekTotal = useMemo(() => weeklyData.reduce((s, d) => s + d.value, 0), [weeklyData]);
 
+  const totalSources = useMemo(() => agents.reduce((s, a) => s + a.sources.length, 0), [agents]);
+
+  // Every value and sub-label here is real data; no placeholder metrics.
   const stats = [
-    { label: "Total agents", value: String(agents.length), trend: agents.length > 0 ? `${activeAgents.length} active` : "Create your first", up: true, icon: Bot, tint: "text-primary bg-primary/10" },
-    { label: "Total messages", value: totalMessages.toLocaleString(), trend: "Live", up: true, icon: MessageSquare, tint: "text-success bg-success/10" },
-    { label: "Conversations", value: totalConversations.toLocaleString(), trend: "Live", up: true, icon: MessagesSquare, tint: "text-info bg-info/10" },
-    { label: "Avg response", value: "1.2s", trend: "0.3s faster", up: false, icon: Clock, tint: "text-warning bg-warning/10" },
+    { label: "Total agents", value: String(agents.length), sub: agents.length > 0 ? `${activeAgents.length} active` : "Create your first", live: agents.length > 0, icon: Bot, tint: "text-primary bg-primary/10" },
+    { label: "Total messages", value: totalMessages.toLocaleString(), sub: weekTotal > 0 ? `+${weekTotal.toLocaleString()} this week` : "None this week", live: weekTotal > 0, icon: MessageSquare, tint: "text-success bg-success/10" },
+    { label: "Conversations", value: totalConversations.toLocaleString(), sub: "All time", live: false, icon: MessagesSquare, tint: "text-info bg-info/10" },
+    { label: "Knowledge sources", value: totalSources.toLocaleString(), sub: totalSources > 0 ? "Docs & pages indexed" : "Train your agent", live: false, icon: BookOpen, tint: "text-warning bg-warning/10" },
   ];
 
   const updatedAgo = Math.max(0, Math.floor((Date.now() - lastUpdated) / 1000));
@@ -111,7 +114,11 @@ export default function Dashboard() {
                   {phrases[phraseIdx]}
                 </motion.h2>
               </AnimatePresence>
-              <p className="text-[13.5px] text-white/60 mt-1">Here's how your AI agents are performing today.</p>
+              <p className="text-[13.5px] text-white/60 mt-1">
+                {agents.length > 0
+                  ? "Here's how your AI agents are performing today."
+                  : "Let's get your first agent live, it takes just a few minutes."}
+              </p>
               <p className="text-[11px] text-white/40 mt-2">Updated {updatedAgo < 5 ? "just now" : `${updatedAgo}s ago`}</p>
             </div>
             <button
@@ -141,9 +148,9 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="text-2xl font-extrabold text-foreground display">{s.value}</div>
-              <div className={`mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium ${s.up ? "text-success" : "text-info"}`}>
-                {s.up ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
-                {s.trend}
+              <div className={`mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium ${s.live ? "text-success" : "text-foreground-muted"}`}>
+                {s.live && <TrendingUp size={11} />}
+                {s.sub}
               </div>
             </motion.div>
           ))}
@@ -236,21 +243,57 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* Insight card */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.45 }}
-          className="rounded-2xl border border-border bg-card p-5 flex items-center gap-4"
-        >
-          <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-            <TrendingUp size={20} className="text-primary" />
-          </div>
-          <p className="text-[13px] text-foreground-secondary leading-relaxed">
-            Your agents handled <span className="text-foreground font-semibold">{totalMessages.toLocaleString()} messages</span> across{" "}
-            <span className="text-foreground font-semibold">{totalConversations.toLocaleString()} conversations</span>. Keep your knowledge base fresh to push resolution rates even higher.
-          </p>
-        </motion.div>
+        {/* Setup checklist until the first real message, then the insight card */}
+        {totalMessages === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45 }}
+            className="rounded-2xl border border-border bg-card p-5"
+          >
+            <h3 className="text-[14px] font-bold text-foreground">Get your agent live</h3>
+            <p className="text-[12px] text-foreground-muted mt-0.5 mb-4">Three steps from zero to answering visitors on your site.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/60">
+              {[
+                { done: agents.length > 0, icon: Bot, title: "Create your agent", desc: "Name it, pick a personality.", to: "/agents/create", cta: "Create agent" },
+                { done: totalSources > 0, icon: BookOpen, title: "Train it on your content", desc: "Upload docs or add your website.", to: agents.length > 0 ? `/agents/edit/${agents[0].id}` : "/agents/create", cta: "Add knowledge" },
+                { done: false, icon: Code2, title: "Embed it on your site", desc: "Paste one snippet, go live.", to: "/embed", cta: "Get the snippet" },
+              ].map((step) => (
+                <div key={step.title} className="py-3 sm:py-0 sm:px-4 first:sm:pl-0 last:sm:pr-0 flex items-start gap-3">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${step.done ? "bg-success/15 text-success" : "bg-primary/10 text-primary"}`}>
+                    {step.done ? <Check size={14} /> : <step.icon size={14} />}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[13px] font-semibold text-foreground">{step.title}</div>
+                    <p className="text-[11.5px] text-foreground-muted mt-0.5 mb-1.5">{step.desc}</p>
+                    {step.done ? (
+                      <span className="text-[12px] font-semibold text-success">Done</span>
+                    ) : (
+                      <button onClick={() => navigate(step.to)} className="text-[12px] text-primary font-semibold hover:underline inline-flex items-center gap-1">
+                        {step.cta} <ArrowRight size={12} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45 }}
+            className="rounded-2xl border border-border bg-card p-5 flex items-center gap-4"
+          >
+            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <TrendingUp size={20} className="text-primary" />
+            </div>
+            <p className="text-[13px] text-foreground-secondary leading-relaxed">
+              Your agents handled <span className="text-foreground font-semibold">{totalMessages.toLocaleString()} messages</span> across{" "}
+              <span className="text-foreground font-semibold">{totalConversations.toLocaleString()} conversations</span>. Keep your knowledge base fresh to push resolution rates even higher.
+            </p>
+          </motion.div>
+        )}
       </div>
     </>
   );

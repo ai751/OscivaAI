@@ -12,7 +12,7 @@ const tiers = [
     plusLabel: "",
     features: [
       { t: "1 agent, live in 30 minutes", hot: false },
-      { t: "50 messages/mo — no API key needed", hot: true },
+      { t: "50 messages/mo, no API key needed", hot: true },
       { t: "Train it with your documents", hot: false },
       { t: "Embed anywhere with one snippet", hot: false },
     ],
@@ -26,9 +26,9 @@ const tiers = [
     plusLabel: "Everything in Free, plus:",
     features: [
       { t: "2 agents", hot: false },
-      { t: "UNLIMITED messages — your API key", hot: true },
+      { t: "UNLIMITED messages, your API key", hot: true },
       { t: "5 MB docs + website indexing", hot: false },
-      { t: "White-label — no Osciva branding", hot: false },
+      { t: "White-label, no Osciva branding", hot: false },
     ],
     popular: false,
   },
@@ -39,8 +39,8 @@ const tiers = [
     note: "For growing teams",
     plusLabel: "Everything in Starter, plus:",
     features: [
-      { t: "5 agents — support, sales & more", hot: false },
-      { t: "ALL premium models — GPT-4o, Claude", hot: true },
+      { t: "5 agents, support, sales & more", hot: false },
+      { t: "ALL premium models, GPT-4o, Claude", hot: true },
       { t: "2× knowledge + custom rate limits", hot: false },
       { t: "Priority support", hot: false },
     ],
@@ -70,7 +70,7 @@ export default function HomePricing() {
         <SectionHead
           hl="Simple Pricing."
           post="Zero Surprises."
-          sub="Start free — your first agent answers on us. Upgrade for unlimited messages with your own API key."
+          sub="Start free, your first agent answers on us. Upgrade for unlimited messages with your own API key."
         />
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

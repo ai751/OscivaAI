@@ -554,7 +554,10 @@ Deno.serve(async (req) => {
         apiKey = keyRow?.api_key ?? "";
       }
 
-      const gate = `⚠️ This assistant isn't ready yet — the owner needs to add their ${provider} API key in Settings → API Keys.`;
+      const gate =
+        plan === "free"
+          ? "⚠️ This assistant isn't ready yet. Free-plan replies run on GPT-4o Mini, so the owner needs an OpenAI API key in Settings → API Keys — or an upgraded plan to use their Google/Anthropic/OpenRouter key."
+          : `⚠️ This assistant isn't ready yet — the owner needs to add their ${provider} API key in Settings → API Keys.`;
       const system = buildSystemPrompt(agent, context);
       const userText = String(lastUser?.content ?? "");
       // Owner Live-Test chats (test:true) are answered but never logged, so they

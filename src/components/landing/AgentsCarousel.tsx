@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, HeadphonesIcon, MessageCircle, BookOpenCheck, UserPlus, Languages, LineChart } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn, DiamondItem, CoralButton, HL } from "./xui";
 
@@ -9,9 +9,8 @@ const agents = [
   {
     tab: "Customer Support",
     tag: "Support",
-    icon: HeadphonesIcon,
     title: "Answers Instantly. Never Sleeps.",
-    desc: "Handles order status, policies, troubleshooting and everything in your docs — so your team stops repeating themselves.",
+    desc: "Handles order status, policies, troubleshooting and everything in your docs, so your team stops repeating themselves.",
     points: [
       "Replies in under 2 seconds, day or night",
       "Cites the exact document behind every answer",
@@ -19,15 +18,18 @@ const agents = [
     ],
     chat: [
       { from: "them", text: "Where is my order #4218?" },
-      { from: "bot", text: "It's out for delivery — arriving today by 8 pm 🚚" },
+      { from: "bot", text: "It's out for delivery, arriving today by 8 pm" },
+      { from: "them", text: "Can I change the delivery address?" },
+      { from: "bot", text: "It's already with the courier, so not for today. I can have it held for pickup instead. Want that?" },
+      { from: "them", text: "No, today works. Thanks!" },
+      { from: "bot", text: "You're welcome! Sending your live tracking link now." },
     ],
   },
   {
     tab: "Sales Assistant",
     tag: "Sales",
-    icon: MessageCircle,
     title: "Turns Visitors Into Buyers.",
-    desc: "Recommends products, explains pricing and nudges hesitant visitors — right when they're deciding.",
+    desc: "Recommends products, explains pricing and nudges hesitant visitors, right when they're deciding.",
     points: [
       "Answers pricing & comparison questions",
       "Suggests the right plan or product",
@@ -35,13 +37,16 @@ const agents = [
     ],
     chat: [
       { from: "them", text: "Which plan is right for a small clinic?" },
-      { from: "bot", text: "Starter fits you — 3 agents, ₹999/mo. Want a breakdown?" },
+      { from: "bot", text: "Starter fits you: 3 agents at ₹999/mo. Want a breakdown?" },
+      { from: "them", text: "Does it include Hindi support?" },
+      { from: "bot", text: "Yes, every plan speaks 20+ Indian languages at no extra cost." },
+      { from: "them", text: "Nice. How do I get started?" },
+      { from: "bot", text: "Sign up free, no card needed. Your clinic can be live tonight." },
     ],
   },
   {
     tab: "FAQ Agent",
     tag: "Knowledge",
-    icon: BookOpenCheck,
     title: "Your FAQ Page, But Alive.",
     desc: "Every policy, price list and how-to you've ever written becomes a conversation instead of a wall of text.",
     points: [
@@ -51,13 +56,16 @@ const agents = [
     ],
     chat: [
       { from: "them", text: "What's your return policy?" },
-      { from: "bot", text: "7-day no-questions returns. Refunds in 3–5 days ✅" },
+      { from: "bot", text: "7-day no-questions returns. Refunds in 3 to 5 days" },
+      { from: "them", text: "Do I need the original box?" },
+      { from: "bot", text: "Just the tags. The box helps but isn't required." },
+      { from: "them", text: "Who pays for return shipping?" },
+      { from: "bot", text: "We do. Pickup is free from your address." },
     ],
   },
   {
     tab: "Lead Capture",
     tag: "Growth",
-    icon: UserPlus,
     title: "Never Lose a Lead Again.",
     desc: "Collects names and numbers naturally inside the conversation and sends them wherever your team works.",
     points: [
@@ -67,15 +75,18 @@ const agents = [
     ],
     chat: [
       { from: "them", text: "Can someone call me about bulk orders?" },
-      { from: "bot", text: "Absolutely — what's the best number to reach you?" },
+      { from: "bot", text: "Absolutely! What's the best number to reach you?" },
+      { from: "them", text: "98860 44321. I'm Priya from Nashik." },
+      { from: "bot", text: "Thanks Priya! Roughly how many units per month?" },
+      { from: "them", text: "Around 500 to start." },
+      { from: "bot", text: "Perfect. Our sales team will call you before 6 pm today" },
     ],
   },
   {
     tab: "Multilingual",
     tag: "Languages",
-    icon: Languages,
     title: "Speaks Your Customer's Language.",
-    desc: "Detects the language automatically and answers in it — from the same English documents you already have.",
+    desc: "Detects the language automatically and answers in it, from the same English documents you already have.",
     points: [
       "20+ Indian languages out of the box",
       "Handles Hinglish and code-switching",
@@ -83,57 +94,70 @@ const agents = [
     ],
     chat: [
       { from: "them", text: "क्या COD उपलब्ध है?" },
-      { from: "bot", text: "हाँ! ₹5,000 तक के ऑर्डर पर COD उपलब्ध है 👍" },
+      { from: "bot", text: "हाँ! ₹5,000 तक के ऑर्डर पर COD उपलब्ध है" },
+      { from: "them", text: "डिलीवरी में कितने दिन लगेंगे?" },
+      { from: "bot", text: "आपके पिनकोड पर 2 से 3 दिन में डिलीवरी हो जाती है।" },
+      { from: "them", text: "बहुत बढ़िया, धन्यवाद!" },
+      { from: "bot", text: "स्वागत है! और कोई सवाल हो तो पूछिए" },
     ],
   },
   {
     tab: "Insights",
     tag: "Analytics",
-    icon: LineChart,
     title: "Learns What Customers Want.",
-    desc: "Every conversation becomes data — what people ask, where your docs have gaps, what's driving tickets.",
+    desc: "Every conversation becomes data, what people ask, where your docs have gaps, what's driving tickets.",
     points: [
       "Top questions and trends each week",
       "Gaps in your knowledge base, flagged",
       "Full transcripts, searchable forever",
     ],
     chat: [
-      { from: "them", text: "— This week —" },
-      { from: "bot", text: "412 questions answered · 86% resolved without a human 📊" },
+      { from: "them", text: "What did customers ask most this week?" },
+      { from: "bot", text: "Delivery time was #1 with 132 questions, then returns." },
+      { from: "them", text: "Anything we should fix?" },
+      { from: "bot", text: "Your kidswear size guide is missing. 28 shoppers asked for it." },
+      { from: "them", text: "And the resolution rate?" },
+      { from: "bot", text: "86% resolved without a human, up from 79% last week" },
     ],
   },
 ];
 
-/* A compact chat widget that plays the conversation in a loop: the visitor's
-   message slides in, the agent "types", replies, holds, then it restarts.
-   Neutral site colors — no solid coral panel. */
-function MiniChat({
-  icon: Icon,
-  tag,
-  chat,
-}: {
-  icon: (typeof agents)[number]["icon"];
-  tag: string;
-  chat: { from: string; text: string }[];
-}) {
-  const [step, setStep] = useState(0); // 0: empty, 1: user msg, 2: typing, 3: reply
+type ChatEvent = { type: "typing" } | { type: "msg"; from: string; text: string };
+
+/* A compact chat widget that plays the WHOLE conversation in a loop: each
+   visitor message slides in, the agent "types" and replies, and older messages
+   push up out of view like a real live chat. Holds at the end, then restarts. */
+function MiniChat({ tag, chat }: { tag: string; chat: { from: string; text: string }[] }) {
+  // Playback timeline: a typing beat before every agent reply.
+  const events = useMemo(() => {
+    const ev: ChatEvent[] = [];
+    chat.forEach((m) => {
+      if (m.from === "bot") ev.push({ type: "typing" });
+      ev.push({ type: "msg", from: m.from, text: m.text });
+    });
+    return ev;
+  }, [chat]);
+
+  const [count, setCount] = useState(1); // how many timeline events are on screen
 
   useEffect(() => {
-    const DUR = [900, 1100, 1400, 2600]; // per-step hold before advancing
-    const id = window.setTimeout(() => setStep((s) => (s + 1) % 4), DUR[step]);
+    const atEnd = count >= events.length;
+    const last = events[count - 1];
+    const hold = atEnd ? 4200 : last.type === "typing" ? 950 : 1250;
+    const id = window.setTimeout(() => setCount(atEnd ? 1 : count + 1), hold);
     return () => clearTimeout(id);
-  }, [step]);
+  }, [count, events]);
+
+  const visible = events.slice(0, count);
 
   return (
     <div
-      className="rounded-[12px] border flex flex-col overflow-hidden min-h-[210px]"
+      className="rounded-[12px] border flex flex-col overflow-hidden h-[290px]"
       style={{ background: X.white, borderColor: X.border }}
     >
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-2.5" style={{ background: X.inkSolid }}>
-        <span className="w-6 h-6 rounded-full grid place-items-center shrink-0" style={{ background: X.coral }}>
-          <Icon size={12} className="text-white" />
-        </span>
+        <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="w-6 h-6 rounded-full shrink-0" />
         <div className="min-w-0">
           <div className="text-[10.5px] font-bold text-white leading-tight truncate">{tag} agent</div>
           <div className="flex items-center gap-1 text-[8.5px] text-white/55">
@@ -143,48 +167,57 @@ function MiniChat({
         </div>
       </div>
 
-      {/* Conversation */}
-      <div className="flex-1 flex flex-col justify-end gap-1.5 px-2.5 py-2.5" style={{ background: X.surface }}>
-        {step >= 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.25 }}
-            className="ml-auto max-w-[92%] rounded-[10px] rounded-br-[3px] px-2.5 py-1.5 text-[11px] leading-snug text-white w-fit"
-            style={{ background: X.inkSolid }}
-          >
-            {chat[0].text}
-          </motion.div>
-        )}
-        {step === 2 && (
-          <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-1 rounded-[10px] rounded-bl-[3px] px-2.5 py-2 border w-fit"
-            style={{ background: X.white, borderColor: X.border }}
-          >
-            {[0, 1, 2].map((d) => (
-              <motion.span
-                key={d}
-                className="w-1 h-1 rounded-full"
-                style={{ background: X.faint }}
-                animate={{ opacity: [0.25, 1, 0.25] }}
-                transition={{ duration: 0.9, repeat: Infinity, delay: d * 0.15 }}
-              />
-            ))}
-          </motion.div>
-        )}
-        {step === 3 && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.25 }}
-            className="max-w-[92%] rounded-[10px] rounded-bl-[3px] px-2.5 py-1.5 text-[11px] leading-snug border w-fit"
-            style={{ background: X.white, borderColor: X.border, color: X.ink }}
-          >
-            {chat[1].text}
-          </motion.div>
-        )}
+      {/* Conversation: newest at the bottom, older messages clip out the top */}
+      <div className="flex-1 flex flex-col justify-end gap-1.5 px-2.5 py-2.5 overflow-hidden" style={{ background: X.surface }}>
+        {visible.map((ev, i) => {
+          if (ev.type === "typing") {
+            // A typing beat only shows while it's the latest event; once the
+            // reply lands it disappears.
+            if (i !== visible.length - 1) return null;
+            return (
+              <motion.div
+                key={`typing-${i}`}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-1 rounded-[10px] rounded-bl-[3px] px-2.5 py-2 border w-fit"
+                style={{ background: X.white, borderColor: X.border }}
+              >
+                {[0, 1, 2].map((d) => (
+                  <motion.span
+                    key={d}
+                    className="w-1 h-1 rounded-full"
+                    style={{ background: X.faint }}
+                    animate={{ opacity: [0.25, 1, 0.25] }}
+                    transition={{ duration: 0.9, repeat: Infinity, delay: d * 0.15 }}
+                  />
+                ))}
+              </motion.div>
+            );
+          }
+          return ev.from === "them" ? (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.25 }}
+              className="ml-auto max-w-[92%] rounded-[10px] rounded-br-[3px] px-2.5 py-1.5 text-[11px] leading-snug text-white w-fit"
+              style={{ background: X.inkSolid }}
+            >
+              {ev.text}
+            </motion.div>
+          ) : (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.25 }}
+              className="max-w-[92%] rounded-[10px] rounded-bl-[3px] px-2.5 py-1.5 text-[11px] leading-snug border w-fit"
+              style={{ background: X.white, borderColor: X.border, color: X.ink }}
+            >
+              {ev.text}
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
@@ -272,7 +305,7 @@ export default function AgentsCarousel() {
               style={{ borderColor: X.border, background: X.white }}
             >
               {/* Visual: the agent live in a chat, looping */}
-              <MiniChat icon={a.icon} tag={a.tag} chat={a.chat} />
+              <MiniChat tag={a.tag} chat={a.chat} />
 
               {/* Copy */}
               <div className="flex flex-col">

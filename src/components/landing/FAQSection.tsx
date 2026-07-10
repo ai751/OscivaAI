@@ -7,7 +7,7 @@ import { SectionHead, FadeIn } from "./xui";
 const faqs = [
   {
     q: "How is Osciva different from other chatbot builders?",
-    a: "Osciva agents are grounded in your own documents and website — every answer cites its source, and the agent hands off to a human instead of guessing. You get real support automation, not a scripted decision tree, and it's built for India: INR pricing, GST invoices, 20+ Indian languages and India-hosted data.",
+    a: "Osciva agents are grounded in your own documents and website, every answer cites its source, and the agent hands off to a human instead of guessing. You get real support automation, not a scripted decision tree, and it's built for India: INR pricing, GST invoices, 20+ Indian languages and India-hosted data.",
   },
   {
     q: "Do I need technical skills to set it up?",
@@ -19,15 +19,15 @@ const faqs = [
   },
   {
     q: "What happens when the agent doesn't know an answer?",
-    a: "It says so honestly and escalates to your team with the full conversation attached. You control the confidence threshold, blocked topics and office-hours routing — the AI never invents answers.",
+    a: "It says so honestly and escalates to your team with the full conversation attached. You control the confidence threshold, blocked topics and office-hours routing, the AI never invents answers.",
   },
   {
     q: "Which languages does it support?",
-    a: "English, Hindi, Tamil, Telugu, Kannada, Malayalam, Marathi, Bengali, Gujarati, Punjabi and 10+ more — including Hinglish. The agent detects your customer's language automatically and answers in it, even if your documents are in English.",
+    a: "English, Hindi, Tamil, Telugu, Kannada, Malayalam, Marathi, Bengali, Gujarati, Punjabi and 10+ more, including Hinglish. The agent detects your customer's language automatically and answers in it, even if your documents are in English.",
   },
   {
     q: "Can I try it before paying?",
-    a: "Yes — the Free plan gives you 1 agent and 50 messages a month on our GPT-4o Mini, forever. No credit card, no API key needed to start. Most businesses are live within 30 minutes of signing up.",
+    a: "Yes, the Free plan gives you 1 agent and 50 messages a month on our GPT-4o Mini, forever. No credit card, no API key needed to start. Most businesses are live within 30 minutes of signing up.",
   },
 ];
 

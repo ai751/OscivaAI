@@ -5,7 +5,7 @@ import { X } from "./LandingNavbar";
 /* Shared building blocks for the expedify-style marketing sections. */
 
 /** Key-phrase highlight in headings: coral text on a soft rounded tint
-    (Osciva's own take — softer than a solid block). */
+    (Osciva's own take, softer than a solid block). */
 export function HL({ children }: { children: ReactNode }) {
   return (
     <span

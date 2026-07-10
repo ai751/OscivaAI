@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Check, Play, Send, Sparkles } from "lucide-react";
+import { Check, Play, Send } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { FadeIn } from "./xui";
 
@@ -34,7 +34,7 @@ export default function CTASection() {
                 <span style={{ color: X.coral }}>Your customers are waiting.</span>
               </h2>
               <p className="mt-4 text-[16px] md:text-[17px] max-w-[480px]" style={{ color: "rgba(255,255,255,0.65)" }}>
-                Upload your docs, brand the widget, paste one snippet — and every
+                Upload your docs, brand the widget, paste one snippet, and every
                 question gets answered from tonight onwards.
               </p>
 
@@ -49,7 +49,7 @@ export default function CTASection() {
                   Start Free Trial
                 </button>
                 <button
-                  onClick={() => navigate("/how-it-works")}
+                  onClick={() => navigate("/features")}
                   className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[15px] font-medium text-white border transition-colors"
                   style={{ borderColor: "rgba(255,255,255,0.35)", background: "transparent" }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
@@ -79,9 +79,7 @@ export default function CTASection() {
                 style={{ background: X.white, boxShadow: "0 24px 60px rgba(0,0,0,0.45)" }}
               >
                 <div className="flex items-center gap-2.5 px-4 py-3" style={{ background: "#1b2130" }}>
-                  <span className="w-7 h-7 rounded-full grid place-items-center" style={{ background: X.coral }}>
-                    <Sparkles size={13} className="text-white" />
-                  </span>
+                  <img src="https://osciva.io/images/osciva-web.png" alt="Osciva" className="w-7 h-7 rounded-full" />
                   <div>
                     <div className="text-[12.5px] font-bold text-white leading-tight">Your assistant</div>
                     <div className="flex items-center gap-1.5 text-[10px] text-white/55">
@@ -107,7 +105,7 @@ export default function CTASection() {
                     className="rounded-[12px] rounded-bl-[4px] px-3 py-2 text-[12.5px] leading-relaxed border w-fit max-w-[85%]"
                     style={{ background: "#ffffff", borderColor: "#e5e7eb", color: "#111827" }}
                   >
-                    Mon–Sat, 10 am to 9 pm. Open till 11 pm during festivals 🪔
+                    Mon-Sat, 10 am to 9 pm. Open till 11 pm during festivals
                   </div>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-3 border-t" style={{ borderColor: "#e5e7eb", background: "#ffffff" }}>
