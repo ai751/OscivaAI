@@ -265,17 +265,34 @@ export default function CreateAgent() {
 
   const applyTemplate = (tpl: PromptTemplate) => {
     const current = instructions.trim();
-    const isUntouched = current === "" || current === DEFAULT_INSTRUCTIONS;
-    if (!isUntouched && !window.confirm("Replace your current System Instructions with the " + tpl.label + " template? Your existing text will be overwritten.")) {
-      return;
-    }
+    // Applies instantly (no confirm dialog). Hand-written text is recoverable
+    // via the toast's Undo; template-to-template switches don't need one.
+    const wasCustom =
+      current !== "" &&
+      current !== DEFAULT_INSTRUCTIONS &&
+      !PROMPT_TEMPLATES.some((t) => t.prompt.trim() === current);
+    const prev = { instructions, welcomeMsg, suggestions };
     setInstructions(tpl.prompt);
     // Only fill welcome/suggestions if the user hasn't customised them yet.
-    if (tpl.welcomeMsg && welcomeMsg.trim() === DEFAULT_WELCOME) setWelcomeMsg(tpl.welcomeMsg);
-    if (tpl.suggestions && JSON.stringify(suggestions) === JSON.stringify(DEFAULT_SUGGESTIONS)) {
-      setSuggestions(tpl.suggestions);
+    const welcomeWasDefault = welcomeMsg.trim() === DEFAULT_WELCOME;
+    const suggestionsWereDefault = JSON.stringify(suggestions) === JSON.stringify(DEFAULT_SUGGESTIONS);
+    if (tpl.welcomeMsg && welcomeWasDefault) setWelcomeMsg(tpl.welcomeMsg);
+    if (tpl.suggestions && suggestionsWereDefault) setSuggestions(tpl.suggestions);
+    if (wasCustom) {
+      toast.success(`${tpl.label} template applied.`, {
+        description: "Your previous instructions were replaced.",
+        action: {
+          label: "Undo",
+          onClick: () => {
+            setInstructions(prev.instructions);
+            if (tpl.welcomeMsg && welcomeWasDefault) setWelcomeMsg(prev.welcomeMsg);
+            if (tpl.suggestions && suggestionsWereDefault) setSuggestions(prev.suggestions);
+          },
+        },
+      });
+    } else {
+      toast.success(`${tpl.label} template applied. Fill in the [BRACKETS].`);
     }
-    toast.success(`${tpl.label} template applied. Fill in the [BRACKETS].`);
   };
 
   const refineInstructions = async () => {
