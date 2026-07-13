@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   BarChart3,
   BookOpen,
@@ -660,10 +660,87 @@ const SLIDES = [
   { key: "collage", dur: 6000, node: <CollageSlide /> },
 ];
 
+/* Types the line out once with a coral caret; caret blinks briefly, then fades.
+   Reduced motion renders the full text instantly. */
+function TypedLine({ text, delay }: { text: string; delay: number }) {
+  const reduce = useReducedMotion();
+  const [n, setN] = useState(reduce ? text.length : 0);
+  const [done, setDone] = useState(!!reduce);
+
+  useEffect(() => {
+    if (reduce) return;
+    let i = 0;
+    let iv: number | undefined;
+    const start = window.setTimeout(() => {
+      iv = window.setInterval(() => {
+        i += 1;
+        setN(i);
+        if (i >= text.length) {
+          window.clearInterval(iv);
+          window.setTimeout(() => setDone(true), 1500);
+        }
+      }, 55);
+    }, delay);
+    return () => {
+      window.clearTimeout(start);
+      if (iv) window.clearInterval(iv);
+    };
+  }, [text, delay, reduce]);
+
+  return (
+    <span className="block">
+      {text.slice(0, n)}
+      {!done && (
+        <motion.span
+          aria-hidden
+          className="inline-block w-[3px] h-[0.9em] ml-1.5 align-[-0.06em] rounded-full"
+          style={{ background: X.coral }}
+          animate={{ opacity: [1, 1, 0, 0] }}
+          transition={{ duration: 0.9, repeat: Infinity, times: [0, 0.5, 0.5, 1] }}
+        />
+      )}
+    </span>
+  );
+}
+
+/* Line-1 words rise in one after another before the typing starts. */
+function RisingWords({ text, base }: { text: string; base: number }) {
+  const reduce = useReducedMotion();
+  if (reduce) return <>{text}</>;
+  return (
+    <>
+      {text.split(" ").map((w, i) => (
+        <motion.span
+          key={`${w}-${i}`}
+          className="inline-block"
+          initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.5, delay: base + i * 0.14, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* NBSP keeps real spaces in the text (screen readers, copy-paste) —
+              margins alone would read as one glued word. */}
+          {i > 0 ? " " : ""}
+          {w}
+        </motion.span>
+      ))}
+    </>
+  );
+}
+
 export default function HeroSection() {
   const navigate = useNavigate();
   const [ind, setInd] = useState(0);
   const [slide, setSlide] = useState(0);
+  // On a first visit the splash covers ~2.75s; hold the headline choreography so it
+  // plays as the splash dissolves instead of invisibly behind it. (SplashIntro only
+  // writes the seen-flag in its effect, i.e. after this render reads it.)
+  const [splashDelay] = useState(() => {
+    try {
+      return sessionStorage.getItem("osciva-splash-seen") !== "1" ? 2.45 : 0;
+    } catch {
+      return 0;
+    }
+  });
 
   useEffect(() => {
     const id = setInterval(() => setInd((i) => (i + 1) % INDUSTRIES.length), 2600);
@@ -715,9 +792,8 @@ export default function HeroSection() {
             className="mt-5 text-[38px] sm:text-[48px] md:text-[54px] font-bold leading-[1.12] tracking-[-0.01em]"
             style={{ color: X.ink }}
           >
-            AI Customer Support
-            <br />
-            That Sounds Like You
+            <RisingWords text="AI Customer Support" base={0.15 + splashDelay} />
+            <TypedLine text="That Sounds Like You" delay={850 + splashDelay * 1000} />
           </motion.h1>
 
           <motion.h2
