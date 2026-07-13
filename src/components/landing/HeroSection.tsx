@@ -715,9 +715,9 @@ export default function HeroSection() {
             className="mt-5 text-[38px] sm:text-[48px] md:text-[54px] font-bold leading-[1.12] tracking-[-0.01em]"
             style={{ color: X.ink }}
           >
-            Every Enquiry Answered.
+            AI Customer Support
             <br />
-            Every Lead Captured.
+            That Sounds Like You
           </motion.h1>
 
           <motion.h2
