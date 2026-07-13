@@ -660,50 +660,7 @@ const SLIDES = [
   { key: "collage", dur: 6000, node: <CollageSlide /> },
 ];
 
-/* Types the line out once with a coral caret; caret blinks briefly, then fades.
-   Reduced motion renders the full text instantly. */
-function TypedLine({ text, delay }: { text: string; delay: number }) {
-  const reduce = useReducedMotion();
-  const [n, setN] = useState(reduce ? text.length : 0);
-  const [done, setDone] = useState(!!reduce);
-
-  useEffect(() => {
-    if (reduce) return;
-    let i = 0;
-    let iv: number | undefined;
-    const start = window.setTimeout(() => {
-      iv = window.setInterval(() => {
-        i += 1;
-        setN(i);
-        if (i >= text.length) {
-          window.clearInterval(iv);
-          window.setTimeout(() => setDone(true), 1500);
-        }
-      }, 55);
-    }, delay);
-    return () => {
-      window.clearTimeout(start);
-      if (iv) window.clearInterval(iv);
-    };
-  }, [text, delay, reduce]);
-
-  return (
-    <span className="block">
-      {text.slice(0, n)}
-      {!done && (
-        <motion.span
-          aria-hidden
-          className="inline-block w-[3px] h-[0.9em] ml-1.5 align-[-0.06em] rounded-full"
-          style={{ background: X.coral }}
-          animate={{ opacity: [1, 1, 0, 0] }}
-          transition={{ duration: 0.9, repeat: Infinity, times: [0, 0.5, 0.5, 1] }}
-        />
-      )}
-    </span>
-  );
-}
-
-/* Line-1 words rise in one after another before the typing starts. */
+/* Headline words rise in one after another, line 1 first, then line 2. */
 function RisingWords({ text, base }: { text: string; base: number }) {
   const reduce = useReducedMotion();
   if (reduce) return <>{text}</>;
@@ -793,7 +750,9 @@ export default function HeroSection() {
             style={{ color: X.ink }}
           >
             <RisingWords text="AI Customer Support" base={0.15 + splashDelay} />
-            <TypedLine text="That Sounds Like You" delay={850 + splashDelay * 1000} />
+            <span className="block">
+              <RisingWords text="That Sounds Like You" base={0.75 + splashDelay} />
+            </span>
           </motion.h1>
 
           <motion.h2
