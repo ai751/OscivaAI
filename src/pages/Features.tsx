@@ -52,9 +52,9 @@ export default function FeaturesPage() {
 
       <PageHero
         breadcrumb="Features"
-        title="Everything You Need to Ship a"
-        highlight="Production AI Agent"
-        subtitle="From private knowledge bases to live analytics and one-line embedding, Osciva covers the whole journey, without a single line of glue code."
+        title="Everything Your Business Needs to"
+        highlight="Answer Every Customer"
+        subtitle="Ready-made assistants, private knowledge bases, live analytics and one-line embedding — Osciva covers the whole journey without a single line of code."
         secondaryCta={{ label: "View pricing", to: "/pricing" }}
       />
 

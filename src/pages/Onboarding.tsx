@@ -186,9 +186,9 @@ export default function Onboarding() {
                 <div className="mt-6 flex items-center justify-between">
                   <button
                     onClick={() => navigate("/agents/create")}
-                    className="text-[12px] text-foreground-muted hover:text-primary transition-colors"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-border text-[13px] font-semibold text-foreground hover:bg-secondary transition-colors"
                   >
-                    Prefer full control? Start from a blank agent
+                    <ArrowLeft size={15} /> Create manually
                   </button>
                   <button
                     onClick={() => setStep(1)}

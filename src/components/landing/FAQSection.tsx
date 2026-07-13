@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "Do I need technical skills to set it up?",
-    a: "No. If you can fill a form and copy-paste one line of code, you can launch an agent. Uploading documents, styling the widget and setting the tone all happen in a point-and-click dashboard. WordPress and Shopify installs are one click.",
+    a: "No. Quick Setup asks three questions about your business and builds a ready-made assistant for you — no prompts to write. Uploading documents, styling the widget and setting the tone all happen in a point-and-click dashboard. WordPress and Shopify installs are one click.",
   },
   {
     q: "How does Osciva handle my customer data?",

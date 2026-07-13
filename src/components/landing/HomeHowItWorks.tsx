@@ -8,28 +8,28 @@ import { SectionHead, FadeIn } from "./xui";
 
 const steps = [
   {
+    icon: Wand2,
+    time: "Minute 0-5",
+    title: "Answer three questions",
+    desc: "Business type, goals, name — Quick Setup builds a ready-made assistant with the right job role. No prompts to write.",
+  },
+  {
     icon: Upload,
-    time: "Minute 0-10",
-    title: "Upload your knowledge",
+    time: "Minute 5-15",
+    title: "Train it on your content",
     desc: "Drop in PDFs, docs and your website URL. Osciva reads and indexes everything automatically.",
   },
   {
-    icon: Wand2,
-    time: "Minute 10-20",
-    title: "Shape your agent",
-    desc: "Pick the tone, greeting, languages and brand colors in a point-and-click editor. Preview it live.",
-  },
-  {
     icon: Code2,
-    time: "Minute 20-30",
+    time: "Minute 15-25",
     title: "Embed with one line",
     desc: "Paste a single script tag, or one-click install on WordPress and Shopify. That's the whole job.",
   },
   {
     icon: Rocket,
-    time: "Minute 30 →",
-    title: "It starts answering",
-    desc: "Your agent handles real customers while you watch every conversation in the dashboard.",
+    time: "Minute 25 →",
+    title: "It starts working",
+    desc: "Your assistant answers real customers and captures leads while you watch every conversation live.",
   },
 ];
 

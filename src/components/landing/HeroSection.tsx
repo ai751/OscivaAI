@@ -32,7 +32,7 @@ const stats = [
   { icon: Gauge, value: "1.2s", lines: ["Average first-reply", "time, day or night"] },
 ];
 
-const journey = ["Upload your data.", "Train in minutes.", "Embed anywhere.", "Live in 30 minutes."];
+const journey = ["Answer three questions.", "Get a ready-made assistant.", "Train it on your content.", "Live in 30 minutes."];
 
 /* Gentle float, staggered per card so the collage feels alive. */
 const float = (delay: number, dur = 5.5) => ({
@@ -690,7 +690,7 @@ export default function HeroSection() {
             className="flex items-center gap-2 text-[15px] font-medium"
             style={{ color: X.ink }}
           >
-            AI Support Agent For
+            The AI Assistant For
             <span className="relative inline-flex min-w-[120px] h-[24px]">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
@@ -715,9 +715,9 @@ export default function HeroSection() {
             className="mt-5 text-[38px] sm:text-[48px] md:text-[54px] font-bold leading-[1.12] tracking-[-0.01em]"
             style={{ color: X.ink }}
           >
-            AI Agents for Customer
+            Every Enquiry Answered.
             <br />
-            Support
+            Every Lead Captured.
           </motion.h1>
 
           <motion.h2
@@ -737,7 +737,8 @@ export default function HeroSection() {
             className="mt-5 text-[16px] leading-[24px]"
             style={{ color: X.mute }}
           >
-            So every customer gets an instant, accurate answer, 24/7.
+            Your AI assistant answers customers 24/7 — admissions, appointments, orders,
+            support — and saves the details of every interested visitor.
           </motion.p>
 
           <motion.div

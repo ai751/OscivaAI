@@ -29,13 +29,13 @@ export default function CTASection() {
             {/* Copy */}
             <div className="relative">
               <h2 className="text-[30px] md:text-[40px] font-bold text-white tracking-[-0.01em] leading-[1.15]">
-                Your AI agent is ready.
+                Your AI assistant is ready.
                 <br />
                 <span style={{ color: X.coral }}>Your customers are waiting.</span>
               </h2>
               <p className="mt-4 text-[16px] md:text-[17px] max-w-[480px]" style={{ color: "rgba(255,255,255,0.65)" }}>
-                Upload your docs, brand the widget, paste one snippet, and every
-                question gets answered from tonight onwards.
+                Answer three questions, train it on your content, paste one snippet —
+                and every customer question gets answered from tonight onwards.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-3">
