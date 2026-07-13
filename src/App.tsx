@@ -25,6 +25,7 @@ import ResetPassword from "@/pages/ResetPassword";
 import Dashboard from "@/pages/Dashboard";
 import Agents from "@/pages/Agents";
 import CreateAgent from "@/pages/CreateAgent";
+import Onboarding from "@/pages/Onboarding";
 import Analytics from "@/pages/Analytics";
 import Embed from "@/pages/Embed";
 import ApiKeys from "@/pages/ApiKeys";
@@ -95,6 +96,7 @@ const App = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/agents/create" element={<CreateAgent />} />
+                  <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/agents/edit/:id" element={<CreateAgent />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/embed" element={<Embed />} />

@@ -187,13 +187,15 @@ export default function Agents() {
             </div>
           ) : (
             <button
-              onClick={() => navigate("/agents/create")}
+              onClick={() => navigate(agents.length === 0 ? "/onboarding" : "/agents/create")}
               className="min-h-[220px] rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/[0.03] transition-all group"
             >
               <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Plus size={24} className="text-primary" />
               </div>
-              <span className="text-sm font-semibold text-foreground-secondary group-hover:text-primary transition-colors">Create new agent</span>
+              <span className="text-sm font-semibold text-foreground-secondary group-hover:text-primary transition-colors">
+                {agents.length === 0 ? "Set up your first assistant" : "Create new agent"}
+              </span>
             </button>
           )}
         </div>

@@ -2,7 +2,7 @@ import Topbar from "@/components/layout/Topbar";
 import { useState, useRef } from "react";
 import { Check, Upload, X, Plus, Send, RotateCcw, Sparkles, Copy, AlertCircle, Maximize2, Minimize2, ChevronDown, Search, FileText, Globe } from "lucide-react";
 import { toast } from "sonner";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAgents, Agent, AgentSource, AgentChunk } from "@/context/AgentContext";
 import { chatComplete, MissingApiKeyError, ChatMessage } from "@/lib/aiClient";
 import { extractPdfText, extractUrlText, chunkText, retrieveTopChunks, buildRagSystemPrompt } from "@/lib/rag";
@@ -77,7 +77,12 @@ export default function CreateAgent() {
   const limits = planLimits(profile?.plan);
   const existingAgent = editId ? agents.find((a) => a.id === editId) : null;
 
-  const [tab, setTab] = useState(0);
+  const [searchParams] = useSearchParams();
+  // Deep-linkable tab (e.g. onboarding's "Train it now" → ?tab=1 Knowledge Base).
+  const [tab, setTab] = useState(() => {
+    const t = Number(searchParams.get("tab"));
+    return Number.isInteger(t) && t >= 0 && t <= 4 ? t : 0;
+  });
   const [name, setName] = useState(existingAgent?.name ?? "");
   const [instructions, setInstructions] = useState(existingAgent?.instructions ?? DEFAULT_INSTRUCTIONS);
   const initialModel = existingAgent?.model ?? "";

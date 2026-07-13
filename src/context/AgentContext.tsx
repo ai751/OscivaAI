@@ -46,7 +46,8 @@ export interface Agent {
 interface AgentContextType {
   agents: Agent[];
   loading: boolean;
-  addAgent: (agent: Agent) => Promise<void>;
+  /** Creates the agent and resolves with its new DB id. */
+  addAgent: (agent: Agent) => Promise<string>;
   updateAgent: (id: string, agent: Partial<Agent>) => Promise<void>;
   deleteAgent: (id: string) => Promise<void>;
   updateAgentStats: (id: string, messageDelta: number, conversationDelta: number) => Promise<void>;
@@ -248,6 +249,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
     }
 
     await loadAgents();
+    return agentId;
   };
 
   const updateAgent = async (id: string, data: Partial<Agent>) => {
