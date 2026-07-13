@@ -650,6 +650,27 @@ export default function CreateAgent() {
       )}
 
       <div className="p-6 animate-fade-up">
+        {/* Quick Setup shortcut — the guided, outcome-first path (all plans) */}
+        {!existingAgent && (
+          <div className="glass-card p-4 mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <Sparkles size={17} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[13px] font-semibold text-foreground">In a hurry? Try Quick Setup</div>
+              <p className="text-[11.5px] text-foreground-muted mt-0.5">
+                Answer three questions about your business and get a ready-made assistant — no configuration needed.
+              </p>
+            </div>
+            <button
+              onClick={() => navigate("/onboarding")}
+              className="px-4 py-2 rounded-full bg-primary text-white text-[12px] font-semibold hover:bg-[#e05f40] transition-colors shrink-0"
+            >
+              Quick Setup →
+            </button>
+          </div>
+        )}
+
         {/* Agent ID bar */}
         {existingAgent && (
           <div className="glass-card p-3 mb-4 flex items-center gap-3">

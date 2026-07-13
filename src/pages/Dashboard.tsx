@@ -122,10 +122,10 @@ export default function Dashboard() {
               <p className="text-[11px] text-white/40 mt-2">Updated {updatedAgo < 5 ? "just now" : `${updatedAgo}s ago`}</p>
             </div>
             <button
-              onClick={() => navigate(agents.length === 0 ? "/onboarding" : "/agents/create")}
+              onClick={() => navigate("/agents/create")}
               className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-full text-[13.5px] font-semibold hover:bg-[#e05f40] transition-colors shadow-brand shrink-0"
             >
-              <Plus size={16} /> {agents.length === 0 ? "Set up my assistant" : "New agent"}
+              <Plus size={16} /> New agent
             </button>
           </div>
         </motion.div>
@@ -215,10 +215,10 @@ export default function Dashboard() {
                   </div>
                   <p className="text-[12px] text-foreground-muted mb-3">No active agents yet</p>
                   <button
-                    onClick={() => navigate("/onboarding")}
+                    onClick={() => navigate("/agents/create")}
                     className="text-[12px] text-primary font-semibold hover:underline inline-flex items-center gap-1"
                   >
-                    Set up your first <ArrowRight size={12} />
+                    Create your first <ArrowRight size={12} />
                   </button>
                 </div>
               ) : (
@@ -255,7 +255,7 @@ export default function Dashboard() {
             <p className="text-[12px] text-foreground-muted mt-0.5 mb-4">Three steps from zero to answering visitors on your site.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/60">
               {[
-                { done: agents.length > 0, icon: Bot, title: "Set up your assistant", desc: "Answer three questions — we do the rest.", to: "/onboarding", cta: "Start setup" },
+                { done: agents.length > 0, icon: Bot, title: "Create your agent", desc: "Name it, pick a personality.", to: "/agents/create", cta: "Create agent" },
                 { done: totalSources > 0, icon: BookOpen, title: "Train it on your content", desc: "Upload docs or add your website.", to: agents.length > 0 ? `/agents/edit/${agents[0].id}` : "/agents/create", cta: "Add knowledge" },
                 { done: false, icon: Code2, title: "Embed it on your site", desc: "Paste one snippet, go live.", to: "/embed", cta: "Get the snippet" },
               ].map((step) => (

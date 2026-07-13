@@ -49,6 +49,12 @@ export default function Onboarding() {
 
   const handleCreate = async () => {
     if (!bt || !businessName.trim() || creating) return;
+    if (agents.length >= limits.agents) {
+      toast.error(
+        `Your ${limits.label} plan includes ${limits.agents} assistant${limits.agents > 1 ? "s" : ""}. Upgrade (or delete an agent) to add another.`,
+      );
+      return;
+    }
     setCreating(true);
     try {
       const cfg = buildAssistantConfig(bt, {
@@ -106,44 +112,26 @@ export default function Onboarding() {
     );
   }
 
-  // Already at the plan's agent limit (and not just finished creating one here).
-  if (!createdId && agents.length >= limits.agents) {
-    return (
-      <>
-        <Topbar title="Quick Setup" subtitle="Answer three questions, get a working assistant" />
-        <div className="p-4 sm:p-6">
-          <div className="max-w-lg mx-auto mt-10 rounded-2xl border border-border bg-card p-8 text-center">
-            <h2 className="text-[16px] font-bold text-foreground display">
-              Your {limits.label} plan includes {limits.agents} assistant{limits.agents > 1 ? "s" : ""}
-            </h2>
-            <p className="text-[13px] text-foreground-muted mt-2">
-              You already have {agents.length} — fine-tune it from My Agents, or upgrade to add more team members.
-            </p>
-            <div className="mt-5 flex items-center justify-center gap-3">
-              <button
-                onClick={() => navigate("/agents")}
-                className="px-4 py-2.5 rounded-full border border-border text-[13px] font-semibold text-foreground hover:bg-secondary transition-colors"
-              >
-                My Agents
-              </button>
-              <button
-                onClick={() => navigate("/settings")}
-                className="px-4 py-2.5 rounded-full bg-primary text-white text-[13px] font-semibold hover:bg-[#e05f40] transition-colors"
-              >
-                View plans
-              </button>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+  // At the plan's agent limit the wizard stays browsable; only creation is blocked.
+  const atLimit = !createdId && agents.length >= limits.agents;
 
   return (
     <>
       <Topbar title="Quick Setup" subtitle="Answer three questions, get a working assistant" />
       <div className="p-4 sm:p-6">
         <div className="max-w-2xl mx-auto">
+          {/* Plan-limit notice — wizard stays explorable, creation needs headroom */}
+          {atLimit && step < 3 && (
+            <div className="mb-6 rounded-xl border border-border bg-secondary/60 px-4 py-3 text-[12px] text-foreground-secondary">
+              Heads up: your {limits.label} plan includes {limits.agents} assistant{limits.agents > 1 ? "s" : ""} and
+              you already have {agents.length}. You can explore the setup, but{" "}
+              <button onClick={() => navigate("/settings")} className="text-primary font-semibold hover:underline">
+                upgrade your plan
+              </button>{" "}
+              (or delete an agent) to create another one.
+            </div>
+          )}
+
           {/* Progress — hidden on the success screen */}
           {step < 3 && (
             <div className="mb-8">
