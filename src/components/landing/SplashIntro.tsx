@@ -14,9 +14,11 @@ const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const LETTERS = ["O", "s", "c", "i", "v", "a", " ", "A", "I"];
 const CORAL_FROM = 7;
 
-const HOLD_MS = 2050; // choreography runs, then the dot-dissolve exit begins
-const DISSOLVE_MS = 950; // blurry-dot dissolve length; unmount after it finishes
+const HOLD_MS = 2050; // choreography runs, then the curtain lifts (0.9s exit)
 const HOLD_MS_REDUCED = 1000;
+
+/* Curtain ease: smooth acceleration and landing, no bounce. */
+const CURTAIN_EASE = [0.65, 0, 0.35, 1] as const;
 
 /* Brand intro shown before the homepage (kore.ai-style: brand mark over an
    ambient ripple, then the whole layer dissolves while the page sharpens in).
@@ -39,8 +41,6 @@ export default function SplashIntro() {
     }
   });
 
-  const [leaving, setLeaving] = useState(false);
-
   useEffect(() => {
     if (!show) return;
     try {
@@ -49,26 +49,12 @@ export default function SplashIntro() {
       /* private mode, splash just replays next visit */
     }
     document.body.style.overflow = "hidden";
-    // Reduced motion keeps the simple fade branch; otherwise: start the CSS
-    // dot-dissolve at HOLD_MS, unmount once it has fully played out.
-    const t1 = setTimeout(
-      () => (reduceMotion ? setShow(false) : setLeaving(true)),
-      reduceMotion ? HOLD_MS_REDUCED : HOLD_MS,
-    );
-    const t2 = reduceMotion ? undefined : setTimeout(() => setShow(false), HOLD_MS + DISSOLVE_MS);
+    const t = setTimeout(() => setShow(false), reduceMotion ? HOLD_MS_REDUCED : HOLD_MS);
     return () => {
-      clearTimeout(t1);
-      if (t2) clearTimeout(t2);
+      clearTimeout(t);
       document.body.style.overflow = "";
     };
   }, [show, reduceMotion]);
-
-  // Click-to-skip runs the same dissolve, just immediately.
-  const dismiss = () => {
-    if (leaving) return;
-    setLeaving(true);
-    setTimeout(() => setShow(false), DISSOLVE_MS);
-  };
 
   if (reduceMotion) {
     return (
@@ -99,49 +85,19 @@ export default function SplashIntro() {
         <motion.div
           key="splash"
           aria-hidden="true"
-          onClick={dismiss}
-          className={`splash-dissolve${leaving ? " leaving" : ""} fixed inset-0 z-[100] flex items-center justify-center overflow-hidden`}
+          onClick={() => setShow(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center"
           style={{ background: X.cream }}
           initial={false}
+          exit={{ y: "-100%", transition: { duration: 0.9, ease: CURTAIN_EASE } }}
         >
-          {/* Exit effect: the whole layer breaks into soft blurry dots that
-              shrink away (animatable @property drives the mask's dot radius),
-              with a light blur + micro-buzz jitter while it goes. */}
-          <style>{`
-            @property --splash-dot {
-              syntax: "<percentage>";
-              inherits: false;
-              initial-value: 160%;
-            }
-            .splash-dissolve {
-              --splash-dot: 160%;
-              -webkit-mask-image: radial-gradient(circle, #000 calc(var(--splash-dot) - 45%), transparent var(--splash-dot));
-              mask-image: radial-gradient(circle, #000 calc(var(--splash-dot) - 45%), transparent var(--splash-dot));
-              -webkit-mask-size: 18px 18px;
-              mask-size: 18px 18px;
-              -webkit-mask-position: center;
-              mask-position: center;
-              transition:
-                --splash-dot 0.9s cubic-bezier(0.4, 0, 0.2, 1),
-                filter 0.9s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-            }
-            .splash-dissolve.leaving {
-              --splash-dot: 0%;
-              opacity: 0;
-              filter: blur(10px);
-              animation: splash-buzz 0.5s linear 1;
-              pointer-events: none;
-            }
-            @keyframes splash-buzz {
-              0%   { transform: translate(0, 0); }
-              18%  { transform: translate(-2px, 1px); }
-              36%  { transform: translate(2px, -1px); }
-              54%  { transform: translate(-2px, -1px); }
-              72%  { transform: translate(1px, 2px); }
-              100% { transform: translate(0, 0); }
-            }
-          `}</style>
+          {/* Curved lip below the curtain: as the layer lifts, this arc sweeps
+              through the screen so the reveal has a soft rounded edge instead
+              of a hard line. */}
+          <div
+            className="absolute top-full left-[-10%] right-[-10%] h-[16vh] rounded-b-[100%]"
+            style={{ background: X.cream }}
+          />
 
           {/* Ambient ripple: concentric rings breathing behind the mark */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -162,9 +118,15 @@ export default function SplashIntro() {
             ))}
           </div>
 
-          {/* Content: the leaving-class dissolve (dots + blur + buzz) takes the
-              whole layer out, so no separate exit choreography needed here */}
-          <div className="flex flex-col items-center px-6">
+          {/* Content drifts up slightly ahead of the curtain (parallax) */}
+          <motion.div
+            className="flex flex-col items-center px-6"
+            exit={{
+              y: -70,
+              opacity: 0,
+              transition: { duration: 0.55, ease: CURTAIN_EASE },
+            }}
+          >
             {/* Logo: scales in, then floats; a coral arc orbits it like a loader */}
             <motion.div
               className="relative mb-8"
@@ -231,7 +193,7 @@ export default function SplashIntro() {
             >
               AI agents, trained on your business
             </motion.p>
-          </div>
+          </motion.div>
 
           {/* Loading hairline along the bottom edge */}
           <motion.div

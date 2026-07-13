@@ -688,12 +688,13 @@ export default function HeroSection() {
   const navigate = useNavigate();
   const [ind, setInd] = useState(0);
   const [slide, setSlide] = useState(0);
-  // On a first visit the splash covers ~2.75s; hold the headline choreography so it
-  // plays as the splash dissolves instead of invisibly behind it. (SplashIntro only
-  // writes the seen-flag in its effect, i.e. after this render reads it.)
+  // On a first visit the splash curtain clears the headline area at ~2.95s; hold the
+  // headline choreography so it rises right as the curtain lifts past it instead of
+  // playing invisibly behind. (SplashIntro only writes the seen-flag in its effect,
+  // i.e. after this render reads it.)
   const [splashDelay] = useState(() => {
     try {
-      return sessionStorage.getItem("osciva-splash-seen") !== "1" ? 2.45 : 0;
+      return sessionStorage.getItem("osciva-splash-seen") !== "1" ? 2.75 : 0;
     } catch {
       return 0;
     }
