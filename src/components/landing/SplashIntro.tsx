@@ -14,11 +14,8 @@ const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const LETTERS = ["O", "s", "c", "i", "v", "a", " ", "A", "I"];
 const CORAL_FROM = 7;
 
-const HOLD_MS = 2050; // choreography runs, then the curtain lifts (0.9s exit)
+const HOLD_MS = 2050; // choreography runs, then the layer dissolves (1s exit)
 const HOLD_MS_REDUCED = 1000;
-
-/* Curtain ease: smooth acceleration and landing, no bounce. */
-const CURTAIN_EASE = [0.65, 0, 0.35, 1] as const;
 
 /* Brand intro shown before the homepage (kore.ai-style: brand mark over an
    ambient ripple, then the whole layer dissolves while the page sharpens in).
@@ -89,16 +86,8 @@ export default function SplashIntro() {
           className="fixed inset-0 z-[100] flex items-center justify-center"
           style={{ background: X.cream }}
           initial={false}
-          exit={{ y: "-100%", transition: { duration: 0.9, ease: CURTAIN_EASE } }}
+          exit={{ opacity: 0, transition: { duration: 1.0, ease: "easeInOut" } }}
         >
-          {/* Curved lip below the curtain: as the layer lifts, this arc sweeps
-              through the screen so the reveal has a soft rounded edge instead
-              of a hard line. */}
-          <div
-            className="absolute top-full left-[-10%] right-[-10%] h-[16vh] rounded-b-[100%]"
-            style={{ background: X.cream }}
-          />
-
           {/* Ambient ripple: concentric rings breathing behind the mark */}
           <div className="absolute inset-0 flex items-center justify-center">
             {[420, 720, 1060].map((size, i) => (
@@ -118,15 +107,7 @@ export default function SplashIntro() {
             ))}
           </div>
 
-          {/* Content drifts up slightly ahead of the curtain (parallax) */}
-          <motion.div
-            className="flex flex-col items-center px-6"
-            exit={{
-              y: -70,
-              opacity: 0,
-              transition: { duration: 0.55, ease: CURTAIN_EASE },
-            }}
-          >
+          <motion.div className="flex flex-col items-center px-6">
             {/* Logo: scales in, then floats; a coral arc orbits it like a loader */}
             <motion.div
               className="relative mb-8"
