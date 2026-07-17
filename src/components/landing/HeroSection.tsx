@@ -114,7 +114,7 @@ function CollageSlide() {
       >
         <div className="flex items-center gap-2 mb-2.5">
           <Languages size={15} style={{ color: X.coral }} />
-          <span className="text-[12px] font-bold" style={{ color: X.ink }}>Speaks 20+ languages</span>
+          <span className="text-[12px] font-bold" style={{ color: X.ink }}>Chats in 20+ languages</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {["English", "हिंदी", "தமிழ்", "मराठी", "+17"].map((l) => (

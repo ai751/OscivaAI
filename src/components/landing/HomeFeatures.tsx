@@ -68,7 +68,7 @@ const custom = [
     tab: "Personality",
     icon: MessageSquareText,
     title: "Tone & Personality",
-    desc: "Warm, professional, playful or concise, your agent talks the way your brand does",
+    desc: "Warm, professional, playful or concise, your agent chats the way your brand does",
     points: [
       "Pick a base tone, then fine-tune the greeting",
       "Set what it should never say or promise",
@@ -246,7 +246,7 @@ export default function HomeFeatures() {
             pre="Make It"
             hl="Unmistakably Yours"
             post=""
-            sub="Your voice, your look, your rules, customers should never feel a difference"
+            sub="Your brand, your look, your rules, customers should never feel a difference"
           />
           <FadeIn delay={0.15} className="mt-12">
             <TabbedPanel items={custom} bg={X.coralSoft} visualBg="#fbdccd" />

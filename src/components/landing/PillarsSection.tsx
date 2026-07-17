@@ -19,7 +19,7 @@ const pillars = [
     name: "The Agent",
     bg: X.lavender,
     points: [
-      "Talks to customers 24/7 in 20+ languages",
+      "Chats with customers 24/7 in 20+ languages",
       "Answers in seconds with source citations",
       "Escalates to your team when it should",
     ],
@@ -43,7 +43,7 @@ export default function PillarsSection() {
       <div className="max-w-[1280px] mx-auto">
         <SectionHead
           pre="One Platform That"
-          hl="Learns, Talks, and Reports"
+          hl="Learns, Chats, and Reports"
           sub="Three parts working together, so support runs itself"
         />
 

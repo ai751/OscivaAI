@@ -28,7 +28,7 @@ const plans: Plan[] = [
       { t: "Train it with your documents (1 MB)" },
       { t: "Accurate RAG answers with source citations" },
       { t: "Embed on any website with one snippet" },
-      { t: "Speaks 20+ Indian languages" },
+      { t: "Chats in 20+ Indian languages" },
       { t: "Basic analytics (7 days)" },
       { t: "Community support" },
     ],

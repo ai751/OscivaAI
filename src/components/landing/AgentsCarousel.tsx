@@ -39,7 +39,7 @@ const agents = [
       { from: "them", text: "Which plan is right for a small clinic?" },
       { from: "bot", text: "Starter fits you: 3 agents at ₹999/mo. Want a breakdown?" },
       { from: "them", text: "Does it include Hindi support?" },
-      { from: "bot", text: "Yes, every plan speaks 20+ Indian languages at no extra cost." },
+      { from: "bot", text: "Yes, every plan supports 20+ Indian languages at no extra cost." },
       { from: "them", text: "Nice. How do I get started?" },
       { from: "bot", text: "Sign up free, no card needed. Your clinic can be live tonight." },
     ],
@@ -85,7 +85,7 @@ const agents = [
   {
     tab: "Multilingual",
     tag: "Languages",
-    title: "Speaks Your Customer's Language.",
+    title: "Chats in Your Customer's Language.",
     desc: "Detects the language automatically and answers in it, from the same English documents you already have.",
     points: [
       "20+ Indian languages out of the box",
