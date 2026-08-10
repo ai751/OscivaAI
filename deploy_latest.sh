@@ -12,7 +12,7 @@
 # Get the token at: Supabase Dashboard -> Account -> Access Tokens. REVOKE after.
 
 set -u
-REF="ydvzfinuypdjkfnzdpkt"
+REF="ivmliklvsqmblplkwutq"
 API="https://api.supabase.com/v1/projects/$REF"
 FUNC="supabase/functions/chat/index.ts"
 MIGRATIONS=(

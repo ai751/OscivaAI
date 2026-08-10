@@ -20,7 +20,7 @@ import LandingNavbar from "@/components/landing/LandingNavbar";
 
 /* The public chat edge function + widget src. Resolved from the deployment so the
  * docs always show the right URLs (falls back to the production defaults during SSR). */
-const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? "https://ydvzfinuypdjkfnzdpkt.supabase.co";
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? "https://ivmliklvsqmblplkwutq.supabase.co";
 const CHAT_FN = `${SUPABASE_URL}/functions/v1/chat`;
 const APP_ORIGIN = typeof window !== "undefined" ? window.location.origin : "https://app.osciva.io";
 const WIDGET_SRC = `${APP_ORIGIN}/osciva-chat.js`;

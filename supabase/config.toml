@@ -1,4 +1,4 @@
-project_id = "ydvzfinuypdjkfnzdpkt"
+project_id = "ivmliklvsqmblplkwutq"
 
 # Public widget endpoint — embedded on arbitrary customer sites, so no JWT.
 [functions.chat]

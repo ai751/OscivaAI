@@ -7,7 +7,7 @@
 #
 # Generate the token at: Dashboard -> Account -> Access Tokens. REVOKE it after.
 
-REF="ydvzfinuypdjkfnzdpkt"
+REF="ivmliklvsqmblplkwutq"
 API="https://api.supabase.com/v1/projects/$REF"
 MIGRATION="supabase/migrations/20260619120000_rate_limit.sql"
 FUNC="supabase/functions/chat/index.ts"

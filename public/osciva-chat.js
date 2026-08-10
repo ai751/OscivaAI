@@ -7,7 +7,7 @@
  * 1) Simple (recommended) — auto-pulls logo / name / colour / welcome from the agent:
  *    <script src="https://YOUR_APP/osciva-chat.js"
  *            data-agent-id="AGENT_UUID"
- *            data-api="https://ydvzfinuypdjkfnzdpkt.supabase.co/functions/v1/chat"></script>
+ *            data-api="https://ivmliklvsqmblplkwutq.supabase.co/functions/v1/chat"></script>
  *
  * 2) With manual overrides — set window.OscivaConfig BEFORE the script tag:
  *    <script>
@@ -42,7 +42,7 @@
   var API =
     cfg.api ||
     (script && script.getAttribute("data-api")) ||
-    "https://ydvzfinuypdjkfnzdpkt.supabase.co/functions/v1/chat";
+    "https://ivmliklvsqmblplkwutq.supabase.co/functions/v1/chat";
   if (!AGENT_ID) {
     console.error("[Osciva] Missing agentId (set data-agent-id or window.OscivaConfig.agentId).");
     return;

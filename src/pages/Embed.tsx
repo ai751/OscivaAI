@@ -6,7 +6,7 @@ import { useAgents } from "@/context/AgentContext";
 import { recordAgentActivity } from "@/lib/agentStats";
 
 // Public chat edge function, the same backend the embedded widget uses.
-const CHAT_FN = `${import.meta.env.VITE_SUPABASE_URL ?? "https://ydvzfinuypdjkfnzdpkt.supabase.co"}/functions/v1/chat`;
+const CHAT_FN = `${import.meta.env.VITE_SUPABASE_URL ?? "https://ivmliklvsqmblplkwutq.supabase.co"}/functions/v1/chat`;
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
