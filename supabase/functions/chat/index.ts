@@ -15,6 +15,8 @@
 //
 // Visitor conversations are logged (conversations + conversation_messages) for the
 // owner's analytics. Owner "Live Test" chats pass { test:true } and are NOT logged.
+// test:true skips the access checks, so it is honoured ONLY for a caller holding
+// the agent owner's own JWT — see ownerTest() below.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -29,6 +31,25 @@ const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
 type Provider = "OpenAI" | "Anthropic" | "Google AI" | "OpenRouter";
 type Msg = { role: string; content: string };
+
+// Does this request carry the agent OWNER's JWT? Only then may test:true skip the
+// domain whitelist, the password gate and rate limiting. Without this check the
+// flag is attacker-supplied JSON: anyone could bypass every access control on a
+// stranger's agent, spend the owner's LLM budget without limit, and leave no trace,
+// since test chats are deliberately not logged. The widget sends the anon key here,
+// which is not a user JWT, so getUser() rejects it and the request stays a normal
+// visitor request.
+async function ownerTest(req: Request, ownerId: string): Promise<boolean> {
+  const header = req.headers.get("authorization") ?? "";
+  const token = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
+  if (!token) return false;
+  try {
+    const { data, error } = await admin.auth.getUser(token);
+    return !error && !!data?.user && data.user.id === ownerId;
+  } catch {
+    return false;
+  }
+}
 
 // Max visitor messages per agent per hour (per IP) when rate limiting is on.
 const RATE_LIMIT_PER_HOUR = 20;
@@ -400,11 +421,15 @@ Deno.serve(async (req) => {
 
     // --- Chat ---
     if (req.method === "POST") {
-      const { agentId, messages, stream, test, conversationId: convIdIn, password, verifyOnly } = await req.json();
+      const { agentId, messages, stream, test: testReq, conversationId: convIdIn, password, verifyOnly } = await req.json();
       if (!agentId || !Array.isArray(messages)) return json({ error: "agentId and messages[] required" }, 400);
 
       const { data: agent } = await admin.from("agents").select("*").eq("id", agentId).maybeSingle();
       if (!agent || !agent.active) return json({ error: "Agent not found" }, 404);
+
+      // Never trust test straight off the wire — prove the caller owns the agent.
+      // A forged flag would otherwise skip every access control below.
+      const test = testReq === true && (await ownerTest(req, agent.user_id));
 
       // Owner's plan drives model, key, limits and branding below.
       const { data: planRow } = await admin.from("profiles").select("plan").eq("user_id", agent.user_id).maybeSingle();

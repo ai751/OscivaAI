@@ -4,6 +4,7 @@ import { Copy, Check, Send, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { useAgents } from "@/context/AgentContext";
 import { recordAgentActivity } from "@/lib/agentStats";
+import { supabase } from "@/integrations/supabase/client";
 
 // Public chat edge function, the same backend the embedded widget uses.
 const CHAT_FN = `${import.meta.env.VITE_SUPABASE_URL ?? "https://ivmliklvsqmblplkwutq.supabase.co"}/functions/v1/chat`;
@@ -70,9 +71,17 @@ export default function Embed() {
     setChatInput("");
     setChatLoading(true);
     try {
+      // test:true only counts if we prove we are the agent's owner, so send the
+      // session JWT. Without it the backend treats this as an ordinary visitor
+      // request and applies the agent's own domain/password/rate-limit rules.
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
       const res = await fetch(CHAT_FN, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
+        },
         body: JSON.stringify({ agentId: currentAgent.id, messages: newHistory.slice(-12), test: true }),
       });
       const data = await res.json();
