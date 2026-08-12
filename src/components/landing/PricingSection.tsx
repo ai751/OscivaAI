@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn } from "./xui";
+import { formatINR, usePricing } from "@/hooks/usePricing";
 
 type Feature = { t: string; hot?: boolean };
 type Plan = {
@@ -93,12 +94,19 @@ const plans: Plan[] = [
 export default function PricingSection() {
   const navigate = useNavigate();
   const [yearly, setYearly] = useState(false);
+  // Live amounts set by an admin in the console; falls back to the values above.
+  const pricing = usePricing();
 
   const price = (p: Plan) => {
-    const v = yearly ? p.yearly : p.monthly;
+    const paid: Record<string, { monthly: number; yearly: number }> = {
+      Starter: { monthly: pricing.starterMonthly, yearly: pricing.starterYearly },
+      Growth: { monthly: pricing.growthMonthly, yearly: pricing.growthYearly },
+    };
+    const live = paid[p.name];
+    const v = live ? (yearly ? live.yearly : live.monthly) : yearly ? p.yearly : p.monthly;
     if (v === "custom") return "Custom";
     if (v === 0) return "Free";
-    return `₹${v.toLocaleString("en-IN")}`;
+    return formatINR(v as number);
   };
 
   return (

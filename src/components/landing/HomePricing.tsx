@@ -2,6 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Check, ChevronRight } from "lucide-react";
 import { X } from "./LandingNavbar";
 import { SectionHead, FadeIn } from "./xui";
+import { formatINR, usePricing } from "@/hooks/usePricing";
 
 const tiers = [
   {
@@ -64,6 +65,13 @@ const tiers = [
 
 export default function HomePricing() {
   const navigate = useNavigate();
+  // Live amounts set by an admin in the console; the literals above are the fallback.
+  const pricing = usePricing();
+  const livePrice = (name: string, fallback: string) => {
+    if (name === "Starter") return formatINR(pricing.starterMonthly);
+    if (name === "Growth") return formatINR(pricing.growthMonthly);
+    return fallback;
+  };
   return (
     <section className="mkt-x py-20 md:py-24 px-5 sm:px-8" style={{ background: X.white }}>
       <div className="max-w-[1280px] mx-auto">
@@ -96,7 +104,7 @@ export default function HomePricing() {
                 </h3>
                 <div className="mt-3 text-center">
                   <span className="text-[32px] font-bold" style={{ color: X.ink }}>
-                    {t.price}
+                    {livePrice(t.name, t.price)}
                   </span>
                   {t.per && (
                     <span className="text-[13px] ml-1" style={{ color: X.faint }}>

@@ -4,8 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical, Pencil, RotateCcw, Search, ShieldCheck, Users as UsersIcon } from "lucide-react";
 import { toast } from "sonner";
 import {
-  adminRpc, AdminUser, FREE_MSG_QUOTA, inr, PLAN_PRICES, PLANS, planBadgeClass,
+  adminRpc, AdminUser, FREE_MSG_QUOTA, inr, PLANS, planBadgeClass,
 } from "./adminRpc";
+import { planPriceMap, usePricing } from "@/hooks/usePricing";
 import { Card, FilterTabs, PageHead, RowsSkeleton, TableWrap, Td, Th } from "./components";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -21,6 +22,8 @@ const PAGE_SIZE = 10;
 type PlanTab = "all" | "free" | "starter" | "growth";
 
 export default function ConsoleUsers() {
+  // Live prices, so the revenue column matches what the admin set.
+  const planPrices = planPriceMap(usePricing());
   const queryClient = useQueryClient();
   const [params] = useSearchParams();
   const [search, setSearch] = useState(params.get("q") ?? "");
@@ -218,7 +221,7 @@ export default function ConsoleUsers() {
                     )}
                   </Td>
                   <Td className="text-foreground-secondary tabular-nums whitespace-nowrap">
-                    {PLAN_PRICES[u.plan] ? inr(PLAN_PRICES[u.plan]) : "—"}
+                    {planPrices[u.plan] ? inr(planPrices[u.plan]) : "—"}
                   </Td>
                   <Td className="text-foreground-muted whitespace-nowrap">
                     {new Date(u.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}

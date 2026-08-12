@@ -2,8 +2,9 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Coins, Gauge, PieChart } from "lucide-react";
 import {
-  adminRpc, AdminAgent, AdminUser, FREE_MSG_QUOTA, inr, PLAN_PRICES, planBadgeClass,
+  adminRpc, AdminAgent, AdminUser, FREE_MSG_QUOTA, inr, planBadgeClass,
 } from "./adminRpc";
+import { planPriceMap, usePricing } from "@/hooks/usePricing";
 import { Card, PageHead, RowsSkeleton, StatCard, TableWrap, Td, Th } from "./components";
 
 function providerOf(model: string): string {
@@ -16,6 +17,8 @@ function providerOf(model: string): string {
 }
 
 export default function ConsoleUsage() {
+  // Live prices, so the revenue column matches what the admin set.
+  const planPrices = planPriceMap(usePricing());
   const users = useQuery({
     queryKey: ["ac-users"],
     queryFn: async () => {
@@ -167,7 +170,7 @@ export default function ConsoleUsage() {
                       <Td className="text-foreground-secondary tabular-nums">{u.msgs_30d.toLocaleString()}</Td>
                       <Td className="text-foreground-muted">—</Td>
                       <Td className="text-foreground-secondary tabular-nums whitespace-nowrap">
-                        {PLAN_PRICES[u.plan] ? `${inr(PLAN_PRICES[u.plan])}/mo` : "₹0"}
+                        {planPrices[u.plan] ? `${inr(planPrices[u.plan])}/mo` : "₹0"}
                       </Td>
                     </tr>
                   );
