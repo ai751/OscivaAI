@@ -31,6 +31,15 @@ AUTH_TABLES = [("auth", "users"), ("auth", "identities")]
 BATCH = 250
 
 
+def try_query(ref, token, sql):
+    """Best-effort variant: warn and carry on instead of aborting the run."""
+    try:
+        return query(ref, token, sql)
+    except SystemExit as exc:
+        print(f"  (skipped) {str(exc).splitlines()[0].strip()}")
+        return []
+
+
 def query(ref, token, sql):
     """POST one SQL statement to the Management API, returning parsed rows."""
     req = urllib.request.Request(
@@ -39,6 +48,8 @@ def query(ref, token, sql):
         headers={
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
+            # Cloudflare fronts the API and rejects urllib's default UA with a 1010.
+            "User-Agent": "osciva-migrate/1.0",
         },
         method="POST",
     )
@@ -168,8 +179,16 @@ def main():
     plan = AUTH_TABLES + [("public", t) for t in order]
 
     if not dry_run:
-        print("disabling on_auth_user_created so the signup trigger cannot fight the copy")
-        query(NEW_REF, NEW_TOKEN, "alter table auth.users disable trigger on_auth_user_created;")
+        # User triggers must be off for the copy to be faithful: plan limits reject
+        # grandfathered rows, updated_at triggers rewrite timestamps, and the
+        # plan-change trigger would invent plan_changes rows. auth.users is owned by
+        # supabase_auth_admin so its trigger usually cannot be toggled — harmless,
+        # since handle_new_user only adds a default profiles row and every table is
+        # cleared before its own copy.
+        print("suppressing triggers for the duration of the copy")
+        try_query(NEW_REF, NEW_TOKEN, "alter table auth.users disable trigger on_auth_user_created;")
+        for t in order:
+            try_query(NEW_REF, NEW_TOKEN, f"alter table public.{t} disable trigger user;")
 
     results = []
     try:
@@ -177,8 +196,10 @@ def main():
             results.append((schema, table) + copy_table(schema, table, dry_run))
     finally:
         if not dry_run:
-            print("\nre-enabling on_auth_user_created")
-            query(NEW_REF, NEW_TOKEN, "alter table auth.users enable trigger on_auth_user_created;")
+            print("\nrestoring triggers")
+            try_query(NEW_REF, NEW_TOKEN, "alter table auth.users enable trigger on_auth_user_created;")
+            for t in order:
+                try_query(NEW_REF, NEW_TOKEN, f"alter table public.{t} enable trigger user;")
 
     print("\n=== VERIFY (source vs target) ===")
     bad = 0
