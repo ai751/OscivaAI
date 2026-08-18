@@ -21,7 +21,13 @@ PROGRESS.md
 BUILD_PROMPT.md
 ROADMAP.md
 SCALING.md
+SETUP.md
 supabase/DEPLOY_ALL.sql
+
+# One-off account-migration scripts (Aug 2026) — kept local, not part of the app
+deploy_full_rebuild.sh
+migrate_data.py
+migrate_storage.py
 
 # Local agent tooling / installed skills — keep local only
 .claude/
